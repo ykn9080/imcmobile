@@ -1,1 +1,1 @@
-add 2nd file
+add 2nd file modified for git diff
