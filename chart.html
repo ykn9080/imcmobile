@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html style="height:100%">
+  <head>
+    <title>
+      jqPlot Test
+    </title>
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta http-equiv="content-type" content="text/html; charset=EUC-KR" />
+   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<link rel="stylesheet" href="css/google-visualization-controls-theme-contrast.css" >
+	
+	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>        
+	<script src="js/colorpicker/jquery.colorPicker.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/jqm-datebox.core.min.js"></script>
+    <link rel="stylesheet" href="js/colorpicker/colorPicker.css">
+    <script src="js/googlechart.js" type="text/javascript"></script>
+    <script src="js/common.js" type="text/javascript"></script>
+    <script src="js/jsapi.js" type="text/javascript"></script>
+    <script src="js/Backbutton.js" type="text/javascript"></script>
+ 	<link rel="stylesheet"  href="css/jquery.mobile.icons-1.4.0.css" />
+    <link rel="stylesheet"  href="css/icon-pack-custom.css" />
+	<script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
+	<script src="phonegap.js"></script>
+    <style>
+		/*remove header margin */ 
+		.ui-title {
+		    margin: 0 !important;
+		}
+		.ui-input-text {margin:0 !important;}
+		.ui-select{margin:0 !important;}
+		.ui-checkbox{margin:0 !important;}
+		.ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb{
+			min-height:2.3em !important;
+		}
+		div.colorPicker-picker{
+			width:100% !important;
+			height:40px !important;
+			-moz-border-radius: 3px !important;
+			-webkit-border-radius: 3px !important;
+			border-radius: 3px !important; 
+			-khtml-border-radius: 3px !important;
+			border:none !important;
+			background-image:none !important;	
+		}
+		div.colorPicker-palette{
+			width:210px !important;
+		}
+		div.colorPicker-swatch{
+			width:20px !important;
+			height:15px !important;
+			margin:6px !important;
+		}
+		div.colorPicker_hexWrap{
+			display:none !important;
+		}
+	 	.sp .ui-block-a {width: 25% !important;}
+     	.sp .ui-block-b {width: 75% !important;}
+     	
+     	#googlechart .ui-content{padding:0 !important;}
+
+		
+		.ui-listview>.ui-li-has-icon>img:first-child, .ui-listview>.ui-li-has-icon>.ui-btn>img:first-child{
+			max-height:1.4em !important;
+			max-width:2.2em !important;
+			top:10px !important
+		}
+		.ui-listview>.ui-li-has-icon>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-icon{
+			padding-left:3em !important;
+			min-height:1.8em !important;
+		}
+		 .ui-btn {margin:0.1em 0 !important;}
+		 .charts-menuitem-content{
+		 	font-size:15px !important;
+		 	padding:10px 0 10px 0 !important;
+		 }
+		 
+		.container {
+		  position: relative;
+		}
+		
+		.container .details {
+		  display: inline-block;
+		  position: absolute;
+			top: 100%;
+			padding: 10px 15px;
+			z-index: 1; 
+			display: none;
+			width: 200px;
+			background: #222;
+			color: #FFF;
+		}
+		
+		.container:hover .details,
+		.container .details:hover {
+			display: block;	
+		}
+		
+		/* jQuery enabled behavior for mobile */
+		.touch .container.no-hover .details {
+			display: none !important;	
+		}
+		</style>
+    <script type="text/javascript">
+	    $(function() {$('#color1').colorPicker();
+	  	});      
+     
+      	//google dashboard
+      	google.load('visualization', '1', { packages : ['controls'] } );
+		google.setOnLoadCallback(drawVisualization);
+		document.addEventListener("deviceready",onDeviceReady,false);
+		function onDeviceReady() {
+			document.addEventListener("backbutton", backbtn, false);
+			
+		}
+		$( document ).ready(function() {
+	    	chartInit();
+			//drawChart1();
+			
+			$.mobile.defaultDialogTransition = "none";
+			$.mobile.defaultPageTransition = "none";
+			document.addEventListener("backbutton", backbtn, false);
+
+		});
+		$(document).bind("mobileinit", function () {
+	    	$.event.special.swipe.horizontalDistanceThreshold = 50;
+	    	 $.mobile.activeBtnClass = 'unused';
+	    	 $.mobile.page.prototype.options.domCache = true;
+	    });
+		 // device APIs are available
+		function backbtn(){
+		  switch($.mobile.activePage.attr('id')){
+		     	 case "dvFilter": case "dvSort": case "dvData": case "dvTitle": case "dvCharttype":
+			     	$.mobile.changePage("#chartedit");
+			     break;
+			    case "googlechart":
+			     	  $.mobile.changePage("#chartlist");
+			     break;
+			     case "chartedit":
+			     	  $.mobile.changePage("#googlechart");
+			     break;
+			     case "chartlist": 
+				     $.mobile.loading( 'show', {
+						text: 'Return Home...',
+						textVisible: true,
+						theme: 'a',
+						html: ""
+					});
+			      	  window.location.href="index.html";
+			     break;
+			     default:
+				 	navigator.app.backHistory();
+		 		 break;
+			 }
+		}
+			
+		function setData(){
+			var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+      				var ax=cht[i].axis;
+	      			var ser=cht[i].series;
+	      			var val=cht[i].value;
+	      			var title=cht[i].title;
+	      			$('#googlechart h1').text(title);
+	      			//filterlist
+	      			var flist=cht[i].filterlist;
+	      			//sort if any
+	      			var slist=cht[i].sortlist;
+	      			var data="";
+	      			
+	      			if(cht[i].srcname !="")
+	      			data=defaultData(cht[i].srcname);
+	      			//filter if any
+	      			var json=makeGoogleDataTable(data,ax,ser,val,flist,slist);
+	      		}
+	      	}
+	      	return json;
+		}
+		function drawTable() {
+		 	var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+      				var ax=cht[i].axis;
+	      			var ser=cht[i].series;
+	      			var val=cht[i].value;
+	      			var title=cht[i].title;
+	      			$('#googlechart h1').text(title);
+	      			//filterlist
+	      			var flist=cht[i].filterlist;
+	      			//sort if any
+	      			var slist=cht[i].sortlist;
+	      			var data="";
+	      			
+	      			if(cht[i].srcname !="")
+	      			data=defaultData(cht[i].srcname);
+	      			//filter if any
+	      			var json=makeGoogleDataTable(data,ax,ser,val,flist,slist);
+				    var table = new google.visualization.Table(document.getElementById('dvTable'));
+		    	    table.draw(json, {showRowNumber: true,"alternatingRowStyle": true,});
+	    		}
+	    	}
+      }
+      
+		function chartReload(){
+			var cht=localStorage.getItem("googlechart");
+			if(cht !==null) {
+				cht=JSON.parse(cht);
+				cht.updated="";
+				localStorage.setItem("googlechart",JSON.stringify(cht));
+			}
+			chartInit();
+		}
+		function googlechartUpdate(cht){
+				var loc=JSON.parse(localStorage.getItem("googlechart"));
+				loc.data=cht;
+				localStorage.setItem("googlechart",JSON.stringify(loc));
+			}
+			
+		var mardata="";	
+		function chartInit(){
+			
+			var login=localStorage.getItem("login");
+			var googlechart=localStorage.getItem("googlechart");
+			if(googlechart ==null){
+				googleChartAjax();
+				//chartInit();
+			}
+			else{
+				//if mobile check & update ajax
+
+				var up=JSON.parse(googlechart).updated;
+				up=new Date(up);
+			
+/*
+				if(detectmobile()){
+					if(makeDate(up,"")!=makeDate(new Date(),"")){
+				  		//online uer processing
+						  if(login !==null){
+								//localStorage.setItem("googlechart",JSON.stringify(OfflineChartdtList()));
+								googleChartAjax();	  }
+							//for single use case
+							else{
+							  localStorage.setItem("googlechart",JSON.stringify(OfflineChartdtList()));
+						  }
+					 }
+				}
+				
+
+				else{
+					//if(!up)
+					//updategoogleChart(localStorage.getItem("googlechart"));
+				}
+*/
+
+		  		sorttype="";
+		  		mardata=JSON.parse(googlechart).data;
+				setTimeout(function(){ChartListLoad(mardata,sorttype),1000});
+			
+			}
+			
+			//for testing only
+//			updategoogleData(localStorage.getItem("googledataimsi"));
+			//updategoogleChart(localStorage.getItem("googlechartimsi"));
+		}
+		
+		var listhead="";
+		function ChartListLoad(mardata,sorttype) {	
+			
+			$("#inList").val(JSON.stringify(mardata));
+			
+			var data ="";
+			$("#ulChart" + ' li').remove();
+				data = mardata;
+/*
+			if(sorttype1 !="")	
+				data=data.sort(sorttype1);*/
+
+			if(sorttype!=""){
+		  		var arr=[];
+		  		var hcnt={};
+		  		for (i in data) {
+		  			var sortname=srcnameConvert(data[i][sorttype]);
+			  		if(listhead!==sortname){
+			  			hcnt={};
+			  			hcnt.uname=sortname;
+			  			hcnt.cnt=1;
+			  			arr.push(hcnt);
+			  			listhead=sortname;
+			  		}
+			  		else{
+						for(j in arr){
+			  			 if (arr[j].uname == sortname) {
+						    arr[j].cnt = parseInt(arr[j].cnt)+1;
+						  }
+						}
+						
+			  		}
+		  		}
+			}
+		
+			for (i in data) {
+				 var li = document.createElement( "li" );
+		        //list-divider
+		        if(sorttype!=""){
+				  	var sortname=srcnameConvert(data[i][sorttype]);
+		  			if(listhead!==sortname){
+			        	li = document.createElement( "li" );
+			        	li.setAttribute("data-role","list-divider");	
+						
+			        	var big = document.createElement( "label" );
+			        	big.innerText=sortname;
+			        	big.setAttribute("style","font-size:12px;font-weight:normal;")
+			        	li.appendChild(big);
+			        	
+			        	//우측 count삽입
+			        	var listcnt;
+			        	var sp=document.createElement("span");
+			        	sp.setAttribute("class","ui-li-count");
+			        	for (var j=0; j<arr.length; j++) {
+						    if (arr[j].uname == sortname) {
+						        listcnt=arr[j].cnt;
+						        break;
+						    }
+						}
+			        	sp.innerHTML=listcnt;
+			        	li.appendChild(sp);
+						$("#ulChart").append( li );
+						listhead=sortname;
+		  			}
+	  			}
+  			
+  			
+				li = document.createElement("li");
+				li.id = data[i]["id"];
+				
+				var ctype = data[i]["ctype"];
+				var a1 = document.createElement("a");
+				var pic = document.createElement("img");
+				var p = document.createElement("p");
+
+				pic.src = "images/chart/"+convertCtype(ctype)+".png";
+				pic.setAttribute("class","ui-li-icon")
+				p.appendChild(document.createTextNode(data[i]["title"]));
+				a1.appendChild(pic);
+
+				//pic.setAttribute("class","ui-li-icon");
+				p.setAttribute("class", "ui-li-aside");
+
+				li.appendChild(a1);
+				a1.appendChild(document.createTextNode(data[i]["title"]));
+				//a1.appendChild(p);
+				$("#ulChart").append(li);
+			}
+			$('#ulChart').listview('refresh');
+		}
+		
+		$(document).on('click', '#ulChart li', function() {
+				//e.preventDefault();
+			var Id = $(this).attr('id');
+			$("#inId").val(Id);
+			$.mobile.changePage("#googlechart");
+			paramshow="none"; //at googlechart.js
+			drawChart1();
+			$("#lbPagenum").html("");
+			//drawTable();
+			//$("#dvTable").css("display","none");
+			//msgshow("sorry ry again");
+		});
+		
+		function srcnameConvert(srcname){
+			var datalist=localStorage.getItem("googledata");
+			datalist=JSON.parse(datalist).datalist;
+			for(i in datalist){
+				if(datalist[i].datacode==srcname)
+				return datalist[i].dataname;
+			}
+		}
+		// upload new created chart && download,update localStorage("googlechart")
+
+		function googleChartAjax() {
+			var comp1=localStorage.getItem("login");
+			var obj = eval("(" + comp1 + ")");
+	  		var staff=obj.id;
+	  		var comp=obj.comp;
+	  		$.mobile.loading( 'show', {
+				text: 'Updating Chart List...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			//var report=;
+			$.ajax({
+				url: "http://mobile.imcmaster.co.kr/WebService.asmx/googleChartList",
+				data: { staff: JSON.stringify(staff)},
+				contentType: "application/json; charset=utf-8",
+				dataType: "JSON",
+				success: function (data, status) {
+					//alert('success'+data.d)
+					updategoogleChart(data.d);
+					setTimeout(function(){googleDataAjax(),1000});
+					chartInit();
+					$.mobile.loading( 'hide');
+				},
+				error: function () { 
+					//updategoogleData(localStorage.getItem("googledataimsi"));
+					updategoogleChart(localStorage.getItem("googlechartimsi"));
+					//var revert=JSON.parse(localStorage.getItem("googlechart")).updated=new Date();
+					//localStorage.setItem("googlechart");
+					ChartListLoad(mardata,""); 
+				}
+			});
+		}
+
+	function sortTitle(a,b){
+		return ((a.title == b.title) ? 0 : ((a.title > b.title) ? 1 : -1 ));
+	}
+  	function sortType(a,b){
+		return ((a.srcname == b.srcname) ? 0 : ((a.srcname > b.srcname) ? 1 : -1 ));
+	}
+	</script>
+	
+  </head>
+  <body  style="height:100%;margin:0">
+
+  	<div data-role="page" id="chartlist" data-overlay-theme="a">
+       <div data-role="header" data-theme="b">
+       	<a onclick="chartReload()" class="ui-btn ui-btn-inline ui-icon-refresh ui-btn-icon-notext"></a>
+        <h1>Chart List</h1>
+        <a href="#chartarchive"  class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext"></a>
+        <div data-role="navbar">
+			<ul>
+				<li><a href="#" onclick="ChartListLoad(mardata.sort(sortType),'srcname')">Type</a></li>
+				<li><a href="#" onclick="ChartListLoad(mardata.sort(sortTitle),'')">Title</a></li>
+			</ul>
+		</div><!-- /navbar -->
+      </div>
+      <div data-role="content">
+      		<ul id="ulChart" data-role="listview"  data-filter="true" data-filter-placeholder="Search ...">
+				<li>
+					<a href="#"><img src="images/search-icon.png" alt="France" class="ui-li-icon">France
+					<p class="ui-li-aside">
+						<strong>6:24</strong>PM
+					</p></a>
+				</li>
+				<li>
+					<a href="#"><img src="images/search-icon1.png" alt="Germany" class="ui-li-icon">Germany</a>
+				</li>
+				<li>
+					<a href="#"><img src="images/map-icon.png" alt="Great Britain" class="ui-li-icon">Great Britain</a>
+				</li>
+				<li>
+					<a href="#"><img src="images/search-red.png" alt="Finland" class="ui-li-icon">Finland</a>
+				</li>
+				<li>
+					<a href="#"><img src="images/comment.png" alt="United States" class="ui-li-icon">United States</a>
+				</li>
+			</ul>
+			<input id="inList" type="hidden"/>
+			<input id="inId" type="hidden"/>
+			
+      </div>
+      <div data-role="footer" data-position="fixed" data-theme="a">
+      	<div data-role="navbar">
+			<ul>
+				<li><a href="#" onclick="change('index');" id="returnhome" class="ui-btn ui-icon-home ui-btn-icon-top">Home</a></li>
+				<li><a href="#" onclick="change('sales');" class="ui-btn ui-icon-tag ui-btn-icon-top">Sales</a></li>
+				<li><a href="#" onclick="change('market');" class="ui-btn ui-icon-video ui-btn-icon-top">Marketinfo</a></li>
+			</ul>
+		</div><!-- /navbar -->
+      </div>
+    </div>
+    <script>
+    	function createChart(){
+			$("#inId").val(idMake());
+		  	$("#lbCharttype").html("");
+		  	$("#lbTitle").html("");
+		  	$("#selLegend").val("");
+		  	$("#lbVertical").html("");
+		  	$("#lbData").html("");
+		}
+		
+    </script>
+    
+   	 <div data-role="page" id="dvFilter">
+      	<div data-role="content" class="ui-contnet" >
+      	 	<ul id="ulFilter" data-role="listview" ></ul>
+      	 	<script>
+				function makeFilterLi1(prodsel,label1){
+				 	var dvg=document.createElement("div");
+					dvg.setAttribute("style","clear:both;height:60px;");
+					  var dva=document.createElement("div");
+					  dva.setAttribute("style","float:right;width:70%");
+			
+					  dvg.appendChild(dva);
+					  
+					  dva.appendChild(prodsel);
+					 
+			
+					  var dvb=document.createElement("div");
+					  dvb.setAttribute("style","float:left");
+					  dvg.appendChild(dvb);
+					  dvb.appendChild(label1);
+			
+					  dvg.appendChild(dva);		  
+					 
+			  
+					  //li 
+					  var li1=document.createElement("li");
+					  li1.appendChild(dvg);
+					  
+					  li1.setAttribute("style","padding:5px;border-bottom:solid 0px #DEDFDE");
+					  return li1;
+				}
+				
+				function makeFilter1(){
+					$("#ulFilter").empty();
+					var indx=0;
+					var go=googlechartRead();
+					for(i in go){
+						if(go[i].id==$("#inId").val()){
+							var sname=go[i].series;
+							var axname=go[i].axis;
+							var valname=go[i].value;
+							
+							//axis
+							if(axname!=""){ 
+								var ser=dataFieldList1(axname);
+    							var data=defaultData(valaxis().src);
+    							
+    							var d = new Date(data[0][axname]);
+								if(d instanceof Date && d !="Invalid Date"){
+									//datetime
+									var dt='sd1,ed1'.split(',');
+									var sel=document.createElement('div');
+									for(k in dt){
+										var dv1=document.createElement('div');
+										dv1.setAttribute("style","width:45%;float:left;");
+										var inp=document.createElement('input');
+										inp.setAttribute("type","date");
+										inp.id=dt[k];
+										inp.setAttribute("value","Date");
+										dv1.appendChild(inp);
+										sel.appendChild(dv1);
+									}				  				
+								}
+								else{
+									var sel=populatePureRtn(ser,"");
+									sel.setAttribute("multiple","multiple")
+					  				sel.id="selFilterax";
+					  				sel.setAttribute("data-native-menu","false");
+					  			}
+				  				
+				   				var lb=document.createElement("label");
+								lb.innerHTML=axname;
+								var li1=makeFilterLi1(sel,lb);
+				  				$("#ulFilter").append(li1);
+							}
+							//series
+							if(sname!=""){ 
+								var ser=dataFieldList1(sname);
+								var sel=populatePureRtn(ser,"");
+									sel.setAttribute("multiple","multiple")
+				  				sel.id="selFilterseries";
+				  				console.log(sel.id)
+				  				sel.setAttribute("data-native-menu","false");
+				  				
+				   				var lb=document.createElement("label");
+								lb.innerHTML=sname;
+								var li1=makeFilterLi1(sel,lb);
+				  				$("#ulFilter").append(li1);
+							}
+							//value
+							if(valname!=""){ 
+								var vall=valname.split(';');
+								for(j in vall){
+									var val=vall[j].split(',');
+									
+									var rang='range1,range2'.split(',');
+									var dv=document.createElement('div');
+										var data=dataFieldList1(val[0]);
+										dv.setAttribute("data-role","rangeslider");
+										dv.setAttribute("data-min","true");
+										
+										var mx=maxmin(val[0]).max.toString();
+										var mn=maxmin(val[0]).min.toString();
+										
+									for(k in rang){
+										
+										var inp=document.createElement('input');
+										inp.setAttribute("type","range");
+										inp.id="rang_"+j+"_"+k;
+										inp.setAttribute("min",mn);
+										inp.setAttribute("max",mx);
+										var cur="0";
+										if(k==1)cur=mx;
+										inp.setAttribute("value",cur);
+										dv.appendChild(inp);
+									}				  				
+				   					var lb=document.createElement("label");
+										lb.innerHTML=val[0];
+										var li1=makeFilterLi1(dv,lb);
+						  				$("#ulFilter").append(li1);
+				  			}
+							}
+						}
+						//selectrefresh("#ulFilter");
+						$('#ulFilter').trigger('create');
+					}
+				}
+				
+      	 		function filterTitle(){
+					var ft=$("#inFilter").val();
+					var flist="";
+					var contain=document.getElementById("dvFiltercontent");
+					contain.innerHTML="";
+					if(ft !=""){
+						flist=ft.split(',');
+						
+						var ah=document.createElement("a");
+				       		        
+						var img=document.createElement("img");
+						img.src="images/exchange.png";
+						img.setAttribute("width","15px");
+						ah.appendChild(img);
+						
+						 var atxt = document.createTextNode("theCounter");
+				        ah.setAttribute('href', "#chartfilter");
+				        ah.appendChild(atxt);
+				        var c1=document.createElement("div");
+				        var c2=document.createElement("div");
+				        c1.setAttribute("style","float:left;")
+				        c1.appendChild(ah);
+				        c2.setAttribute("style","float:right;")
+				        c2.innerHTML="<a href='#' id='ahClear' onclick='filterClear()' class='ui-btn ui-icon-delete ui-btn-icon-notext'></a>";
+						
+						contain.appendChild(c1);
+						contain.appendChild(c2);
+						contain.setAttribute("style","display:block;padding:0.3em 0.3em;background-color:#C3C3C3;height:28px;")
+					}
+				}
+				function filterClear(){
+					document.getElementById("dvFiltercontent").style.display="none";
+					$("#inFilter").val("");
+					$("#inSort").val("");
+					sessionStorage.removeItem("imcFilter");
+					var cht=googlechartRead();
+					for(i in cht){
+						if(cht[i].id==$("#inId").val())
+							cht[i].filterlist="";
+					}
+					googlechartUpdate(cht);
+					drawChart1();
+				
+				}
+				function filterEdit(){
+					var fil=valaxis().filterlist;
+					var txt="";
+					if(fil !=""){
+						fil=fil.split(';');
+						for(i in fil){
+							var fi=fil[i].split(',');
+							switch(fi[0]){
+							case "0":
+								$('#selFilterax').val(fi[1]);
+								
+								txt +="col1:"+fi[1]+",";
+								
+								break;
+							case "1":
+								for(var i=0;i<10;i++){
+					    			var $val1 = $("#rang_"+i+"_0");
+					    			var $val2 = $("#rang_"+i+"_1");
+					    			if ( $val1.length){
+					    				$val1.val(fi[1]);
+					    				$val2.val(fi[2]);
+					    				txt +="col2:"+fi[1]+"~"+fi[2]+",";
+					    				indx++;
+									}		
+					    		}
+					    		break;
+					    	}
+						}	
+					}
+					$("#lbFilter").html(txt);
+				}
+				function filterSave(){
+					var indx=0;
+					var fil="";
+		    		if ( $('#sd1').length){
+		    			if( $('#sd1').val()!="" && $('#ed1').val()!="")
+		    			fil +=indx+","+$("#sd1").val()+","+$("#ed1").val()+";";
+		    			indx++;
+		    		}
+		    		else if( $('#selFilterax').length){ 
+		    			if( $('#selFilterax').val()!=""){
+			    			fil=indx+","+$("#selFilterax").val()+",;";
+			    		}
+			    		indx++;
+			    	}
+		    		
+		    		if ( $('#selFilterseries').length){
+		    			if( $('#selFilterseries').val()!="")
+		    			fil+=indx+","+$("#selFilterseries").val()+",;";
+		    			indx++;
+		    		}
+		    		for(var i=0;i<100;i++){
+		    			var $val1 = $("#rang_"+i+"_0");
+		    			var $val2 = $("#rang_"+i+"_1");
+		    			if ( $val1.length){
+		    				fil+=indx+","+$val1.val()+","+$val2.val()+";";
+		    				indx++;
+						}		
+		    		}
+		    		if(fil !="")
+		    		fil=fil.substring(0,fil.length-1);
+					
+					var dateindex;
+					var valindex;
+		  			var cht=googlechartRead();
+					for(i in cht){
+						if(cht[i].id==$("#inId").val()){
+							cht[i].filterlist=fil;
+						}
+					}
+					googlechartUpdate(cht);
+		  			
+		  			
+		/*
+					if($('input:checkbox[name=cbFilter]').is(':checked')) {
+						sessionStorage.setItem("imcfilter",fval);
+					}
+					else{
+						sessionStorage.removeItem("imcfilter");
+						$('input[name=cbFilter]').attr('checked', false);	
+						
+						$("#dvFiltercontent").css("display","none");
+					}
+		*/
+					
+				}
+      	 	</script>
+		   	<style>
+		   		.ui-listview>.ui-li-static{
+		   			padding:.2em .7em !important;
+		   		}
+		   	</style>
+	   	</div>
+	   	<div data-role="footer" data-position="fixed" data-theme="b">
+      	<div data-role="navbar">
+			<ul>
+				<li><a href="#chartedit" onclick="filterSave();filterTitle();" class="ui-btn ui-icon-grid ui-btn-icon-left">Apply</a></li>
+				<li><a href="#chartedit" onclick="filterClear();" class="ui-btn ui-icon-delete ui-btn-icon-left">Clear</a></li>
+				<li><a href="#chartedit" class="ui-btn ui-icon-back ui-btn-icon-left">Cancel</a></li>
+			</ul>
+		</div>
+		</div>
+	</div>
+    <div data-role="page" id="dvSort">
+      <div data-role="content" class="ui-contnet" >
+  	      	<div class="ui-grid-a">
+				<div class="ui-block-a">
+					<label for="btnSort2">Add Sorting:</label>
+				</div>
+				<div class="ui-block-b" style="padding-bottom:5px;">
+					<a href="#" id="btnSort2" class="ui-btn ui-icon-plus ui-btn-icon-notext" >Add</a>
+				</div>
+			</div>
+		 	<ul data-role="listview" style="margin:0;" data-theme="c" id="olSort"></ul>
+		 	<script>
+
+		 		function makeCollist(chartid,localstorage){
+		 			var collist="";
+    				var go=localstorage;
+    				if(go !==null){
+    					go=JSON.parse(go).data;
+    					var indx=0;
+    					for(i in go){
+    						if(go[i].id==chartid){
+    							collist=0+","+go[i].axis+";";
+    							indx++;
+    							if(go[i].series!=""){
+    								collist+=1+","+go[i].series+";";
+    								indx++;
+    							}
+    							var val=go[i].value;
+    							if(val !="")val=val.split(';');
+    							for(j in val){
+    								var v=val[j].split(',');
+    								collist +=indx+","+v[0]+";";
+    								indx++
+    							}
+    							if(collist !="") 
+    								collist=collist.substring(0,collist.length-1);
+    						}
+    					}
+    				}
+    				return collist;
+		 		}
+		 		
+		 		var cnt1=0;
+		 		function makeSort(){
+					 var id="btnSort3_"+cnt1;
+					//column list find
+					var collist=makeCollist($("#inId").val(),localStorage.getItem("googlechart"));
+					
+					  //data select create
+					  var datasel=populatePureRtn(collist,"");
+					  datasel.id="selsort_"+cnt1;
+					  var html=document.createElement("div");
+			
+					  var dva=document.createElement("div");
+					  dva.setAttribute("style","float:left;width:50%");
+			
+					  html.appendChild(dva);
+					  //html.setAttribute("data-role","fieldcontain");
+					  
+					  dva.appendChild(datasel);
+					 
+			
+					  var dvb=document.createElement("div");
+					  dvb.setAttribute("style","float:left;width:30%;");
+					  html.appendChild(dvb);
+		
+					  var sortorder="false,Asc;true,Desc";
+					  var sortordersel=populatePureRtn(sortorder,"false");
+					  sortordersel.id="selsortorder_"+cnt1;
+					  dvb.appendChild(sortordersel);
+					  dvb.setAttribute("style","float:left;padding-left:5px;");
+					  
+					   // minus button
+					  var dvc=document.createElement("div");
+					  dvc.setAttribute("class","ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext");
+					  dvc.setAttribute("style","float:right;");
+
+					  dvc.id="btnSort3_"+cnt1;
+					  
+			
+					  html.appendChild(dva);		
+					  html.appendChild(dvb);		
+					  html.appendChild(dvc);		  
+					 
+			  
+					  //li 
+					  var li1=document.createElement("li");
+					  li1.appendChild(html);
+					  li1.setAttribute("style","padding: .2em .2em ;");
+					 
+					  $("#olSort").append(li1);
+					  //listrefresh("#olSort");
+					  cnt1++;
+				}
+				function sortEdit(){
+					$("#olSort").empty();
+					cnt1=0;
+					var sortlist=valaxis().sortlist;
+					if(sortlist !=""){
+						var vl=sortlist.split(';');
+						
+					for(var k=0;k< vl.length;k++){
+						
+						makeSort();
+						var ndt=vl[k].split(',');//JSON.parse(data[k]);
+						$("#selsort_"+k).val(ndt[0]);
+						$("#selsortorder_"+k).val(ndt[1]);
+					}
+					$('#olSort').trigger('create');
+					} 
+				}
+				function updateSort(){
+					var val="";
+					var txt="";
+					var srt={};
+					var srtarr=[];
+			        $( "#olSort li" ).each(function( index ) {
+			            val+=$(this).find('select').eq(0).val()+",";
+			            val+=$(this).find('select').eq(1).val()+";";
+			            txt += $(this).find('select option:selected').eq(0).text()+" ";
+			            txt += $(this).find('select option:selected').eq(1).text()+",";
+			        });
+			        if(val !="")
+			        	val=val.substring(0,val.length-1);
+			        if(txt !="")
+			        	txt=txt.substring(0,txt.length-1);
+			        	
+					var cht=googlechartRead();
+					for(i in cht){
+						if(cht[i].id==$("#inId").val()){
+							cht[i].sortlist=val;
+							
+						}
+					}
+					googlechartUpdate(cht);
+					$("#lbSort").html(txt);
+				}
+				
+				// product new create input field 
+				 $("#btnSort2").click(function(){
+				 	//$.mobile.utils.showWaitBox("a", "loading...");
+					makeSort(); $('#olSort').trigger('create');
+					//setTimeout(function(){$.mobile.utils.hideWaitBox()}, 1000);
+					
+				  });
+				  
+				 //input del button click  
+				 $(document).on("click", '[id^=btnSort3_]', function(event, ui) {
+				 	var indx=$(this).attr('id').replace("btnSort3_","");
+				    $(this).parent().parent().remove();
+				 
+			  		return false;
+				  })
+		 	</script>
+      </div>
+       <div data-role="footer" data-position="fixed" data-theme="b">
+      	<div data-role="navbar">
+			<ul>
+				<li><a href="#chartedit" onclick="updateSort();" class="ui-btn ui-icon-grid ui-btn-icon-left">Apply</a></li>
+				<li><a href="#chartedit" class="ui-btn ui-icon-back ui-btn-icon-left">Cancel</a></li>
+			</ul>
+		</div>
+		</div>
+	</div>
+	
+	<div data-role="page" id="dvData">
+      <div data-role="header" data-theme="b">
+        <h1>Data Create</h1>
+      </div>
+      <div data-role="content">
+   		<ul data-role="listview" id="ContainData" style="margin:0;">
+   			<li class="sp">
+				<div class="ui-grid-a" >
+					<div class="ui-block-a" >
+						<label for="selSrc">DB:</label>
+					</div>
+					<div class="ui-block-b" >
+						<select id="selSrc" onchange="selSrcchg()" name="selSrc" data-native-menu='true' data-theme='a'>
+						</select>
+					</div>
+				</div>
+			</li>
+			<li class="sp">
+				<div class="ui-grid-a" >
+					<div class="ui-block-a" >
+						<label for="selAxis">Axis:</label>
+					</div>
+					<div class="ui-block-b" >
+						<select id="selAxis"  onchange="selAxischg()" name="selAxis" data-native-menu='true' data-theme='a'>
+						</select>
+						<div id="dvDateformat" style="display:none;">
+						<select id="selDateformat"  name="selDateformat" data-native-menu='true' data-theme='a'>
+						</select>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="sp">
+				<div class="ui-grid-a" >
+					<div class="ui-block-a" >
+						<label for="selSeries">Series:</label>
+					</div>
+					<div class="ui-block-b" >
+						<select id="selSeries" name="selSeries" data-native-menu='true' data-theme='a'>
+						</select>
+					</div>
+				</div>
+			</li>
+			<li class="sp">
+				<div class="ui-grid-a" >
+					<div class="ui-block-a" >
+						<label for="btn2">value:</label>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" id="btn2" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" >Add</a>
+					</div>
+				</div>
+			</li>
+	   	</ul>
+		 <ul data-role="listview" data-theme="c" style="margin:0;" id="ol1"></ul>
+      </div>
+       <div data-role="footer" data-position="fixed" data-theme="b">
+      	<div data-role="navbar">
+			<ul>
+				<li><a href="#chartedit" onclick="DataListUpdate();" class="ui-btn ui-icon-grid ui-btn-icon-left">Save</a></li>
+				<li><a href="#chartedit" class="ui-btn ui-icon-back ui-btn-icon-left">Cancel</a></li>
+			</ul>
+		</div>
+		</div>
+	</div>
+	<script>
+		
+		function dataFieldList(){
+			var dsrc=$("#inId").val();
+			var data=defaultData(valaxis().src);
+			  var list =Object.keys(data[0]);
+			  var sellist="";
+			  for(i in list){
+			  	sellist+=list[i]+","+list[i]+";";
+			  }
+			   sellist = sellist.substring(0, sellist.length-1);
+		   return sellist;
+		}
+		
+		function populateValAxis(){
+			var sellist=dataFieldList();
+			populatePure("#selAxis",sellist,valaxis().axis,"");
+			 $("#selAxis").enhanceWithin();
+			populatePure("#selSeries",sellist,valaxis().series,"None");
+			 $("#selSeries").enhanceWithin();
+			makeData();
+		}
+		function selSrcchg(){
+			$("#inId").val($("#selSrc").val());
+			$("#ol1").empty();
+			cnt=0;
+			//data source
+			var sellist=dataFieldList();
+			populatePure("#selAxis",sellist,"","");
+			populatePure("#selSeries",sellist,"","None");
+			 $("#selAxis").enhanceWithin();
+			 $("#selSeries").enhanceWithin();
+			makeData();
+		}
+		
+		function selAxischg(){
+			var data=defaultData($("#selSrc").val());
+			var fname=$("#selAxis").val();
+			var d = new Date(data[0][fname]);
+			$("#dvDateformat").css("display","none");
+			if(d instanceof Date && d !="Invalid Date"){
+				$("#dvDateformat").css("display","block");
+				var datef="yyyy/MM/dd,yyyy/MM/dd;yy/MM/dd,yy/MM/dd;yy/M/d,yy/M/d;MM/dd,MM/dd;M/d,M/d";
+				populatePure("#selDateformat",datef,valaxis().xformat,"Select Date Format");
+				 $("#selDateformat").enhanceWithin();
+			}
+		}
+		//when datalist edit
+		function dataEdit(){
+			$("#ol1").empty();
+			cnt=0;
+			//data source
+			populatePure("#selSrc",defaultDatasrc(),valaxis().src,"");
+			$("#selSrc").enhanceWithin();
+			var sellist=dataFieldList();
+			var vallist=valaxis().val;
+			populatePure("#selAxis",sellist,valaxis().axis,"");
+			$("#selAxis").enhanceWithin();
+			selAxischg();
+			populatePure("#selSeries",sellist,valaxis().series,"None");
+			 $("#selSeries").enhanceWithin();
+			$('#containData').trigger('create');
+			if(vallist !=""){
+				var vl=vallist.split(';');
+			for(var k=0;k< vl.length;k++){
+				makeData();
+				var ndt=vl[k].split(',');//JSON.parse(data[k]);
+				$("#seldata_"+k).val(ndt[0]);
+				$("#selaggre_"+k).val(ndt[1]);
+			}
+			$('#ol1').trigger('create');
+			} 
+		}
+	
+		var cancelcnt=0;
+		function refresh(){
+			cancelcnt++;
+		}
+		var cnt=0;
+		//prodlist blank
+		function makeData(){
+			 var id="btn3_"+cnt;
+			 
+			  //data select create
+			  var sellist=dataFieldList();
+			  var datasel=populatePureRtn(sellist,"");
+			  datasel.id="seldata_"+cnt;
+			  datasel.setAttribute("data-native-menu","false");
+			  datasel.setAttribute("data-theme","a");
+			  //("#seldata_"+cnt).enhanceWithin();
+			  var html=document.createElement("div");
+	
+			  var dva=document.createElement("div");
+			  dva.setAttribute("style","float:left;width:50%");
+	
+			  html.appendChild(dva);
+			  //html.setAttribute("data-role","fieldcontain");
+			  
+			  dva.appendChild(datasel);
+			 
+	
+			  var dvb=document.createElement("div");
+			  dvb.setAttribute("style","float:left;width:30%;");
+			  html.appendChild(dvb);
+
+			  var agglist="sum,Sum;avg,Avg;max,Max;min,Min";
+			  var aggresel=populatePureRtn(agglist,"sum");
+			  aggresel.id="selaggre_"+cnt;
+			  aggresel.setAttribute("data-native-menu","false");
+			  aggresel.setAttribute("data-theme","a");
+			  //("#selaggre_"+cnt).enhanceWithin();
+			  dvb.appendChild(aggresel);
+			  dvb.setAttribute("style","float:left;padding-left:5px;");
+			  
+			   // minus button
+			  var dvc=document.createElement("div");
+			  dvc.setAttribute("class","ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext");
+			  dvc.setAttribute("style","float:right;");
+	
+/*
+			  var img=document.createElement("img");
+			  img.src="images/minus1.png";
+			  sp.appendChild(img);*/
+
+			  dvc.id="btn3_"+cnt;
+			  
+	
+			  html.appendChild(dva);		
+			  html.appendChild(dvb);		
+			  html.appendChild(dvc);		  
+			 
+	  
+			  //li 
+			  var li1=document.createElement("li");
+			  li1.appendChild(html);
+			  li1.setAttribute("style","padding: .2em .2em ;");
+			 
+			  $("#ol1").append(li1);
+			  listrefresh("ol1");
+			  cnt++;
+		}
+		
+		// product new create input field 
+	 $("#btn2").click(function(){
+	 	//$.mobile.utils.showWaitBox("a", "loading...");
+		makeData(); $('#ol1').trigger('create');
+		//setTimeout(function(){$.mobile.utils.hideWaitBox()}, 1000);
+		
+	  });
+	  
+	 //input del button click  
+	 $(document).on("click", '[id^=btn3_]', function(event, ui) {
+	 	var indx=$(this).attr('id').replace("btn3_","");
+	    $(this).parent().parent().remove();
+	 
+  		return false;
+	  })
+	   //when save create prodlist
+	function DataListUpdate(){
+		var axis=$("#selAxis").val();
+		var xformat=$("#selDateformat").val();
+		var ser=$("#selSeries").val();
+		var val="";
+		var arr = new Array();
+        $( "#ol1 li" ).each(function( index ) {
+            val+=$(this).find('select').eq(0).val()+",";
+            val+=$(this).find('select').eq(1).val()+";";
+        });
+        if(val !="")
+        	val=val.substring(0,val.length-1);
+			var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+					cht[i].axis=axis;
+					cht[i].xformat=xformat;
+					cht[i].series=ser;
+					cht[i].value=val;
+				}
+			}
+		googlechartUpdate(cht);
+		
+	}
+	</script>
+	<style>
+		.ui-listview>.ui-li-static {
+		padding: .1em .1em !important;
+		}
+	</style>
+  	<div data-role="page" id="googlechart">
+      <div data-role="header" data-theme="b" data-position="fixed">
+      	<a href="#" id="tgl"  class="ui-btn ui-btn-inline ui-icon-exchange ui-btn-icon-notext"></a>
+        <h1>test</h1>
+        <a href="#chartedit" onclick="chartEditRead()" class="ui-btn ui-btn-inline ui-icon-gear ui-btn-icon-notext"></a>
+
+      </div>
+      <div data-role="content">
+      	<div id="dvFiltercontent" style="display:none;"></div>
+      	<input type="hidden" id="inFilter">
+	    <div id="chartdiv"></div>
+	    <div id="dvContainer"></div>
+	    <div id="dvGoalChart"  >
+	    </div>
+	   <div style="position:absolute;bottom:60px;left:50%;margin-left:-10px;font-size:10px;font-weight:bold;"><label id="lbPagenum"></label></div>
+	    <input type="hidden" id="googleData">
+      </div>
+
+      <script>
+		$(document).on("pagecreate","#googlechart",function(){
+		  $("#dvContainer").on("swipeleft",function(){
+		     var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+					if(i !=cht.length-1){
+						var k=parseInt(i)+1;
+						var Id=cht[k].id;
+						$("#inId").val(Id);
+						paramshow="none"; 
+						drawChart1();
+						$("#lbPagenum").html(k+"/"+cht.length-1);
+						break;
+					}
+				}
+			}
+		  });
+		  $("#dvContainer").on("swiperight",function(){
+		    var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+					if(i!=0){
+						var k=parseInt(i)-1;
+						var Id=cht[k].id;
+						$("#inId").val(Id);
+						paramshow="none"; 
+						drawChart1();
+						$("#lbPagenum").html(k+"/"+cht.length-1);
+						break;
+					}
+				}
+			}
+		  });                       
+		});
+
+		
+
+        
+      	$("#tgl").click(function(){
+			$("#dvGoalChart").toggle();
+			//$("#dvTable").toggle();
+			//if(valaxis().axistype!="date")	
+			//$("#dvAxis").toggle();
+			//$('div[id^="dvValue"]').toggle();
+			if(paramshow=="none")
+				paramshow="block";
+			else
+				paramshow="none";
+				
+			drawChart1();
+			
+			$("#dvTable").css("width","95%")
+		});
+		
+		
+		function googlechartRead(){
+			var chartlist=localStorage.getItem("googlechart");
+			if(chartlist !==null){
+				var cht=JSON.parse(chartlist).data;
+			}
+			return cht;
+		}
+		function chartEditRead(){
+			//data,charttype,title,haxis,vaxis,legend
+			var cht=googlechartRead();
+			for(i in cht){
+				if(cht[i].id==$("#inId").val()){
+					
+					$("#lbCharttype").html(cht[i].ctype);
+					
+					
+					$("#lbTitle").html(cht[i].title);
+					var opt_tit=cht[i].opt_tit;
+					var opt_vax=cht[i].opt_vax;
+					var opt_hax=cht[i].opt_hax;
+					var opt_leg=cht[i].opt_leg;
+	      			
+	      			
+					$("#lbVertical").html(opt_vax.split(',')[0]);
+					$("#lbHorizontal").html(opt_hax.split(',')[0]);
+					$("#selLegend").val(opt_leg.split(',')[0]);
+
+					populatePure("#selSrc",defaultDatasrc(),valaxis().src,cht[i].srcname);
+					$("#lbData").html($("#selSrc option:selected").text());		
+					sortEdit();
+					var txt="";
+					$( "#olSort li" ).each(function( index ) {
+			            txt += $(this).find('select option:selected').eq(0).text().capitalize()+" ";
+			            txt += $(this).find('select option:selected').eq(1).text().toLowerCase()+",";
+			        });	
+			        if(txt !="")txt=txt.substring(0,txt.length-1);
+			        $("#lbSort").html(txt);		
+			        filterEdit();	
+				}
+			}
+		}
+
+	        //title,tsize,tfontname,tcolor,tbold,titalic
+			//,width,height
+			//,haxis(title,hsize,hfontname,hcolor,hbold,hitalic)
+			//,vaxis(title,vsize,vfontname,vcolor,vbold,vitalic),legendposition
+			var chktime=0;
+      		function optionRead(){
+      			
+      			var legend="none";
+      			var cht=googlechartRead();
+  				for(i in cht){
+  					if(cht[i].id==$("#inId").val()){
+  					
+		      			var ctype=cht[i].ctype;
+		      			legend=cht[i].opt_leg.split(',')[0];
+		      			
+  						switch($('#titlefrom').val()){
+  							case "mp": default:
+  								opt=cht[i].opt_tit.split(',');
+  								var title=cht[i].title;
+				      			var fontsize=opt[1];
+				      			if (fontsize=="")fontsize=16;
+  								var fontname=opt[2];
+  								if (fontname=="")fontname="arial";
+				      			var color=opt[3];
+				      			var bold=opt[4];
+				      			var italic=opt[5];
+  							break;
+  							case "vx":
+  								opt=cht[i].opt_vax.split(',');
+	      						title=opt[0];
+				      			fontsize=opt[1];
+  								if (fontsize=="")fontsize=10;
+				      			fontname=opt[2];
+				      			if (fontname=="")fontname="arial";
+				      			color=opt[3];
+				      			bold=opt[4];
+				      			italic=opt[5];
+		      				break;
+  							case "hx":
+  								opt=cht[i].opt_hax.split(',');
+	      						title=opt[0];
+				      			fontsize=opt[1];
+  								if (fontsize=="")fontsize=10;
+				      			fontname=opt[2];
+				      			if (fontname=="")fontname="arial";
+				      			color=opt[3];
+				      			bold=opt[4];
+				      			italic=opt[5];
+  							break;
+  						}
+  						//common default value
+		      			if (color=="")color="#000000";
+		      			if (bold=="")bold="false";
+		      			if (italic=="")italic="false";
+		      			
+		      			$("#inTitle1").val(title);
+					  	$("#color1").val(color);
+					  	 $("#color1").change();
+					  	 
+	  	 				if(chktime==0){
+	  	 					$('input[name=cbBold]').attr('checked', getBool(bold));
+	  	 					$('input[name=cbItalic]').attr('checked', getBool(italic));
+	  	 				}
+
+	  	 				else{
+	  	 					$( "input[name=cbBold]" ).prop( "checked", getBool(bold) ).checkboxradio( "refresh" );
+	  	 					$( "input[name=cbItalic]" ).prop( "checked", getBool(italic) ).checkboxradio( "refresh" );
+	  	 				}
+
+		      			populatePure("#selSize","10,10px;12,12px;14,14px;18,18px;20,20px;24,24px",fontsize,"");
+		      			$("#selSize").enhanceWithin();
+		      			populatePure("#selFont","arial,Arial;sanssarif,SansSarif;gulim,Gulim;dotum,Dotum;malgun gothic,MalgunGothic",fontname,"");
+		      			
+		      			switch(ctype){
+		      				case "pie": case "doughnut":
+							    $('#selLegend').append("<option value='labeled'>Labeled</option>")
+							    selectrefresh(selLegend);
+						    break;
+						    default:
+						    if( $("#selLegend option[value='labeled']").length ){
+						    	$("#selLegend option[value='labeled']").remove();
+						    	selectrefresh(selLegend);
+						    }
+						    	
+						    break;
+					    }
+					    
+		      			$("#selLegend").val(legend);
+		      		}
+	      		}
+      		
+	      		chktime++;
+      		}
+      		
+      		function optionUpdate(){
+      			var cht=googlechartRead();
+      				for(i in cht){
+      					if(cht[i].id==$("#inId").val()){
+      						cht[i].ctype=$("#lbCharttype").html();
+      						cht[i].opt_leg=$("#selLegend").val();
+			      			var opt=[];
+      						switch($('#titlefrom').val()){
+      							case "mp": default:
+      								cht[i].title=$("#inTitle1").val();
+      								opt=[];
+      								opt[0]=$("#inTitle1").val();
+					      			opt[1]=$("#selSize").val();
+      								opt[2]=$("#selFont").val();
+					      			opt[3]=$("#color1").val();
+					      			opt[4]=false;
+					      			if($('input:checkbox[name=cbBold]').is(':checked')) opt[4]=true;
+					      			opt[5]=false;
+					      			if($('input:checkbox[name=cbItalic]').is(':checked')) opt[5]=true;
+					      			cht[i].opt_tit=arraytoCSV(opt);
+      							break;
+      							case "vx":
+      								opt=[];
+					      			opt[0]=$("#inTitle1").val();
+					      			opt[1]=$("#selSize").val();
+      								opt[2]=$("#selFont").val();
+					      			opt[3]=$("#color1").val();
+					      			opt[4]=false;
+					      			if($('input:checkbox[name=cbBold]').is(':checked')) opt[4]=true;
+					      			opt[5]=false;
+					      			if($('input:checkbox[name=cbItalic]').is(':checked')) opt[5]=true;
+					      			cht[i].opt_vax=arraytoCSV(opt);
+			      				break;
+      							case "hx":
+					      			opt=[];
+					      			opt[0]=$("#inTitle1").val();
+					      			opt[1]=$("#selSize").val();
+      								opt[2]=$("#selFont").val();
+					      			opt[3]=$("#color1").val();
+					      			opt[4]=false;
+					      			if($('input:checkbox[name=cbBold]').is(':checked')) opt[4]=true;
+					      			opt[5]=false;
+					      			if($('input:checkbox[name=cbItalic]').is(':checked')) opt[5]=true;
+					      			cht[i].opt_hax=arraytoCSV(opt);
+      							break;
+      						}
+      						
+      						googlechartUpdate(cht);
+      					}
+      				}
+      			
+      		}
+			function arraytoCSV(arr){
+				var csv="";
+				for(i in arr){
+					csv +=arr[i]+",";
+				}
+				return csv.substring(0, csv.length-1);
+			}
+      		function drawChart1(){
+      			var cht=googlechartRead();
+  				for(i in cht){
+  					if(cht[i].id==$("#inId").val()){
+  						
+	      				var ax=cht[i].axis;
+	      				var ser=cht[i].series;
+		      			var val=cht[i].value;
+		      			//var opt=cht[i].options;
+		      			var opt_tit=cht[i].opt_tit;
+						var opt_wh=cht[i].opt_wh;
+						var opt_vax=cht[i].opt_vax;
+						var opt_hax=cht[i].opt_hax;
+						var opt_leg=cht[i].opt_leg;
+		      			var title=cht[i].title;
+		      			$('#googlechart h1').text(title);
+		      			var ctype=cht[i].ctype;
+	      				//filter if any
+		      			var flist=cht[i].filterlist;
+		      			//sort if any
+		      			var slist=cht[i].sortlist;
+		      			var data="";
+		      			
+		      			if(cht[i].srcname !="")
+		      			data=defaultData(cht[i].srcname);
+		      		
+		      			var json=makeGoogleDataTable(data,ax,ser,val,flist,slist);
+		      			
+		      			var options=createOption(opt_tit,opt_wh,opt_vax,opt_hax,opt_leg);
+		      			//drawVisualization(json);
+		      			//drawChart(json,"","dvGoalChart",options,ctype);
+		      			drawDashboard(json,options,ctype,flist,slist);
+
+      			}
+      			}
+      		}
+      </script>
+
+      <div data-role="footer" data-position="fixed" data-theme="b">
+      	<div data-role="navbar" >
+			<ul style="height:50px;">
+				<li><a href="#" onclick="reloadChart()" class="ui-btn ui-icon-grid ui-btn-icon-top">List</a></li>
+				<li><a onclick="moveChart(-1)" class="ui-btn ui-icon-carat-l ui-btn-icon-top">Prev</a></li>
+				<li><a onclick="moveChart(1)" class="ui-btn ui-icon-carat-r ui-btn-icon-top">Next</a></li>
+			</ul>
+			<script>
+				function reloadChart(){
+					var googlechart=localStorage.getItem("googlechart");
+					sorttype="";
+			  		mardata=JSON.parse(googlechart).data;
+					setTimeout(function(){ChartListLoad(mardata,sorttype),1000});
+					$.mobile.changePage("#chartlist");
+				}
+				function moveChart(add){
+					 var cht=googlechartRead();
+					for(i in cht){
+						if(cht[i].id==$("#inId").val()){
+							var k=parseInt(i)+add;
+							if(k <cht.length && k>=0){
+								
+								var Id=cht[k].id;
+								console.log(k,cht[k]["id"],cht[i]["title"])
+								$("#inId").val(Id);
+								paramshow="none"; 
+								drawChart1();
+								var pg=k+"/"+(cht.length-1);
+								$("#lbPagenum").html(pg);
+					break;
+							}
+						}
+					}
+				}
+				
+/*
+				//$(document).on("pagecreate",function(event){
+				  $(window).on("orientationchange",function(event){
+				    drawChart1();
+				  });                     
+				//});
+*/
+				window.addEventListener("orientationchange", function() {
+					 drawChart1();
+					//alert(window.orientation);
+					setTimeout(function(){drawChart1(),1000});
+				}, false);
+				
+				//extract column values
+				function maxmin(name){
+	      			var data=setData();
+	      			//find index thru loop
+	      			for(var i =0;i<data.getNumberOfColumns();i++){
+	      				if(data.getColumnLabel(i)==name){
+	      					return {index:i,max:data.getColumnRange(i).max,min:data.getColumnRange(i).min}
+	      				}
+	      			}
+				}
+				function dataFieldList1(name){
+					var dsrc=$("#inId").val();
+					var data=defaultData(valaxis().src);
+					
+					var list=[];
+
+					for(i in data){
+						list.push(data[i][name]);
+					}
+					list=uniques(list);
+					list=list.sort();
+					var rtn="";
+				  	for(i in list){
+				  		rtn+=list[i]+","+list[i]+";";
+				  	}
+				   rtn = rtn.substring(0, rtn.length-1);
+				   return rtn;
+
+				}
+				function dataFieldList2(name){
+					var dsrc=$("#inId").val();
+					var data=defaultData(valaxis().src);
+					
+					var list=[];
+					
+
+					for(i in data){
+						list.push(data[i][name]);
+					}
+					list=uniques(list);
+					var rtn=[];
+					var set={};
+				  	for(i in list){
+				  		set={};
+				  		set.code=list[i];
+				  		set.name=list[i];
+				  		rtn.push(set);
+				  	}
+				  
+				   return rtn;
+
+				}
+				
+			
+	function makeArchive(){
+		$("#ulArchive").empty();
+					
+  		var range=$("#rangeYr").val();
+  		var range1=$("#rangeMth").val();
+  		if(range ==null)range=new Date().getFullYear();
+  		if(range1==null)range1=new Date().getMonth()+1; 
+  		range=" ("+range+" / "+range1+")"
+  		$("#dvListHead").html("Sales"+range);
+  		
+  		
+  		if(sorttype1!=""){
+	  		var arr=[];
+	  		var hcnt={};
+	  		for (i in data) {
+	  			var sortname1=data[i][sorttype1];
+	  			if(sorttype1=='odate'){
+	  				var now=new Date(data[i].odate);
+	  				var day = ("0" + now.getDate()).slice(-2);
+				    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				    sortname1 = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				    if(makeDate(new Date(),"-")==sortname1)
+				    	sortname1="Today";
+	  			}
+
+		  		if(listhead!==sortname1){
+		  			hcnt={};
+		  			hcnt.uname=sortname1;
+		  			hcnt.cnt=1;
+		  			hcnt.rev=parseInt(data[i]["rev"]);
+		  			arr.push(hcnt);
+		  			listhead=sortname1;
+		  		}
+		  		else{
+					for(j in arr){
+		  			 if (arr[j].uname == sortname1) {
+					    arr[j].cnt = parseInt(arr[j].cnt)+1;
+					    arr[j].rev +=parseInt(data[i]["rev"]);
+					  }
+					}
+					
+		  		}
+	  		}
+		}
+  		for (i in data) {
+  	    	
+	        //list-divider
+	        if(sorttype1!=""){
+	       
+			  	var sortname=data[i][sorttype1];
+	
+	  			if(sorttype1=='odate'){
+				    sortname =makeDate(new Date(data[i].odate),"-");
+				     if(makeDate(new Date(),"-")==sortname)
+				    	sortname="Today";
+	  			}
+
+	  			if(listhead!=sortname){
+		        	li = document.createElement( "li" );
+		        	li.setAttribute("data-role","list-divider");	
+	
+		        	//right count insert
+		        	var listcnt;
+		        	var sp=document.createElement("span");
+		        	sp.setAttribute("class","ui-li-count");
+		        	
+		        	for (var j=0; j<arr.length; j++) {
+					    if (arr[j].uname == sortname) {
+					        listcnt=arr[j].cnt;
+					        break;
+					    }
+					}
+		        	sp.innerHTML=listcnt;
+		        	li.appendChild(sp);
+		        	
+		        	//subhead label
+		        	var big = document.createElement( "label" );
+		        	big.innerText=sortname;
+		        	li.appendChild(big);
+		        	
+					$("#list").append( li );
+					listhead=sortname;
+	  			}
+  			}
+  			var ul=document.getElementById("list");
+  			ul.setAttribute("data-role","listview");	
+        	ul.setAttribute("data-inset","false");
+        	ul.setAttribute("data-split-icon","delete");
+	        var li = document.createElement( "li" );
+			
+
+			var a1=document.createElement("a");
+			a1.href="#";
+			//a1.id="scode"+data[k]["scode"];
+			var dvbody=document.createElement("div");
+			dvbody.setAttribute("class","iconFloat ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext");
+			var img=document.createElement("img");
+			img.src="images/add-1-icon.png";
+			
+			dvbody.appendChild(img);
+			//dvbody.id=data[k]["scode"];
+			
+			var big = document.createElement( "h3" );
+			switch(sorttype1){
+				case "odate": default:
+					big.innerText = data[i]["chname"];
+				break;
+				case "chname":
+					big.innerText = makeDate(new Date(data[i].odate),"-");
+				break;
+			}
+			
+			var small = document.createElement( "p" );
+			small.setAttribute("class","ui-li-aside");
+
+			var now=new Date(data[i]["odate"]);
+			var date1=convertDate(now,"date","/");
+			if(sorttype1=="chname")date1="";
+			listrev =calrev(data[i]["prodlist"]).rev;;//parseInt(arr[j].rev);
+			var listcnt="";
+        	small.innerHTML=""+listrev+"<span style='font-weight:normal;font-size:smaller;color:gray;padding-left:5px;'><br/>"+date1+"</span>";
+   			
+   			//table hide & show
+   			var dvdisplay=document.createElement("div");
+			dvdisplay.setAttribute("style","display:none;");
+
+			var list=data[i]["prodlist"];
+   			dvdisplay.appendChild(makeTable(list,data[i]["scode"]));
+
+   			
+			a1.appendChild( dvbody );
+			a1.appendChild(big);
+
+			a1.appendChild(small);
+			a1.appendChild(dvdisplay);
+
+			
+			var a2=document.createElement("a");
+			a2.href="#";
+			a2.id="scode"+data[i]["scode"];
+			li.appendChild(a1);
+			li.appendChild(a2);
+
+			ul.appendChild(li)
+			//pli.appendChild(ul)
+	    }
+	   
+	    $("#ulArchive").listview( "refresh" );	
+  	}	
+			</script>
+		</div><!-- /navbar -->
+      </div>
+    </div>
+  <div data-role="page" id="chartedit">
+      <div data-role="header" data-theme="b">
+        <h1>Edit</h1>
+      </div>
+      <div data-role="content">
+   		<ul id="ulList" data-role="listview" >
+			<li>
+				<a href="#dvData" onclick="dataEdit();" data-transition="none"><label  for="lbData" >Data:</label> <label class="ui-li-aside" id="lbData" ></label></a>
+			</li>
+			<li>
+				<a href="#dvCharttype" data-transition="none"  ><label  for="lbCharttype" >Chart Type:</label> <label class="ui-li-aside" id="lbCharttype" ></label></a>
+			</li>
+			<li>
+				<a href="#dvTitle" onclick="titletype('mp')" data-transition="none"><label  for="lbTitle" >Title:</label> <label class="ui-li-aside" id="lbTitle" ></label></a>
+			</li>
+			<li>
+				<a href="#dvTitle" onclick="titletype('vx')" data-transition="none"><label  for="lbVertical" >Y-Axis:</label> <label class="ui-li-aside" id="lbVertical" ></label></a>
+			</li>
+			<li>
+				<a href="#dvTitle" onclick="titletype('hx')" data-transition="none"><label  for="lbHorizontal" >X-Axis:</label> <label class="ui-li-aside" id="lbHorizontal" ></label></a>
+			</li>
+			<li class="sp">
+	   			<div class="ui-grid-a" >
+					<div  style="padding:10px 0 0 13px;" class="ui-block-a" >
+						<label for="selLegend">Legend :</label>
+					</div>
+					<div  class="ui-block-b" >
+						<select id="selLegend" onchange="selLegendChg()" data-icon="carat-r" data-native-menu="false">
+		                   <option value="none">None</option>
+		                   <option value="right">Right</option>
+		                   <option value="left" >Left</option>
+		                   <option value="top" >Top</option>
+		                   <option value="bottom" >Bottom</option>
+		                </select>
+	                </div>
+                </div>
+			</li>
+	   		<li>
+				<a href="#dvSort" onclick="sortEdit();" data-transition="none"><label  for="lbSort" >Sort:</label> <label class="ui-li-aside" id="lbSort" ></label></a>
+			</li>
+			<li>
+				<a href="#dvFilter" onclick="makeFilter1();" data-transition="none"><label  for="lbFilter" >Filter:</label> <label class="ui-li-aside" id="lbFilter" ></label></a>
+			</li>
+	   	</ul>
+      </div>
+       <div data-role="footer" data-position="fixed" data-theme="b">
+      	<div data-role="navbar">
+			<ul>
+				<li><a href="#googlechart" onclick="drawChart1();setTimeout(function(){drawChart1(),1000});" class="ui-btn ui-icon-grid ui-btn-icon-left">Apply</a></li>
+				<li><a href="#googlechart" class="ui-btn ui-icon-back ui-btn-icon-left">Cancel</a></li>
+			</ul>
+		</div>
+		</div>
+	</div>
+
+	<div data-role="page" id="chartarchive" data-overlay-theme="a">
+	   <div data-role="header" data-theme="b">
+	   	<a onclick="googleDataAjax();" class="ui-btn ui-btn-inline ui-icon-refresh ui-btn-icon-notext"></a>
+	    <h1>Chart Archive</h1>
+	    <a href="#chartedit" onclick="createChart();" class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext"></a>
+	  </div>
+	  <div data-role="content">
+	  		<ul id="ulArchive" data-role="listview" />
+	  </div>
+	  <div data-role="footer" data-theme="b" data-position="fixed">
+	  		<div data-role="navbar">
+			<ul>
+				<li><a href="#chartlist" class="ui-btn ui-icon-back ui-btn-icon-left">Cancel</a></li>
+			</ul>
+		</div>
+	  </div>
+	</div>
+	<script>
+		function googleDataAjax(){
+
+			var comp1=localStorage.getItem("login");
+			var obj = eval("(" + comp1 + ")");
+	  		var comp=obj.comp;
+	  		var staff=obj.id;
+	  		$.mobile.loading( 'show', {
+				text: 'Updating Data...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			$.ajax({
+		    url: "http://mobile.imcmaster.co.kr/WebService.asmx/googleDataRequest",
+		    data: { comp: JSON.stringify(comp),staff: JSON.stringify(staff) },
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "JSON",
+		    success: function (data, status) {	
+				//if(JSON.stringify(data)!="{\"d\":\"ChartList fail\"}"){
+					//updategoogleData(data.d);
+					//alert(data.d)
+					localStorage.setItem("googledata",data.d);
+					$.mobile.loading( 'hide');
+		    	//}
+				//else
+			 	//	alert("Load Failed!");
+		    },
+		   error: function (response) {
+			      var r = jQuery.parseJSON(response.responseText);
+			      alert("Message: " + r.Message);
+			      alert("StackTrace: " + r.StackTrace);
+			      alert("ExceptionType: " + r.ExceptionType);
+			}
+
+		});
+
+
+		}
+		function updategoogleData(ondata){
+			var exist=false;
+			var data1=localStorage.getItem("googledata");
+			var data = eval("(" + data1 + ")");
+			
+			ondata=JSON.parse(ondata);
+			localStorage.setItem("googledata",JSON.stringify(ondata));
+		}
+		function updategoogleChart(ondata){
+			var exist=false;
+			var data=[];
+			var set={};
+			ondata=JSON.parse(ondata).data;
+			
+			for(i in ondata){
+				exist=false;
+				if(!exist){
+					data.push(convertGoogle(ondata[i]));
+				}
+			}
+			set.data=data;
+			set.updated=new Date();
+			localStorage.setItem("googlechart",JSON.stringify(set));
+			
+		}
+		function convertGoogle(data){
+			//googlechart list
+			var set={};
+			set.id=data.rdcode;
+			set.srcname=data.SProcedure;
+			var va=data.field;
+			va=va.split(';');
+			set.series="";
+			for(i in va){
+				var v=va[i].split(',');
+				switch(v[0]){
+					case "dvCt1":
+						set.axis=v[1];
+					break;
+					case "dvCt2":
+						set.value=v[1]+","+data.Groupby;
+					break;
+					case "dvCt3":
+						set.series=v[1];
+					break;
+				}
+			}
+			
+			set.opt_tit=data.name+",16,,,,";
+			set.opt_wh="100%,";
+			set.opt_vax=",12,,,,";
+			set.opt_hax=data.Xtitle+",12,,,,";
+			set.opt_leg=data.LegendPosition;
+			set.title=data.name;
+			set.ctype=convertCtype(data.Charttype);
+			var srt=data.Sorting;
+			var collist="";
+			var indx=0;
+			collist=0+","+set.axis+";";
+			indx++;
+			if(set.series!=""){
+				collist+=1+","+set.series+";";
+				indx++;
+			}
+			var value="";
+			if(set.value !="")val=set.value.split(';');
+			for(j in val){
+				var v=val[j].split(',');
+				collist +=indx+","+v[0]+";";
+				indx++
+			}
+			if(collist !="") 
+				collist=collist.substring(0,collist.length-1);
+								
+	/*
+				collist: 0,chname;1,rev srtname: rev desc
+					collist: 0,infoname;1,num srtname: num desc
+					collist: 0,leadname;1,exprev srtname: */
+	
+			var srtname="";
+			if(srt !=""){
+				srt=srt.split(' ');
+				var col=collist.split(';');
+				for(j in srt){
+					var sr=srt[j].split(',')
+					for(k in col){
+						var co=col[k].split(',');
+						
+						if(sr[0]==co[1]){
+							srtname+=co[0]+",";
+							switch(sr[1]){
+								case "desc":
+									srtname +="false;";
+									break;
+								default:
+									srtname +="true;";
+									break;
+							}
+						}
+					}
+				}
+			}
+			if(srtname !="")srtname=srtname.substring(0,srtname.length-1);
+			
+			set.sortlist=srtname;
+			set.filterlist="";
+		return set;
+		}
+		function convertCtype(ctype){
+			var rtn=ctype
+			if(rtn.indexOf("Chart")==-1){
+				rtn=rtn.capitalize()+"Chart";
+			}
+			return rtn;
+		}
+	</script>
+	<div data-role="page" id="dvTitle" >
+	  	<div data-role="header"  data-theme="b">
+	    	<h1>Title Edit</h1>
+	    	<input type="hidden" id="titlefrom">
+	  	</div>
+	  	<div role="content" class="ui-content">
+			<ul id="ulTitle" data-role="listview">
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div  class="ui-block-a" >
+							<label for="inTitle1">Title:</label>
+						</div>
+						<div  class="ui-block-b" >
+							<input id="inTitle1" type="text">
+						</div>
+					</div>
+				</li>
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div class="ui-block-a" >
+							<label for="selSize" >Font Size:</label>
+						</div>
+						<div class="ui-block-b" >
+							<select id="selSize" name="selSize" data-native-menu='false' data-theme='a'>
+							</select>
+						</div>
+					</div>
+				</li>
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div class="ui-block-a" >
+							<label for="selFont">Font:</label>
+						</div>
+						<div class="ui-block-b" >
+							<select name="selFont" id="selFont" data-native-menu='false' data-theme='a'></select>
+						</div>
+					</div>
+				</li>
+			
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div  class="ui-block-a" >
+							<label>Bold</label> 
+						</div>
+						<div  class="ui-block-b" >
+							<label for="cbBold">Bold</label>
+							<input type="checkbox" style="width:30px;" name="cbBold" id="cbBold" ></input>
+						</div>
+					</div>
+					
+				</li>
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div  class="ui-block-a" >
+							<label>Italic</label> 	
+						</div>
+						<div  class="ui-block-b" >
+							<label for="cbItalic">Italic</label>
+							<input type="checkbox" style="width:30px;" name="cbItalic" id="cbItalic" ></input>
+						</div>
+					</div>
+					
+				</li>
+				
+				<li class="sp">
+					<div class="ui-grid-a" >
+						<div  class="ui-block-a" >
+							<label for="color2">Color:</label> 
+						</div>
+						<div  class="ui-block-b" >
+							<input id="color1" type="text" name="color1" value="#333399" />
+						</div>
+					</div>
+					
+					
+				</li>
+			</ul>
+	  	</div>
+	  	<div data-role="footer" data-position="fixed" data-theme="b">
+	  		<div data-role="navbar">
+	  			<ul>
+	  				<li>
+	  					<a href="#chartedit" onclick="optionUpdate();updatetitle()" data-theme="b"  data-transition="none" data-role="button" >Save</a>		
+	  				</li>
+	  				<li>
+	  					<a href="#chartedit" data-role="button"  data-transition="none" data-theme="b">Cancel</a>			
+	  				</li>
+  				</ul>
+    		</div>
+   		</div>
+	
+	
+		<script>
+			function updatetitle(){
+				var t=$("#inTitle1").val();
+				var fsize=$("#selSize").val();
+				var ftype=$("#selFont").val();
+				var fr=$('#titlefrom').val();
+				var cl=$('#color1').val();
+				var cbb="";
+				var cbi="";
+			 	if($('#cbBold').is(':checked'))
+				 	cbb="bold";
+				if($('#cbItalic').is(':checked'))
+				 	cbi="italic";
+				 var fall=cbb+" "+cbi+" "+fsize+"px "+ftype;
+				switch(fr){
+					case "mp":
+						$("#lbTitle").html(t);
+						//document.getElementById("lbTitle").style.font=fall;
+						//$("#lbTitle").css("color",cl);
+					break;
+					case "vx":
+						$('#lbVertical').html(t);
+						//document.getElementById("lbVertical").style.font=fall;
+						//$("#lbVertical").css("color",cl);
+					break;
+					case "hx":
+						$('#lbHorizontal').html(t);
+						//document.getElementById("lbHorizontal").style.font=fall;
+						//$("#lbHorizontal").css("color",cl);
+					break;
+				}
+			}
+			function titletype(pos){
+				$('#titlefrom').val(pos);
+				$('#dvTitle h1').text("");
+				switch(pos){
+					case "mp":
+						$('#dvTitle h1').text("Title Edit");
+					break;
+					case "vx":
+						$('#dvTitle h1').text("V-Axis Title Edit");
+					break;
+					case "hx":
+						$('#dvTitle h1').text("H-Axis Title Edit");
+					break;
+				}
+			optionRead();
+			}
+		</script>
+	</div>
+	
+	<div data-role="page" id="dvCharttype" data-theme="a">
+	  	<div data-role="header"  data-theme="b">
+	    	<h2>Chart Type</h2>
+	  	</div>
+	  	<div role="content" class="ui-content">
+			<ul id="ulChartype" data-role="listview">
+			<li>
+				<a  id="LineChart" href="#"><img src="images/chart/LineChart.png" alt="line" class="ui-li-icon">Line</a>
+			</li>
+			<li>
+				<a id="ColumnChart" href="#"><img src="images/chart/ColumnChart.png" alt="column" class="ui-li-icon">Column</a>
+			</li>
+			<li>
+				<a id="BarChart" href="#"><img src="images/chart/BarChart.png" alt="bar" class="ui-li-icon">Bar</a>
+			</li>
+			<li>
+				<a id="AreaChart" href="#"><img src="images/chart/AreaChart.png" alt="area" class="ui-li-icon">Area</a>
+			</li>
+			<li>
+				<a id="PieChart" href="#"><img src="images/chart/PieChart.png" alt="Pie" class="ui-li-icon">Pie</a>
+			</li>
+		</ul>
+		
+		</div>
+		 <div data-role="footer" data-position="fixed">
+	      	<div data-role="navbar">
+				<ul>
+					<li><a href="#chartedit"  data-role="button"  data-transition="none" data-theme="b">Close</a></li>
+				</ul>
+			</div><!-- /navbar -->
+      	</div>
+		<script>
+			$( document ).on( 'click', '#ulChartype li a', function(){
+			   //e.preventDefault();
+				$.mobile.changePage("#chartedit");
+			    var Id=$(this).attr('id');
+				$("#lbCharttype").html(Id);
+				
+				//update localStorage(googlechart)
+				var cht=googlechartRead();
+  				for(i in cht){
+  					if(cht[i].id==$("#inId").val())
+		      			cht[i].ctype=$("#lbCharttype").html();
+	      		}
+	      		googlechartUpdate(cht);
+			});
+			function googlechartUpdate(cht){
+				var loc=JSON.parse(localStorage.getItem("googlechart"));
+				loc.data=cht;
+				localStorage.setItem("googlechart",JSON.stringify(loc));
+			}
+			function selLegendChg(){
+				var cht=googlechartRead();
+  				for(i in cht){
+  					if(cht[i].id==$("#inId").val()){
+		      			var opt=cht[i].opt_leg;
+		      			opt=opt.split(',');
+		      			opt[opt.length-1]=$("#selLegend").val();
+		      			cht[i].opt_leg=arraytoCSV(opt);
+		      			googlechartUpdate(cht);
+		      		}	
+	      		}
+			
+			}
+		</script>
+	</div>
+    
+	<script src="http://debug.build.phonegap.com/target/target-script-min.js#imcmobile"></script>
+</body>
+</html>

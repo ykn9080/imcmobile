@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html style="height:100%">
+  <head>
+    <title>Market Information</title>   
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta http-equiv="content-type" content="text/html; charset=EUC-KR" />
+
+   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+	<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />	
+	<link rel="stylesheet" href="css/stylesheet.css" />
+	<link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
+	<script src="js/energize-min.js"></script>
+	
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>   
+	
+	<script type="text/javascript" src="js/jqm-datebox.core.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/picture.js"></script>
+	<script src="js/video.js"></script>
+	<script src="js/videoplayer.js"></script>
+	<script src="js/daummap.js"></script>
+	<script src="js/filemanage.js"></script>
+	<script src="js/cordova-zip-plugin/zip.js"></script>
+	
+	<style type="text/css">
+		html, body, #map_daum,#map_canvas {margin: 0; padding: 0; width: 100%; height: 100%;font-family:dotum;}
+		#map_canvas{ 	height:600px;    }
+		#custom-footer .ui-block-a {width: 50% !important;		}
+		#custom-footer .ui-block-b {width: 30% !important;    	}
+		#custom-footer .ui-block-c {width: 20% !important;    	}
+		#loc .ui-block-a {width: 40% !important;		}
+		#loc .ui-block-b {width: 40% !important;    	}
+		#loc .ui-block-c {width: 20% !important;    	}
+		#searchbar  .ui-block-a {width: 70% !important;		}
+		#searchbar  .ui-block-b {width: 30% !important;    	}
+		#search  .ui-block-a {width: 19% !important;		}
+		#search  .ui-block-b {width: 19% !important;    	}
+		#search  .ui-block-c {width: 19% !important;    	}
+		#search  .ui-block-d {width: 19% !important;    	}
+		#search  .ui-block-e {width: 24% !important;    	}
+		.viewpage {padding:0 0 5px 0;}
+		.viewpage small {font-size:small}
+		.ui-header .ui-title {
+		  overflow: visible !important;
+		  text-overflow: ellipsis !important;
+		}
+		.ui-title {
+		    margin: 0 !important;
+		}
+		.ui-input-text {margin:0 !important;}
+		.ui-select{margin:0 !important;}
+		.ui-checkbox{margin:0 !important;}
+		
+		.ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb{
+			min-height:2.3em !important;
+		}
+		.ui-listview>.ui-li-has-icon>img:first-child, .ui-listview>.ui-li-has-icon>.ui-btn>img:first-child{
+			max-height:1.4em !important;
+			max-width:2.2em !important;
+			top:10px !important
+		}
+		
+		.ui-listview>.ui-li-has-icon>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-icon{
+			padding-left:3em !important;
+			min-height:1.8em !important;
+		}
+		 
+		.sp .ui-block-a {width: 25% !important;}
+     	.sp .ui-block-b {width: 75% !important;}
+	</style>
+	<script type="text/javascript" src="http://apis.daum.net/maps/maps3.js?apikey=62a17c6d8b7c66317ca7b9c39fd35ec3807368d0" charset="utf-8"></script> 
+  </head>
+  <body  style="height:100%;margin:0">
+  
+  	<script>//Page Init
+  	 // device APIs are available
+    $(document).on("mobileinit",function() {
+	    $.mobile.autoInitializePage = false;
+	     $.mobile.page.prototype.options.domCache = true;
+	});
+
+	document.addEventListener("deviceready",onDeviceReady,false);
+	function onDeviceReady() {
+		document.addEventListener("resume", onResume, false);
+		document.addEventListener("pause", onPause, false);
+	}
+	function onResume() {
+		// Handle the resume event
+		LocalStorage.removeItem("resume");
+		alert("hi")
+	}function onPause() {
+		// Handle the resume event
+		LocalStorage.setItem("resume","yes");
+	}
+	
+   
+		
+	var rootdir
+	$( document ).ready(function() {
+		//document.getElementById("new").setAttribute("data-role","page");
+	    PageInit();
+		$.mobile.defaultDialogTransition = "none";
+    	$.mobile.defaultPageTransition = "none"; 
+		document.addEventListener("online", onOnline, false);
+		$("#returnhome").click(function(){
+			navigator.app.loadUrl("file:///android_asset/www/index.html");
+		});
+	});
+	
+	$( document ).on( 'click', '#imglistview li', function(){
+	   //e.preventDefault();
+	    var Id=$(this).attr('id');
+	    var ty=file_get_ext(Id);
+	   
+	    //if(ty !="3ga" && ty !="mp3" && ty !="mp4")
+	    $("#txComment").val("");
+        $("#imgsrc").html("");
+	    $("#imgurl").html("");
+	    document.getElementById("container").innerHTML="";	
+	    if(Id !="undefined")
+	    playav(Id);
+	});
+
+ 	function playVideo(){
+ 		var vidUrl=$("#imgurl").html();
+        window.plugins.videoPlayer.play(vidUrl);
+    }
+    
+	function playav(data){
+		var imgtype="";
+		var clicksrc="";
+		var filename="";
+		 for (var i = imgjson.length - 1; i >= 0; i--) {
+	        if (imgjson[i]['filename'] == data) {
+	            $("#txComment").val(imgjson[i]["comment"]);
+	            $("#imgsrc").html(data);
+	            $("#imgurl").html(imgjson[i]["url"]);
+	            clicksrc=imgjson[i]["url"];
+	            imgtype=imgjson[i]["imgtype"];
+	            switch(imgtype){
+	            	case "qrcode":
+	            		clicksrc=imgjson[i]["url"];
+	            		if(clicksrc.indexOf("http")!=0){
+            				if(clicksrc.indexOf("http")!=-1){
+            					clicksrc=clicksrc.substr(clicksrc.indexOf("http"));	
+            				}
+            			}
+	            		
+	            		$("#imgsrc").html(imgjson[i]["filename"]);
+	            		$("#imgurl").html(clicksrc);
+	            		filename=imgjson[i]["filename"];
+	            	break;
+	            	case "barcode":
+	            		clicksrc="http://www.google.com/#q="+imgjson[i]["filename"];
+	            		$("#imgsrc").html(data);
+	            		$("#imgurl").html(clicksrc);
+	            		upcdata=imgjson[i]["url"];
+	            		filename=imgjson[i]["filename"]
+	            	break;
+	            }
+	        }
+	    }
+	    
+    	switch(imgtype)
+	    {
+	    	case "video":
+				pic=document.createElement("img");
+				pic.src="images/video.jpg";
+				pic.setAttribute("onclick","playVideo()");
+			break;
+			case "audio":
+				pic=document.createElement("img");
+				pic.setAttribute("style","width:50px;");
+				pic.setAttribute("src","images/mp3.png");
+				pic.setAttribute("onclick","playAudio('"+clicksrc+"')");
+			break;
+			case "img": 
+				pic=document.createElement("img");
+				var wsize= $('[data-role="page"]').width()-80;
+				pic.setAttribute("style","max-width:"+wsize+"px");
+				pic.setAttribute("src",clicksrc);
+			break;
+			case "qrcode": 
+				pic=document.createElement("img");
+				var siteurl="http://qrickit.com/api/qr?d="+filename;
+				pic.setAttribute("src",siteurl);
+				pic.setAttribute("onError","this.onerror=null;this.src='images/homepage.png';");
+				pic.setAttribute("onclick","openInAppBrowserBlank('"+clicksrc+"')");
+			break;
+			case "barcode": 
+				pic=document.createElement("img");
+				var siteurl="http://www.searchupc.com/drawupc.aspx?q="+filename;
+				pic.setAttribute("src",siteurl);
+				pic.setAttribute("onError","this.onerror=null;this.src='images/barcode.jpg';");
+				pic.setAttribute("onclick","openInAppBrowserBlank('"+clicksrc+"')");
+			break;
+		}
+		
+		document.getElementById("container").innerHTML="";	
+		document.getElementById("container").appendChild(pic);
+
+		if(imgtype=="barcode"){
+			document.getElementById("container").appendChild(parseUpc(upcdata));
+		}
+
+	    document.location.href="#imgshow"; 
+	    //$.mobile.changePage("#imgshow");
+	}
+ 	function checkmarket(){
+ 		alert(localStorage.getItem("marketsave"));
+ 	}
+	function onOnline(){
+		var conn=navigator.connection.type;
+		var marketsave=localStorage.getItem("marketsave");
+		if(conn !="none" && (marketsave !="" && marketsave !=null)){
+			saveRemoteMarketInfo();
+		}
+	}
+	//page별 키보드 할당
+	$(document).keypress(function(e) {
+	    if(e.keyCode == 13) 
+	    {
+	      $("#b").trigger('click'); 
+	    }
+	  });
+	  
+    // document.addEventListener("offline", onOffline, false);
+    document.addEventListener("backbutton", backKeyDown); 
+	function backKeyDown() { 
+	     // Call my back key code here.
+	     switch($.mobile.activePage.attr('id')){
+	     case "dvList":
+	     $.mobile.loading( 'show', {
+			text: 'Return Home...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+	     navigator.app.loadUrl("file:///android_asset/www/index.html");
+	     break;
+	     case "dvEdit":
+	     $.mobile.changePage("#dvList");
+	     break;
+	     case "imgshow":
+	     $.mobile.changePage("#imglist");
+	     break;
+	     case "imglist": 
+	     case "dvLocation":
+	     case "pic":
+	     $.mobile.changePage("#dvEdit");
+	     break;
+	     default:
+	 	navigator.app.backHistory();
+	 	break;
+	 }
+	}
+
+	var mardata;
+    function PageInit(){
+    	//localstorage check
+    	var mktinfo=localStorage.getItem("marketinfo");
+    	var obj = eval("(" + mktinfo + ")");
+    	//alert(mktinfo);
+		if(mktinfo==null){
+     		MarketInfoAjax();
+    		//PageInit();
+     	}
+     	else{ 
+     		if(obj.data.length==0){
+	     		MarketInfoAjax();
+	    		mktinfo=localStorage.getItem("marketinfo");
+	     	}
+	  		mardata=obj.data;
+	  		sorttype="";
+	  		
+	  		setTimeout(function(){ListViewLoad(mardata.sort(sortDate))},1000);
+  		}
+    }
+    
+    function rivalchg(code){
+    	console.log(code);
+    	var mktinfo=localStorage.getItem("marketinfo");
+    	var obj = eval("(" + mktinfo + ")");
+  		var content=obj.rivalprod;
+    	var list={};
+    	var arr=[];
+    	for (i in content){
+    		if(code==content[i]["rcomp"]){
+  				list={};
+  				list.rprodcode=content[i]["rprodcode"]
+  				list.rprodname=content[i]["rprodname"]
+  				arr.push(list);
+  			}
+  		}
+  		populate("#rivalprod",arr,"rprodcode","rprodname","");
+  		$( "#rivalprod" ).selectmenu( "option", "overlayTheme", "a" );
+		$("#rivalprod").enhanceWithin();
+    }
+   
+/*
+    function populate(id,content,code,name,selcode)
+	{
+		var selected="";
+		$(id).empty();
+		var newOptions='<option value="">-- Select --</option>';
+		for (i in content){
+			if(selcode==content[i][code]) selected="selected";
+	        newOptions += '<option '+selected+' value="'+content[i][code] + '">' + content[i][name] + '</option>';
+	        selected="";
+	    }
+	    $(id).append(newOptions);
+	  	$(id).selectmenu('refresh');
+	    $(id).attr("selectedIndex", -1)
+	}
+*/
+	function createMapContent(requestfrom,mapcontain){
+	    var map=document.createElement("div");
+	    map.id="map";
+		map.setAttribute("style","position:absolute;left:0px;top:45px;overflow:hidden;height:100%;width:100%;");
+		mapcontain.appendChild(map);
+		
+		var dv1=document.createElement("div");
+		var dv2=document.createElement("div");
+		dv1.setAttribute("class","ui-grid-a");
+		dv1.setAttribute("data-role","header");
+		dv1.id="searchbar";
+		mapcontain.appendChild(dv1);
+		
+		//top search input
+		dv1.appendChild(dv2);
+		dv2.setAttribute("class","ui-block-a");
+		var in1=document.createElement("input");
+		dv2.appendChild(in1);
+		in1.id="q";
+		in1.name="검색위치를 입력하세요";
+		in1.type="search";
+		in1.setAttribute("data-mini","true");
+		in1.setAttribute("data-theme","c");
+		
+		dv2=document.createElement("div");
+		dv2.setAttribute("class","ui-block-b");
+		var a1=document.createElement("a");
+
+		dv2.appendChild(a1);
+		dv1.appendChild(dv2);
+		a1.id="b";
+		a1.setAttribute("style","float:right;margin-top:3px;")
+		a1.setAttribute("data-role","button");
+		a1.setAttribute("data-theme","b");
+		a1.setAttribute("data-inline","true");
+		a1.setAttribute("onclick","showList();obj.init();obj.pingSearch();");
+		a1.innerHTML="Search";
+		
+		//search result
+		var img=document.createElement("img")
+		img.src="images/btn_list_on.gif";
+		img.id="btnSearch";
+		img.setAttribute("class","imdim");
+		img.setAttribute("onclick","showList()");
+		img.setAttribute("style","position:absolute;top:70px;left:30px;display:none;z-index:1000;");
+		var mbox=document.createElement("div")
+		mapcontain.appendChild(img);
+		mapcontain.appendChild(mbox);	
+		mbox.id="r";
+		mbox.setAttribute("style","top:70px;left:30px;display:none;");
+		mbox.setAttribute("class","msgbox");
+		var mbox1=document.createElement("div")
+		mbox.appendChild(mbox1);
+		mbox1.setAttribute("class","imdim");
+		mbox1.setAttribute("style","text-align:right;margin-bottom:10px;");
+		img=document.createElement("img")
+		mbox1.appendChild(img);
+		img.src="images/close-icon.png";
+		img.setAttribute("onclick","showBtn()");
+		
+		//close
+		var close=document.createElement("div")
+		mapcontain.appendChild(close);
+		close.setAttribute("data-role","footer");
+		close.setAttribute("data-position","fixed");
+		close.setAttribute("style","height:48px;");
+		var close1=document.createElement("a")
+		close.appendChild(close1);
+		close1.id="close";
+		if(requestfrom=="edit"){
+			//close1.href="#dvEdit";
+			close1.setAttribute("onclick","setTimeout(function(){ checkCurrentPosition();removeMapContent('"+mapcontain.id+"');history.back();},100)");
+		}
+		else
+			close1.setAttribute("onclick","history.back()" );
+		close1.setAttribute("data-icon","back" );
+		close1.setAttribute("data-theme","b" );
+		close1.setAttribute("data-role","button" );
+		close1.setAttribute("class","ui-btn-right");
+		close1.innerHTML="Close";
+		
+		var curpos=document.createElement("a")
+		if(requestfrom=="edit")
+		close.appendChild(curpos);
+		curpos.id="curpos1";
+		curpos.href="#";
+		curpos.setAttribute("onclick","curposchg()");
+		curpos.setAttribute("data-icon","check" );
+		curpos.setAttribute("data-theme","b" );
+		curpos.setAttribute("data-role","button" );
+		curpos.setAttribute("class","ui-btn-left");
+		curpos.innerHTML="<label id='curpos1label'>현재위치</label>";
+	}
+	function removeMapContent(id){
+		var element = document.getElementById(id);
+		element.parentNode.removeChild(element);
+	}
+	function checkCurrentPosition(){
+		//if not current position uncheck 
+		navigator.geolocation.getCurrentPosition(function(position) {
+		  if($("#LatLng").val()!=position.coords.latitude+","+position.coords.longitude){
+		  	$('.myCheckbox').prop('checked', false);
+		  }
+		});
+	}
+ 
+  </script>
+  		
+	<script>//Market Info
+	function MarketInfoAjax() {
+		var comp1=localStorage.getItem("login");
+		var obj = eval("(" + comp1 + ")");
+  		var comp=obj.comp;
+  		$.mobile.loading( 'show', {
+			text: 'Loading ....',
+			textVisible: true,
+			theme: 'b',
+			html: ""
+		});
+		$.ajax({
+	        url: "http://mobile.imcmaster.co.kr/WebService.asmx/MarketInfoList",
+	        data: { comp: JSON.stringify(comp)},
+	        contentType: "application/json; charset=utf-8",
+	        dataType: "JSON",
+	        success: function (data, status) {	
+				if(JSON.stringify(data)!="{\"d\":\"fail\"}"){
+					savelocal("marketinfo",data.d );
+					PageInit();
+		    	}
+	    		else
+					msgshow('login failed');
+					$.mobile.loading('hide');
+	            },
+	            error: function () { 
+	            	$.mobile.loading('hide');
+					msgshow('login error'); } 
+	    });
+   	}    
+	function localSaveLocation(){
+		navigator.geolocation.getCurrentPosition(onLocSuccess, onLocError);
+		var lat=startPos.coords.latitude; 
+		var lng=startPos.coords.longitude;
+		localStorage.setItem("latlng",lat+","+lng);
+	}
+	function curposchg(){
+		var cur=document.getElementById("curpos1label");
+		localSaveLocation();//localStorage save currentposition
+		  if(cur.innerHTML=="현재위치"){
+		  	cur.innerHTML="원래위치";
+		  	$("#loctemp").val($("#LatLng").val());
+		  	$("#LatLng").val(localStorage.getItem("latlng"));
+		  }
+		  else{
+		  	cur.innerHTML="현재위치";
+		  	$("#LatLng").val($("#loctemp").val());
+		  	
+		  }
+		  daumAgain();
+	}
+    
+    var startPos ="";
+   function onLocSuccess(position) {
+   		startPos = position;
+		var lat=startPos.coords.latitude; 
+		var lng=startPos.coords.longitude;
+		$("#LatLng").val(lat+","+lng);
+	}
+	
+	function onLocError(error) {
+	    alert('code: '    + error.code    + '\n' +
+	          'message: ' + error.message + '\n');
+	}
+	
+	function sortDate(a,b){
+		return new Date(b.idate).getTime() - new Date(a.idate).getTime();
+	}
+	function sortInfoname(a,b){
+		return ((a.infoname == b.infoname) ? 0 : ((a.infoname > b.infoname) ? 1 : -1 ));
+	}
+	function sortStaffname(a,b){
+		return ((a.staffname == b.staffname) ? 0 : ((a.staffname > b.staffname) ? 1 : -1 ));
+	}
+  	function sortName(a,b){
+		return ((a.iname == b.iname) ? 0 : ((a.iname > b.iname) ? 1 : -1 ));
+	}
+	
+	function sortList(code){
+		$('#list').empty();
+		switch(code){
+  			case "infotype":
+  				sorttype="infoname";
+  				ListViewLoad(mardata.sort(sortInfoname));
+  			break;
+  			case "staff":
+  				sorttype="staffname";
+  				ListViewLoad(mardata.sort(sortStaffname));
+  			break;
+  			case "idate":
+  				sorttype="idate";
+  				ListViewLoad(mardata.sort(sortDate));
+  			break;
+  			case "iname":
+  				sorttype="N/A";
+  				ListViewLoad(mardata.sort(sortName));
+  			break;
+  		}
+  		console.log(code,sorttype);
+	}
+	var sorttype="";
+	var listhead="";
+  	function ListViewLoad(data){
+  		//list-divider 별 count
+  		firstload=true;//
+  		if(sorttype!=""){
+	  		var arr=[];
+	  		var hcnt={};
+	  		for (i in data) {
+	  			var sortname1=data[i][sorttype];
+
+	  			if(sorttype=='idate'){
+	  				var now=new Date(data[i].idate);
+	  				var day = ("0" + now.getDate()).slice(-2);
+				    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				    sortname1 = now.getFullYear()+"-"+(month)+"-"+(day) ;
+	  			}
+
+		  		if(listhead!==sortname1){
+		  			hcnt={};
+		  			hcnt.uname=sortname1;
+		  			hcnt.cnt=1;
+		  			arr.push(hcnt);
+		  			listhead=sortname1;
+		  		}
+		  		else{
+					for(j in arr){
+		  			 if (arr[j].uname == sortname1) {
+					    arr[j].cnt = parseInt(arr[j].cnt)+1;
+					  }
+					}
+		  		}
+	  		}
+		}
+  		for (i in data) {
+	        var li = document.createElement( "li" );
+	        //list-divider
+	        if(sorttype!=""){
+			  	var sortname=data[i][sorttype];
+
+	  			if(sorttype=='idate'){
+	  				var now=new Date(data[i].idate);
+	  				var day = ("0" + now.getDate()).slice(-2);
+				    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				    sortname = now.getFullYear()+"-"+(month)+"-"+(day) ;
+	  			}
+
+	  			if(listhead!==sortname){
+		        	li = document.createElement( "li" );
+		        	li.setAttribute("data-role","list-divider");	
+					
+	
+		        	var big = document.createElement( "label" );
+		        	big.innerText=sortname;
+		        	li.appendChild(big);
+		        	
+		        	//우측 count삽입
+		        	var listcnt;
+		        	var sp=document.createElement("span");
+		        	sp.setAttribute("class","ui-li-count");
+		        	for (var j=0; j<arr.length; j++) {
+		        		
+			  			
+					    if (arr[j].uname == sortname) {
+					        listcnt=arr[j].cnt;
+					        break;
+					    }
+					}
+		        	sp.innerHTML=listcnt;
+		        	li.appendChild(sp);
+					$("#list").append( li );
+					listhead=sortname;
+	  			}
+  			}
+	        li = document.createElement( "li" );
+			
+			var a1=document.createElement("a");
+			a1.id=data[i]["icode"];
+			//var dvbody=document.createElement("div");
+			//dvbody.id=data[i]["icode"];
+			a1.setAttribute("class","firstanchor");
+			var big = document.createElement( "h3" );
+			big.innerText = data[i]["iname"];
+			
+			var staff=data[i]["staffname"];
+			var now=new Date(data[i]["idate"]);
+			var date =convertDate(now,"date","/");//+" "+convertDate(now,"time",":");
+			//date.setAttribute("style","text-align:right;")
+			//staff.setAttribute("style","text-align:right;")
+			
+			var small = document.createElement( "p" );
+			small.setAttribute("class","ui-li-aside");
+			small.setAttribute("style","margin-right:-20px")
+        	small.innerHTML="<span style='font-weight:normal;font-size:smaller;color:gray;padding-left:5px;'><br/><br/>"+date+"</span>";
+			
+			//thumbnail
+			var thumb=document.createElement("img");
+			thumb.setAttribute("class","ui-li-icon");
+			thumb.src="images/noimage.png";
+			if(data[i]["filename"] !=""){
+				//var imgjs = eval("(" + data[i]["filename"] + ")");
+				var imgjs=JSON.parse(data[i].filename );
+				var comp=data[i]["comp"];
+				for( k in imgjs ){
+		  			var f=imgjs[k]["url"];
+		  			
+		  			var fname=imgjs[k]["filename"];
+		  			var imgtype=imgjs[k]["imgtype"];
+		  			switch(imgtype){
+		  			case "img":
+		  				thumb.src=f; 
+		  				break;
+	  				}
+		  			break;
+					}
+	  			}
+			
+			a1.appendChild(thumb);
+			a1.appendChild(big);
+			a1.appendChild(small)
+			
+			//a1.appendChild( dvbody );
+			li.appendChild(a1);
+			
+			//2nd anchor: edit button (ui-li-link-alt)
+			var a2=document.createElement("a");
+			a2.href="#";
+			a2.id="ed_"+data[i]["icode"];
+			a2.setAttribute("class","secondanchor");
+			//a2.setAttribute("onclick","ContentEditLoad('"+data[i]["icode"]+"');LoadSelect();");
+			li.appendChild(a2);
+			
+			$("#list").append( li );
+	    }
+/*
+	    if ( typeof $( '#list' ).listview() !== "undefined" )
+	    $("#list").listview( "refresh" );	
+*/
+	    
+	    listrefresh("#list");
+  	}
+
+	$( document ).on( 'click', '#list li a.firstanchor', function(){
+	     var icode=$(this).attr('id');
+  		ContentViewLoad(icode);
+	});
+	$( document ).on( 'click', '#list li a.secondanchor', function(){
+	     var icode=$(this).attr('id').replace("ed_","");
+  		ContentEditLoad(icode);LoadSelect();
+	});
+
+    var sval={}; // populate()에 넘겨줄 값
+	function ContentEditLoad(icode){
+		var mkt=localStorage.getItem("marketinfo");
+  		var obj = eval("(" + mkt + ")");
+  		var data=obj.data;
+  		for( i in data){
+  			if(icode==data[i]["icode"]){
+				sval.rcomp=data[i]["othercomp"];
+				sval.rprod=data[i]["otherprod"];
+				sval.pd=data[i]["prod"];
+				sval.infotype=data[i]["infotype"];
+		  		$('#icode').val(data[i]["icode"]);
+  				var descdata=data[i]["iname"]+"<br />"+data[i]["idesc"];
+  				$('#desc').val(descdata.replace(/(<|<\;)br\s*\/*(>|>\;)/gi, "\r\n"));
+  				
+				imgjson="";
+  				if(data[i]["filename"] ==""){
+  					$("#btnImglist").attr("display","none");
+  					imgjson=[];
+  				}
+  				else{
+	  				imgjson = eval("(" + data[i]["filename"] + ")");
+	  				var comp=data[i]["comp"];
+	  				for( i in imgjson ){
+			  			var fname=imgjson[i]["filename"];
+			  			var imgtype=imgjson[i]["imgtype"];
+			  			switch(imgtype){
+			  			case "img": case "video": case "audio":
+			  				//imgjson[i].url="file:///mnt/sdcard/imcmobile/"+fname;
+			  				break;
+		  				case "barcode":
+		  					upcdata=imgjson[i].url;
+		  					break;
+			  			}
+					}
+	  			}
+	  			$('#LatLng').val("");
+	  			//$("input:checkbox[id='checkbox-1']").prop("checked", false);
+	  			$('.checkbox-1').prop('checked', false);
+				if(data[i]["place"] !=""){
+					var loc=eval("(" + data[i]["place"] + ")");
+					$('#location').val(loc.locname);
+					sval.ch=data[i]["chcode"];
+					if(loc.lating !=""){
+					$('#LatLng').val(loc.latlng);
+					//$("input:checkbox[id='checkbox-1']").attr("checked", false); /* by ID */
+					}
+					/*
+					else{
+											if(navigator.geolocation) 
+											navigator.geolocation.getCurrentPosition(onLocSuccess, onLocError);
+											 $('input:checkbox[id="checkbox_1"]').attr("checked", true);
+										
+					}*/
+				}
+/*
+				else{
+					if(navigator.geolocation) 
+					navigator.geolocation.getCurrentPosition(onLocSuccess, onLocError);
+					$("input:checkbox[id='checkbox-1']").attr("checked", true); /* by ID */
+//				}
+
+				
+				var sd = new Date(data[i]["sdate"]);
+				var ed = new Date(data[i]["edate"]);
+				
+				$('#sdate').val(convertDate(sd,"date","-"));
+				$('#stime').val(convertDate(sd,"time",""));
+				$('#edate').val(convertDate(ed,"date","-"));
+				$('#etime').val(convertDate(ed,"time",""));
+				var dt=new Date($("#sdate").val()+" "+$("#stime").val());
+				$("#lbPeriod").html(makeDateTime(dt));
+				
+				LoadSelectProd();
+				var prod=$("#pd option:selected").text();
+				if($("#rivalcomp").val()!="")
+				prod +="(<span style='font-style:italic;'>"+$("#rivalprod option:selected").text()+"</span>)";
+				$("#lbProdRival").html(prod);
+				
+  			}
+  		}
+		$.mobile.changePage("#dvEdit")
+	}
+	
+	
+	$('#clear').on('click', function() {
+		$.mobile.changePage("#dvEdit")
+       	LoadSelect();
+    }); 
+    function convertDate(now,type,divider){
+    	if(devider="")devider="-";
+    	 var rtn;
+		 switch(type){
+		 	case "date":
+			    var day = ("0" + now.getDate()).slice(-2);
+			    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+			    rtn = now.getFullYear()+divider+(month)+divider+(day) ;
+			break;
+			case "time":
+				var time=("0" + now.getHours()).slice(-2);
+				var min=("0" + now.getMinutes()).slice(-2);
+				rtn=(time)+":"+(min);
+			break;
+		}
+		return rtn;
+    }
+    
+	function LoadSelect(){
+		var mktinfo=localStorage.getItem("marketinfo");
+		var obj = eval("(" + mktinfo + ")");
+		populate("#infotype",obj.mi,"code","name",sval.infotype);
+		//$("#infotype").enhanceWithin();
+  		
+  		populate("#ch",obj.ch,"code","name",sval.ch);
+  		//$("#ch").enhanceWithin();
+  		
+	}
+	function LoadSelectProd(){
+		var mktinfo=localStorage.getItem("marketinfo");
+		var obj = eval("(" + mktinfo + ")");
+	
+		populate("#pd",obj.pd,"code","name",sval.pd);
+  		$("#pd").enhanceWithin();
+
+		populate("#rivalcomp",obj.rivalcomp,"compcode","compname",sval.rcomp);
+		//populate rivalprod based on rivalcomp selection
+  		var content=obj.rivalprod;
+    	var list={};
+    	var arr=[];
+    	for (i in content){
+    		if(content[i]["rcomp"]==sval.rcomp){
+  				list={};
+  				list.rprodcode=content[i]["rprodcode"]
+  				list.rprodname=content[i]["rprodname"]
+  				arr.push(list);
+  			}
+  		}
+  		populate("#rivalprod",arr,"rprodcode","rprodname",sval.rprod);
+   }
+	function handleDates(elm, options) {
+        event.stopPropagation();
+        var currentField = $(elm);
+        var opts = options || {};
+        var minVal = opts.min || 0;
+        var maxVal = opts.max || 0;
+
+        var myNewDate = Date.parse(currentField.val()) || new Date();
+        if(typeof myNewDate === "number") {
+            myNewDate = new Date (myNewDate);
+        }
+
+        window.plugins.datePicker.show({
+            date : myNewDate,
+            mode : 'date',
+            minDate: Date.parse(minVal),
+            maxDate: Date.parse(maxVal)
+        }, function(returnDate) {
+            if(returnDate !== "") {
+                var newDate = new Date(returnDate);
+                currentField.val(getFormattedDate(newDate));
+            }
+            currentField.blur();
+        });
+    }
+    
+    function handleTime(elm) {
+        var currentField = $(elm);
+        var time = currentField.val();
+        var myNewTime = new Date();
+
+        if(time) {
+            myNewTime.setHours(time.substr(0, 2));
+            myNewTime.setMinutes(time.substr(3, 2));
+        }
+        plugins.datePicker.show({
+            date : myNewTime,
+            mode : 'time'
+        }, function(returnDate) {
+            if(returnDate !== "") {
+                var newDate = new Date(returnDate);
+                currentField.val(getFormattedTime(newDate));
+            }
+
+            currentField.blur();
+        });
+    }
+    
+
+    function saveLocalMarketInfo(){
+    	var d = new Date();	
+    	var yr=d.getFullYear().toString().substr(2, 2)
+    	var month = d.getMonth()+1;
+		var day = d.getDate();
+		var hr = d.getHours();
+		var min = d.getMinutes();
+		var sec = d.getSeconds();
+		var id =$("#icode").val();
+		if(id=="")id= "i"+yr + 
+		    ((''+month).length<2 ? '0' : '') + month +
+		    ((''+day).length<2 ? '0' : '') + day+
+		    hr+min+sec;
+		    
+		var obj = eval("(" + localStorage.getItem("login") + ")");
+  		
+    	var mi={};
+    	mi.icode=id;
+    	mi.comp=obj.comp;
+		mi.prod=$("#pd").val();
+		mi.chcode=$("#ch").val();
+		mi.infotype=$("#infotype").val();
+    	var td=$("#desc").val();
+	    var cnt=td.indexOf("\n");
+		mi.iname=td.substring(0,cnt);
+		mi.idesc=td.substring(cnt+1,td.length);
+		var loc={};
+		loc.locname=$("#location").val();
+    	loc.latlng=$("#LatLng").val();
+    	mi.location=loc;
+    	var log1=localStorage.getItem("login");
+		var obj = eval("(" + log1 + ")");
+		mi.staff=obj.id;
+		mi.filename=imgjson;
+		mi.rivalcomp=$("#rivalcomp").val();
+		mi.rivalprod=$("#rivalprod").val();
+		//mi.idate=d;
+		mi.sdate=$("#sdate").val()+" "+$("#stime").val();
+		mi.edate=$("#edate").val()+" "+$("#etime").val();
+		if($("#edate").val()+" "+$("#etime").val()=="")
+		mi.edate=null;
+		mi.offertype="";
+		mi.offervalue="";
+		mi.offervalue1="";
+		mi.sharelist="";
+		mi.budget="";
+		
+    	//var data=JSON.stringify(mi);
+    	appendToStorage("marketsave", id,mi);
+
+		if(navigator.connection.type !="none"){
+    		saveRemoteMarketInfo();
+    		if(imgjson !=[] && imgjson !="")
+    		uploadAll();
+    		//imcmobile directory file List
+    		FileListup();
+    		// images zip & down extract zip & save & delete zip file(local,remote both)
+    		setTimeout(function(){ImageDownAjax();},2000)
+    	}
+
+    }
+    
+ 	function appendToStorage(name, icode,data){
+	    var old = localStorage.getItem(name);
+	    var obj = [];
+	    if(old != null) obj=eval("(" + old + ")");
+	     for (var i = obj.length - 1; i >= 0; i--) {
+	        if (obj[i]['icode'] == icode) {
+	            obj.splice(i, 1);
+	        }
+	    }
+	    obj.push(data);
+	    localStorage.setItem(name, JSON.stringify(obj));
+	}
+	function checkConnection() {
+	    var networkState = navigator.connection.type;
+	
+	    var states = {};
+	    states[Connection.UNKNOWN]  = 'Unknown connection';
+	    states[Connection.ETHERNET] = 'Ethernet connection';
+	    states[Connection.WIFI]     = 'WiFi connection';
+	    states[Connection.CELL_2G]  = 'Cell 2G connection';
+	    states[Connection.CELL_3G]  = 'Cell 3G connection';
+	    states[Connection.CELL_4G]  = 'Cell 4G connection';
+	    states[Connection.CELL]     = 'Cell generic connection';
+	    states[Connection.NONE]     = 'No network connection';
+		return networkState;
+	    //alert('Connection type: ' + states[networkState]);
+	}
+    function saveRemoteMarketInfo() {
+		//var mkt="'"+localStorage.getItem("marketsave")+"'"
+		var mkt="'"+replaceFilename()+"'";
+		$.mobile.loading( 'show', {
+			text: 'Save to server ....',
+			textVisible: true,
+			theme: 'b',
+			html: ""
+		});
+		console.log(mkt)
+		$.ajax({
+		    url: "http://mobile.imcmaster.co.kr/WebService.asmx/MarketInfoSave",
+		    data: { data: mkt},
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "JSON",
+		    success: function (data, status) {	
+				if(JSON.stringify(data)!="{\"d\":\"fail\"}"){
+					localStorage.removeItem('marketinfo');
+					PageInit();
+					$.mobile.changePage("#dvList");
+					$.mobile.loading('hide');
+					alert("finish")
+		    	}
+				else{
+			 		$.mobile.loading('hide');
+			 	}
+			 	
+		    },
+		    
+		    error: function (response) { showmsg("Save Error!");$.mobile.loading('hide'); alert(JSON.stringify(response))}
+					
+		});
+		localStorage.removeItem("marketsave");
+	}
+	//End of Market Info
+	function replaceFilename(){
+		var mkt=localStorage.getItem("marketsave");
+		var obj = JSON.parse(mkt);
+		for(i in obj){
+			var fname=obj[i]["filename"];
+			for(j in fname){
+				if(fname[j]["imgtype"]=="img"){
+					var fn = fname[j]["url"];
+					var lname=fn.substr(fn.lastIndexOf("/")+1);
+					if(lname.indexOf("modified.jpg?")!=-1){
+						lname=lname.replace("modified.jpg?","")+".jpg";
+					}
+					fname[j]["url"]="file:///mnt/sdcard/imcmobile/"+lname;
+				}
+			}
+		}
+		return JSON.stringify(obj);
+	}
+	var firstload=true;
+	 function ContentViewLoad(icode){
+		
+		var mkt=localStorage.getItem("marketinfo");
+  		var obj = eval("(" + mkt + ")");
+  		var data=obj.data;
+  		var imgc=document.getElementById("imgcontainer");
+  		
+  		//imgc.innerHTML="";
+  		for( var i = 0; i<data.length; i++ ){
+  			if(icode==data[i]["icode"]){
+	
+		  		$("#dv1").html(data[i]["iname"]);
+		  		$("#dv2").html(data[i]["idesc"]);
+		  		$("#lbProd").html("<img src='images/bullet.png'/><b>상품:</b>"+data[i]["prodname"]);
+		  		var ocompname="";
+		  		var oprodname="";
+		  		$("#lbRival").html("");
+		  		if(data[i]["oprodname"] !="") oprodname="/"+data[i]["oprodname"];
+		  		if(data[i]["ocompname"]!="")
+		  		$("#lbRival").html("<img src='images/bullet.png'/><b>경쟁:</b>"+data[i]["ocompname"]+oprodname);
+				$('#LatLng').val("");
+				$('#lbPlace').html("");
+				//localStorage.removeItem("sendlatlng");
+				
+				document.getElementById("dviframe").style.display="none";
+				if(data[i].place !=""){
+					var loc=eval("(" + data[i].place + ")");
+
+					//var expbtn="<a onclick=\"createMapContent('view');daumMap()\"  style='font-size:12px;padding-left:10px;;' class='imbiga'><img src='images/btn_expand.gif'/>지도크게</a>";
+					var expbtn="<a onclick=\"mapmaker();daumMap()\" style='vertical-align:bottom;' class='imbiga'><img  src='images/mapview.png'/></a>";
+					
+					var placename="";
+					if(loc.locname){
+						placename=loc.locname;
+					}
+					$('#lbPlace').html("<img src='images/bullet.png'/><b>Location:</b>"+placename+expbtn);
+					$('#LatLng').val(loc.latlng);
+					//document.getElementById("iframe1").contentDocument.getElementById('LatLng').value=loc.latlng;
+					localStorage.setItem("latlng",loc.latlng);
+					var ifr=document.getElementById("iframe1")
+					ifr.src="map.html";
+					document.getElementById("dviframe").style.display="block";
+	    			$.mobile.changePage("#dvView", { transition: "none" });
+					//document.getElementById('map1').setAttribute("style","width:100%;height:200px;border:solid 1px gray;");
+					
+				}
+
+				var sd = new Date(data[i]["sdate"]);
+				var ed = new Date(data[i]["edate"]);
+				var edate="";
+				if(data[i]["edate"] !="") edate=" - "+convertDate(ed,"date","/")+" "+convertDate(ed,"time","");
+				$('#lbDate').html("<img src='images/bullet.png'/><b>기간:</b>"+convertDate(sd,"date","/")+" "+convertDate(sd,"time","/")+edate)
+				
+				document.location.href="#dvView"
+				//image capture
+				while (imgc.firstChild) {
+					    imgc.removeChild(imgc.firstChild);
+					}
+				if(data[i]["filename"]!=""){
+					var title=document.createElement('div');
+					title.innerHTML="<img src='images/bullet.png'/><b>Capture:</b>";
+					imgc.appendChild(title);
+					imgc.appendChild(makePhotoView(data[i]["filename"]));
+				}
+  			}
+  		}
+	}
+	function makePhotoView(imgjson1){
+		var data = eval("(" + imgjson1 + ")");
+		var rtnHtml=document.createElement('div');
+		for (i in data) {
+			 var ext=data[i]["imgtype"];
+			var pic,clicksrc;
+			var src;
+			var size;
+
+			switch(ext){
+				case "img":
+					pic=document.createElement("img");
+					pic.id=data[i]["url"];
+					pic.setAttribute("src",data[i]["url"]);
+					//if(pic.width>150)
+					pic.setAttribute("style","width:100px;max-height:100px");
+					
+				break;
+				case "audio":
+					pic=document.createElement("img");
+					pic.id=data[i]["url"];
+					pic.setAttribute("src","images/mp3.png");
+					
+					pic.setAttribute("style","width:50px;");
+					var pic1=document.createElement("audio");
+					pic1.setAttribute("src",data[i]["url"]);
+
+				break;
+				case "video":
+					pic=document.createElement("img");
+					pic.src="images/video.jpg"
+					pic.setAttribute("style","width:110px");
+				break;
+				case "qrcode": 
+					pic=document.createElement("img");
+					var siteurl="http://qrickit.com/api/qr?d="+data[i]["url"];
+					pic.setAttribute("src",siteurl);
+					pic.setAttribute("style","width:50px;")
+					pic.setAttribute("onError","this.onerror=null;this.src='images/homepage.png';");
+					clicksrc=data[i]["url"];
+					if(clicksrc.indexOf("http")!=0){
+        				if(clicksrc.indexOf("http")!=-1){
+        					clicksrc=clicksrc.substr(clicksrc.indexOf("http"));	
+        				}
+        			}
+					pic.setAttribute("onclick","openInAppBrowserBlank('"+clicksrc+"')");
+				break;
+				case "barcode": 
+					pic=document.createElement("img");
+					var siteurl="http://www.searchupc.com/drawupc.aspx?q="+data[i]["filename"];
+					pic.setAttribute("src",siteurl);
+					pic.setAttribute("style","width:50px;")
+					pic.setAttribute("onError","this.onerror=null;this.src='images/barcode.jpg';");
+					clicksrc="http://www.google.com/#q="+data[i]["filename"];
+					pic.setAttribute("onclick","openInAppBrowserBlank('"+clicksrc+"')");
+				break;
+			}
+				var comment = document.createTextNode(data[i]["comment"]);
+				var dv=document.createElement('div');
+				var dv1=document.createElement('div');
+				dv.setAttribute("style","float:left;padding-right:5px;");
+				dv.setAttribute("onclick","showimg('"+data[i].url+"')")
+				dv.appendChild(pic);
+				dv1.appendChild(comment);
+				
+				dv.appendChild(dv1);
+				rtnHtml.appendChild(dv);
+		}
+		return rtnHtml;
+	}
+	function showimg(Id){
+		var type=Id.substr(Id.lastIndexOf(".")+1);
+		if(type=="mp4"){
+			$("#imgurl").html(Id);
+			playVideo();
+		}
+		else{
+	    	playav(Id);
+	    	$.mobile.changePage("#imgshow");
+	   }
+	}
+	function newInfo(){
+    	$("#icode").val("");
+    	$("#desc").val("");
+    	var sd = new Date();
+		$('#sdate').val(convertDate(sd,"date","-"));
+		$('#stime').val(convertDate(sd,"time",""));
+		imgjson=[];
+	   	sval={};
+	    sval.rcomp="";
+	    sval.rprod="";
+	    sval.pd="";
+	    sval.ch="";
+	    sval.infotype="";
+	    LoadSelect();
+	   	//$("input:checkbox[id='checkbox-1']").prop("checked", true); /* by ID */
+	   	$('.checkbox-1').prop('checked', false);
+	   	$("#location").val("");
+	   	$("#LatLng").val(" ");
+	   	$("#loctemp").val("");
+    	if(navigator.geolocation) 
+				navigator.geolocation.getCurrentPosition(onLocSuccess,onLocError);
+    }
+
+    </script>
+	
+	<div data-role="page" id="dvList">
+		<div data-theme="b" data-role="header" >	
+		   <h3>
+		        시장 정보 List
+		    </h3>
+		    <a href="#" id="gotoedit"  data-theme="a" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline ui-btn-right" >Add</a>
+		    <div data-role="navbar">
+				<ul>
+					<li><a href="#" onclick="sortList('idate')">날짜순</a></li>
+					<li><a href="#" onclick="sortList('iname')">제목순</a></li>
+					<li><a href="#" onclick="sortList('infotype')">유형별</a></li>
+					<li><a href="#" onclick="sortList('staff')">직원별</a></li>
+				</ul>
+			</div><!-- /navbar -->
+
+		</div>
+		<div  data-role="content">	
+			
+			<ul id="list" data-role="listview" class="ui-listview-outer"   data-divider-theme="b" data-split-theme="d" data-split-icon="edit" data-theme="a" data-filter-reveal:true, data-filter="true" >
+	       </ul>
+		</div>
+		<div data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+			
+			 <div data-role="footer" data-position="fixed" data-theme="a">
+		      	<div data-role="navbar">
+					<ul>
+						<li><a href="#" id="returnhome" data-icon="home" data-role="button" >Home</a></li>
+						<li><a href="#" onclick="change('sales')" class="ui-btn ui-icon-tag ui-btn-icon-top">Sales</a></li>
+						<li><a href="#"  onclick="change('chart')" class="ui-btn ui-icon-grid ui-btn-icon-top">Chart</a></li>
+					</ul>
+				</div><!-- /navbar -->
+		      </div>
+			
+			<script>
+			$("#returnhome").click(function(){
+				$.mobile.loading( 'show', {
+					text: 'Returing Home...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				navigator.app.loadUrl("file:///android_asset/www/index.html");
+			});
+			
+			$("#gotoedit").click(function(){
+				$.mobile.changePage("#dvEdit");
+				newInfo();
+			});
+			</script>
+	    </div>
+	</div>    	
+	<div data-role="popup" id="dvView">
+		<div data-theme="a" data-role="header">	
+		    <h3>
+		        <div id="dv1"></div>
+		    </h3>
+	    </div>	
+	  	<div data-role="content">
+	  		<div id="dv2"  class='viewpage'></div>
+  			<div class='viewpage'>
+  				<label id="lbProd"></label>
+  			</div>
+  			<div class='viewpage'>
+  				<label id="lbRival"></label>
+  			</div>
+	  		<div class='viewpage'>
+	  			<label id="lbDate"></label>
+	  		</div>
+	  		<div class='viewpage'>
+	  			<label id="lbPlace"></label>
+	  			<div id="dviframe" style="display:none">
+   	 				<iframe id="iframe1" style="width:100%;height:200px;border:solid 1px gray;" seamless></iframe>
+   	 			</div>
+   	 			
+	  		</div>
+	  		<div id="imgcontainer" class='viewpage'></div>
+	  	</div>
+	  	<a href="#" onclick="history.back()" data-role="button" data-ajax="false" data-icon="back" data-theme="b">Back</a>
+	  
+  </div>
+  <div data-role="page" id="dvProd">
+		<div data-theme="a" data-role="header">	
+		    <h3>
+		        상품과 경쟁
+		    </h3>
+	    </div>	
+	  	<div data-role="content">
+	  		<label for="pd">Product:</label>
+	  		 <select name="pd" id="pd" data-native-menu="false"></select>
+	  		<div>
+	 			<label for="rivalcomp">경쟁사:</label>
+			    <select name="rivalcomp" id="rivalcomp" data-theme="a" onchange="rivalchg(this.value)" data-native-menu="false" ></select>
+		   </div>
+		   <div>
+	 			<label for="rivalprod">경쟁상품:</label>
+			    <select name="rivalprod" id="rivalprod" data-theme="a" data-native-menu="false" ></select>
+		   </div>
+	  	</div>
+	  	<div data-theme="a" data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+			<div data-role="navbar" >
+				<ul style="height:50px;">
+					<li><a href="#dvEdit"  id="prodapply" data-icon="home" data-theme="a" data-role="button" >Apply</a></li>
+					<li><a href="#dvEdit" data-theme="a" data-role="button" data-icon="plus" >Cancel</a></li>
+				</ul>
+				<script>
+					$("#prodapply").click(function(){
+						$.mobile.changePage("dvEdit");
+						var prod=$("#pd option:selected").text();
+						if($("#rivalcomp").val()!="")
+						//prod +="("+$("#rivalprod option:selected").text()+")";
+						prod +="(<span style='font-style:italic;'>"+$("#rivalprod option:selected").text()+"</span>)";
+						$("#lbProdRival").html(prod);
+					});
+					
+				</script>
+			</div>
+		</div>
+	</div>
+	
+  <div data-role="page"  id="dvPeriod">
+		<div data-theme="a" data-role="header" >
+		     <h3>
+		       Period
+		    </h3>
+	    </div>	
+	    <div data-role="content">
+	    	<div >	
+	    		<label >일시:</label>
+			     <div  class="ui-grid-a"  >
+                    <div  class="ui-block-a" style="padding-right:5px;">
+                        <input type="date" name="date" value="Date" onfocus="handleDates(this,'')" id="sdate"/>
+                    </div>
+                    <div  class="ui-block-b" >
+                        <input type="time" name="time" value="Time" onfocus="handleTime(this)" id="stime"/>
+                    </div>
+                </div>
+		 		
+	    		<label >기간종료(optional):</label>
+			     <div class="ui-grid-a"  >
+			     	<div  class="ui-block-a" style="padding-right:5px;">
+                        <input type="date" name="date" value="Date" onfocus="handleDates(this,'')" id="edate"/>
+                    </div>
+                    <div  class="ui-block-b" >
+                        <input type="time" name="time" value="Time" onfocus="handleTime(this)" id="etime"/>
+                    </div>
+                </div>
+		    </div>
+	    </div>
+		<div data-theme="a" data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+			<div data-role="navbar" >
+				<ul style="height:50px;">
+					<li><a href="#dvEdit" data-theme="b" id="periodapply" data-icon="home" data-theme="a" data-role="button" >Apply</a></li>
+					<li><a href="#dvEdit" data-theme="b" data-role="button" data-icon="plus" >Cancel</a></li>
+				</ul>
+				<script>
+					$("#periodapply").click(function(){
+						$.mobile.changePage("dvEdit");
+						var dt=new Date($("#sdate").val()+" "+$("#stime").val());
+						$("#lbPeriod").html(makeDateTime(dt));
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+	
+		   		
+	<div data-role="page" id="dvEdit">
+		<div data-theme="a" data-role="header">	
+		    <h3>
+		        시장정보 Edit
+		    </h3>
+	    </div>	
+	  	<div data-role="content">
+	  		<ul id="ulList" data-role="listview" >
+				<li class="sp">
+		   			<div class="ui-grid-a" >
+						<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+							<label for="infotype">정보유형 :</label>
+						</div>
+						<div  class="ui-block-b" >
+							 <select  id="infotype" data-theme='a'>
+		        				</select>
+		                </div>
+	                </div>
+				</li>
+				<li class="sp">
+		   			<div class="ui-grid-a" >
+						<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+							<label for="desc">설명:</label>
+						</div>
+						<div  class="ui-block-b" >
+							<input id="icode" style="display:none"/>
+			    			<textarea  id="desc" name="description here" rows="3"></textarea>
+		                </div>
+	                </div>
+				</li>
+				
+				<li>
+					<a href="#dvPeriod"  data-transition="none"><label  for="lbPeriod" >Period:</label> <label class="ui-li-aside" id="lbPeriod" ></label></a>
+				</li>
+				<li class="sp">
+		   			<div class="ui-grid-a" >
+						<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+							<label for="ch">거래선 :</label>
+						</div>
+						<div  class="ui-block-b" >
+							 <select name="ch" id="ch" data-native-menu="true" ></select>
+		                </div>
+	                </div>
+				</li>
+				<li>
+					<a href="#imglist" onclick="makePhotoList(imgjson);" id="btnImglist"  ><label  for="lbImageList" >Images:</label> <label class="ui-li-aside" id="lbImageList" ></label></a>
+	            	<style>
+	            		.big { height: 35px;}
+						.big .ui-btn-inner { padding-top:6px;color:white; }
+	            	</style>
+	            	<script>
+	            		 $(document).on("click","btnImglist1",function() {
+						    $.mobile.changePage("search1");
+						    makePhotoList(imgjson);
+						});
+	            	</script>
+				</li>
+				
+				<li>
+					<a href="#dvProd" data-transition="none" data-ajax="false"><label  for="lbProdRival" >Product:</label> <label class="ui-li-aside" style="font-size:small;" id="lbProdRival" ></label></a>
+				</li>
+		   		<li>
+		   			 <div data-role="collapsible" data-inset="false" style="margin-top:-18px;">
+					      <h1><span style="font-weight:normal">Location</span></h1>
+					      	
+							장소명:<input type="text" data-inline="true" name="location" id="location" />
+					        
+					         <div>
+				             	<div id="dvloc"></div>
+				             	<div id="dvch"></div>
+							</div>
+								<div class="ui-grid-a">
+									 <div style="margin-top:8px;" class="ui-block-a">
+										<input type="checkbox" name="checkbox-1" id="checkbox-1" />
+										<label for="checkbox-1">현위치</label>
+					             		<script>
+					             			 $("#checkbox-1").change(function(){
+					             			 	var isChecked = $('#checkbox-1').prop('checked')?true:false;
+					             			 	console.log(isChecked)
+										        if(isChecked){
+									        		localSaveLocation();
+									        		var lat=localStorage.getItem("latlng");
+									        		$("#LatLng").val(lat);	
+										        }
+										       
+										    });
+										    function mapmaker(){
+										    	var mapcontain=document.createElement("div");
+												document.body.appendChild(mapcontain);
+												mapcontain.id="new123";
+												createMapContent('edit',mapcontain);
+										    }
+										   
+					             		</script>
+						             </div>
+						             <div class="ui-block-b">
+					         			<a onclick="mapmaker();daumMap()" data-role="button">Map<label class="ui-li-aside" id="lbLocation" ></label></a>
+									</div>
+								</div>
+								<input style="display:block;" id="LatLng" ></input>	
+								<input style="display:none;" id="loctemp" ></input>	
+					     
+			
+					         
+			
+				       </div>
+					
+				</li>
+		   	</ul>
+	  		
+		   
+	    		
+            <p id="info"></p>
+
+           </div>
+
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar" >
+				<ul style="height:50px;">
+					<li><a href="#" onclick="saveLocalMarketInfo();"  class="ui-btn ui-icon-plus ui-btn-icon-top" id="save">Save</a></li>
+					<li><a href="#dvList" id="cancel" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>  
+	
+	<div data-role="page"  id="dvLocation">
+		<div data-theme="a" data-role="header" >
+		   
+	    </div>	
+	    <input type="search" />
+	  	<div  data-role="content">
+	  		
+	  	<div id="map_canvas"></div>
+	  	
+		</div>
+		<div data-role="footer">
+			
+			<a href="#dvEdit" data-icon="cancel" data-ajax="false"  data-theme="b" data-role="button" id="close">Close</a>
+		</div>
+	</div>	
+	<div data-role="page" id="imglist">
+		<div data-role="header" >
+			 <h3>Capture</h3>
+			 <div id="search" class="ui-grid-d" style="padding:0 0 0 5px;">
+    				<div class="ui-block-a"><img src="images/capture_camera.png" onclick="captureCamera('camera');" onmouseout="this.attr('style','width:48px')" class="imbiga"></div>
+    				<div class="ui-block-b"><img src="images/capture_video.png" onclick="capture('video');" class="imbiga"></div>
+    				<div class="ui-block-c"><img src="images/capture_voice.png" onclick="capture('audio');" class="imbiga"></div>
+    				<div class="ui-block-d"><img src="images/capture_cd.png" onclick="captureCamera('library');" class="imbiga"></div>
+    				<div class="ui-block-e"><img src="images/qrcode.jpg" onclick="scan();" class="imbiga"></div>
+            </div>
+		</div>
+		<div data-role="content">    
+	        <ul data-role="listview" id="imglistview" data-split-icon="delete" data-split-theme="c" data-theme="d">
+	        </ul>
+       </div>
+       <div data-role="footer" data-position="fixed" data-theme="a">
+			<div data-role="navbar" >
+			<ul style="height:50px;">
+				<li><a href="#search1"  data-role="button" data-icon="plus" id="newimg" >Add</a></li>
+				<li><a href="#dvEdit"  data-role="button"   data-icon="back" id="backimg" >Back</a></li>
+			</ul>
+			</div>
+			<script>
+				$("#newimg").click(function(){
+					$.mobile.changePage("#search1");
+				});
+				$("#backimg").click(function(){
+					$.mobile.changePage("#dvEdit");
+				});
+			</script>
+	    </div>
+	    
+    </div>
+    <div  data-role="page"  id="search1" data-theme="a" >
+    	<div data-role="header" >
+			 <h3>Capture Select</h3>
+		</div>
+		<div data-role="content">    
+    	<p>
+    		Capture방법을 선택하세요 ....
+    	</p>
+       	<div class="ui-grid-d" >
+			<div class="ui-block-a"><img src="images/capture_camera.png" onclick="captureCamera('camera');" onmouseout="this.attr('style','width:48px')" class="imbiga"></div>
+			<div class="ui-block-b"><img src="images/capture_video.png" onclick="capture('video');" class="imbiga"></div>
+			<div class="ui-block-c"><img src="images/capture_voice.png" onclick="capture('audio');" class="imbiga"></div>
+			<div class="ui-block-d"><img src="images/capture_cd.png" onclick="captureCamera('library');" class="imbiga"></div>
+			<div class="ui-block-e"><img src="images/qrcode.jpg" onclick="scan();" class="imbiga"></div>
+        </div>
+        
+        <a href="#imglist" data-role="button" data-theme="c" data-icon="back" >Cancel</a>
+       </div>
+    </div>
+    <div data-role="page" id="imgshow">
+		<div data-role="header" data-theme="c">
+			<h1>View Image</h1>
+		</div>
+	
+		<div data-role="content" data-theme="c">
+			<div id="container"></div>
+			Comment:
+			<textarea id="txComment" rows="5"></textarea>
+			<label id="imgsrc"></label>
+			<label id="imgurl"></label>
+	        <script>
+	        	function viewJson(){
+	        		alert(JSON.stringify(imgjson));
+	        	}
+	        	function audioplay(){
+	        		var link=$("#audioinput").val();
+	        		playAudio(link);
+	        	}
+	        	function updateimg(){
+	        		//container firstchildnod type find
+        		 	for(i in imgjson){
+				        if (imgjson[i]['filename'] == $("#imgsrc").html()) {
+				            imgjson[i]["comment"]=$("#txComment").val();
+				        }
+				    }
+				   
+					makePhotoList(imgjson);
+					
+					$("#txComment").val("");
+				   $.mobile.changePage("#imglist");
+				   //location.href="#imglist";
+	        	}
+	        	function imageDown()
+				{
+				var fileTransfer = new FileTransfer();
+				var options = new FileUploadOptions();
+				options.headers = {
+				    Connection: "close"
+				};
+				options.chunkedMode = false;
+				fileTransfer.download(
+				    fileSystem.root.toURL() + '/' + "obama(1).jpg",
+				    "http://www.imcmaster.co.kr/data/document/acuvue/obama(1).jpg",
+				    function(entry) {
+ 			    alert("download complete: " + entry.toURL());1
+				    },
+				    function(error) {
+				        alert("download error source " + error.source);
+				        alert("download error target " + error.target);
+				        alert("upload error code" + error.code);
+				    },options, true    
+				);
+				}
+				function imgStore(){
+				  var url = "http://mobile.imcmaster.co.kr/data/document/acuvue/obama(1).jpg"; 
+				  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+				      var imagePath = fs.root.toURL() + url.substr(url.lastIndexOf("/")+1); // full file path
+				      showmsg(imagePath);
+				      var fileTransfer = new FileTransfer();
+				      fileTransfer.download(url,imagePath, function (entry) {
+				               alert(entry.toURL()); // entry is fileEntry object
+				      }, function (error) {
+				               alert("download error source " + error.source+"download error target " + error.target+"upload error code" + error.code);
+				      });
+				   })
+				}
+				</script>
+				<script src="barcodescanner.js"></script>
+				<script>
+				//inappbrowser
+				var ref = null;
+				function openInAppBrowserBlank(url){
+					if(url=="")
+					 url=$("#imgurl").html();
+				    try {
+						ref = window.open(encodeURI(url),'_blank','location=yes'); //encode is needed if you want to send a variable with your link if not you can use ref = window.open(url,'_blank','location=no');
+				         ref.addEventListener('loadstop', LoadStop);
+				         ref.addEventListener('exit', Close);
+				    }
+				    catch (err)    
+				    {
+				        alert(err);
+				    }
+				}
+				function LoadStop(event) {
+			         if(event.url == "http://www.mypage.com/closeInAppBrowser.html"){
+			            // alert("fun load stop runs");
+			             ref.close();
+			         }    
+			    }
+				function Close(event) {
+			         ref.removeEventListener('loadstop', LoadStop);
+			         ref.removeEventListener('exit', Close);
+			    } 
+				function scan() {
+			        var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+			        scanner.scan( function (result) { 
+
+			            console.log("We got a barcode\n" + 
+			            "Result: " + result.text + "\n" + 
+			            "Format: " + result.format + "\n" + 
+			            "Cancelled: " + result.cancelled);  
+		            	var imgtype, source,clicksrc,js,siteurl,onerror;
+		            	switch (result.format){
+		            		case "QR_CODE":
+		            	
+		            			imgtype="qrcode";
+		            			siteurl="http://qrickit.com/api/qr?d="+result.text;
+		            			var bname="";
+/*
+		            			if(result.text.indexOf("http")!=0){
+		            				bname=result.text.substr(0,7);
+		            				if(result.text.indexOf("http")!=-1){
+		            					clicksrc=result.text.substr(result.text.indexOf("http"));	
+		            				}
+		            			}
+		            			else
+		            			 	bname=result.text.substr(result.text.firstindexOf(".")+1,result.text.lastindexOf(".")-1);*/
+
+		            			//saveUpc(siteurl,bname+".png");
+		            			
+		            			onerror="this.onerror=null;this.src='images/homepage.png';"
+		            			source="<img src='"+siteurl+"' onError=\"this.onerror=null;this.src='images/homepage.png';\"/>";
+		            			
+		            			clicksrc=result.text;
+		            			imgSave(result.text,result.text,imgtype,result.format+":"+result.text);
+		            			$("#imgsrc").html(result.text);
+		            			$("#imgurl").html(result.text);
+		            			break;
+	            			case "EAN_13": default:
+		            			imgtype="barcode";
+		            			
+		            			siteurl="http://www.searchupc.com/drawupc.aspx?q="+result.text;
+		            			//saveUpc(siteurl,result.text+".jpg");
+		            			onerror="this.onerror=null;this.src='images/barcode.jpg';"
+		            			clicksrc="http://www.google.com/#q="+result.text;
+		            			if(result.text !="" && result.text !=null)
+		            			imgSave(upcdata,result.text,imgtype,result.format+":"+result.text);
+		            			
+							    $("#imgsrc").html(result.text);
+							    $("#imgurl").html(clicksrc);
+		            			break;
+		            	}
+		            	$.mobile.changePage("#imgshow");
+						
+						
+			            var pic=document.createElement("img");
+						pic.setAttribute("src",siteurl);
+						pic.setAttribute("onError",onerror);
+						pic.setAttribute("onclick","openInAppBrowserBlank('"+clicksrc+"')");
+						
+						var contain=document.getElementById("container");
+						$("#container").empty();
+						$("#txComment").val(result.format+"/n"+result.text);
+						
+						contain.appendChild(pic);
+/*
+			    		if(result.format !="QR_CODE"){
+							contain.appendChild(parseUpc(upcdata));
+						}
+*/
+						
+			        }, function (error) { 
+			            console.log("Scanning failed: ", error); 
+			        } );
+			    }
+			    //upc code 조회
+				function upcsearch(upccode) {
+					upcdata="";
+					$.mobile.loading( 'show', {
+						text: 'Searching ....',
+						textVisible: true,
+						theme: 'b',
+						html: ""
+					});
+					$.ajax({
+			        	type:"POST",
+				        //url: "www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=AB81E65C-B7A9-49BE-B285-BE7EF97BC3A7&upc=9783161484100",
+				        url:"http://api.upcdatabase.org/json/77d7cac8fa015c2ad402631b5251df27/"+upccode,
+				        data: { },
+				        contentType: "application/json; charset=utf-8",
+				        dataType: "JSON",
+				        success: function (data, status) {	
+				        	
+							upcdata=JSON.stringify(data);
+							 $.mobile.loading('hide');
+			            },
+			            error: function () { showmsg("Error!"); $.mobile.loading('hide'); } 
+			           
+				    });
+			   	}    
+			   	var upcdata="";
+			   	//{"valid":"true","number":"0111222333446","itemname":"UPC Database Testing Code","alias":"Testing Code","description":"http:\/\/upcdatabase.org\/code\/0111222333446","avg_price":"123.45","rate_up":"6","rate_down":0}
+			    function parseUpc(data){
+			    	var obj = data.split(',');
+			    	
+			    		var dv=document.createElement("div");
+			  		dv.innerHTML="● Code:"+obj[1]+"<br />";
+			  		dv.innerHTML+="● Name:"+obj[2]+"("+obj[3]+")<br />";
+			  		dv.innerHTML+="● Desc:"+obj[4]+"<br />";
+			  		dv.innerHTML+="● Price:"+obj[5];
+			  		
+			  		return dv;
+			    }
+			    function upc(){
+			    	var val=$("#upc").val();
+			    	upcsearch(val);
+			    }
+			    
+			    function saveUpc(url,bname){
+			    	
+			    	var remoteFile = url;//"http://i3.kym-cdn.com/entries/icons/original/000/000/080/doubt.jpg";
+			        var localFileName = bname;//emoteFile.substring(remoteFile.lastIndexOf('/')+1);
+			        
+			        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+			            fileSystem.root.getFile("imcmobile", {create: true, exclusive: false}, function(fileEntry) {
+			                var localPath = "file:///mnt/sdcard/imcmobile/"+bname;
+			                var ft = new FileTransfer();
+			                ft.download(remoteFile,
+			                    localPath, function(entry) {
+			                       /*
+									var dwnldImg = document.getElementById("dwnldImg");
+																	   dwnldImg.src = entry.fullPath;
+																	   dwnldImg.style.visibility = "visible";
+																	   dwnldImg.style.display = "block";*/
+								   
+			                    }, fail);
+			            }, fail);
+			        }, fail);
+			    	
+			    	
+			    	
+			    	
+/*
+    				window.requestFileSystem( 
+					LocalFileSystem.PERSISTENT, 
+					0, 
+					function(fileSystem){ 
+					// Create the folder 
+					fileSystem.root.getDirectory("imcmobile", {create:true, exclusive:false}, function (folder){}); 
+					} 
+					); 
+					var ft = new FileTransfer(); 
+					ft.download(encodeURI(url), "imcmobile", callback) 
+			    	
+			    	//var url = 'http://image_url';
+				    var filePath = 'file:///mnt/sdcard/imcmobile/'+bname;
+				    var fileTransfer = new FileTransfer();
+				    var uri = encodeURI(url);
+				
+				    fileTransfer.download(
+				        uri,
+				        filePath,
+				        function(entry) {
+				            console.log("download complete: " + entry.fullPath);
+				        },
+				        function(error) {
+				            console.log("download error source " + error.source);
+				            console.log("download error target " + error.target);
+				            console.log("upload error code" + error.code);
+				        },
+				        false,
+				        {
+				            headers: {
+				                "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+				            }
+				        }
+				    );
+*/
+			    }
+			    
+	        </script>
+	        <div class="ui-grid-a">
+        		<div class="ui-block-a"><a href="#" onclick="updateimg()" data-role="button" data-theme="b" >Update</a></div>
+        		<div class="ui-block-b"><a href="#imgshow"  data-role="button" data-theme="c" data-rel="back">Close</a></div>
+    		</div>
+    		<div><a href="#" onclick="imgStore()" data-role="button" data-theme="c" >imgsave1</a></div>
+    		<div style="display:none">
+				<input id="upc" value='0111222333446'></input>
+        		<div><a href="#" onclick="upc()" data-role="button" data-theme="c" >upc</a></div>
+        		<div><a href="#" onclick="upcsearch('')" data-role="button" data-theme="c" >upcsearch</a></div>
+        		<a href="#" onclick="openInAppBrowserBlank('http://www.mypage.asp?userId=1');" data-role="button">open InAppBrowser</a>
+        		<div><a href="#" onclick="imageDown()" data-role="button" data-theme="c" >imgsave</a></div>
+        		
+				<div><a href="#" onclick="FileListup();ImageDownAjax();" data-role="button" data-theme="c" >imgdownall</a></div>
+			<div><a href="#" onclick="imageSave()" data-role="button" data-theme="c" >imgsave2</a></div>
+	 		</div>
+		</div>
+	</div>
+	<script src="http://debug.build.phonegap.com/target/target-script-min.js#imcmobile"></script>
+</body>
+</html>

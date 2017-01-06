@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<head>
+	<title>Capture Photo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+	<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />	
+	<link rel="stylesheet" href="css/stylesheet.css" />
+	<link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
+	
+	
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>    
+	<script src="js/common.js"></script>
+	<script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
+	<script src="js/common.js"></script>
+
+	<script src="phonegap.js"></script>
+		
+	<script src="js/energize-min.js"></script>
+	<script src="js/archive.js"></script>
+	<script src="js/fastclick.js"></script>
+	<script type="text/javascript" src="js/Insomnia.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/telephonenumber.js"></script>
+
+	<style>
+		.imbiga {
+			cursor: pointer;
+		}
+		.imbiga:active {
+			background-color: transparent;
+			width: 100px;
+		}
+		#ulSetting .compact {
+			margin: 0px !important;
+		}
+		.sp .ui-block-a {width: 25% !important;}
+     	.sp .ui-block-b {width: 75% !important;}
+     	.sp1 .ui-block-a {width: 35% !important;}
+     	.sp1 .ui-block-b {width: 65% !important;}
+     	input.ui-input-text, textarea.ui-input-text{
+     		margin:0 !important;
+     		ling-height:0 !important;
+     	}
+     	.sptitle {
+			padding-top:2em;
+		}
+		
+	   
+	    .wrap textarea {
+	      width: 100%;
+	      resize: none;
+	      overflow-y: hidden; /* prevents scroll bar flash */
+	      padding: 1.1em; /* prevents text jump on Enter keypress */
+	      padding-bottom: 0.2em;
+	      line-height: 1.6;
+	    }
+	    .ui-header .ui-title {
+		  overflow: visible !important;
+		  text-overflow: ellipsis !important;
+		}
+		.ui-title {
+		    margin: 0 !important;
+		}
+		.ui-input-text {margin:0 !important;}
+		.ui-select{margin:0 !important;}
+		.ui-checkbox{margin:0 !important;}
+		
+		.ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb{
+			min-height:2.3em !important;
+		}
+		.ui-listview>.ui-li-has-icon>img:first-child, .ui-listview>.ui-li-has-icon>.ui-btn>img:first-child{
+			max-height:1.4em !important;
+			max-width:2.2em !important;
+			top:10px !important
+		}
+		
+		.ui-listview>.ui-li-has-icon>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-icon{
+			padding-left:3em !important;
+			min-height:1.8em !important;
+		}
+	  </style>
+</head>
+<body>
+	<script>
+	$(document).bind('mobileinit', function () {
+        $.mobile.activeBtnClass = 'unused';
+        $.mobile.page.prototype.options.domCache = true;
+    });
+document.addEventListener("deviceready",onDeviceReady,false);
+// document.addEventListener("online", onOnline, false);
+// document.addEventListener("offline", onOffline, false);
+// Cordova is ready to be used!
+function onDeviceReady() {
+	navigator.splashscreen.hide();
+	document.addEventListener("backbutton", ShowExitDialog, false);
+	var log=localStorage.getItem("login");
+	
+/*
+	if(localStorage.getItem("resume")===null){
+	localStorage.setItem("resume","yes");
+	navigator.app.exitApp();
+	navigator.app.loadUrl("file:///android_asset/www/index.html", {wait:2000, loadingDialog:"Wait,Loading App", loadUrlTimeoutValue: 60000})
+	}
+*/
+	
+	var obj = eval("(" + log + ")");
+	$("#lbUsername").val(obj.name);
+	$.mobile.defaultDialogTransition = "none";
+	$.mobile.defaultPageTransition = "none";
+	//initFastButtons();
+	//document.addEventListener("resume", onResume, false);
+	//document.addEventListener("pause", onPause, false);
+}
+
+
+function onResume() {
+	// Handle the resume event
+	localStorage.removeItem("resume");
+}function onPause() {
+	// Handle the resume event
+	localStorage.setItem("resume","yes");
+}
+
+//get user mobile phone number
+function detectNumber(){
+	var telephoneNumber = cordova.require("cordova/plugin/telephonenumber");
+	telephoneNumber.get(function(result) {
+		//console.log("result = " + result);
+		showmsg(result);
+		return result;
+		}, function(error) {
+		showmsg("error = " + error.code);
+	});
+}
+$( window ).on( "navigate", function( event, data ) {
+  //showmsg( JSON.stringify(data.state));
+});
+
+var backcnt=0;
+function ShowExitDialog() {
+
+	 // Call my back key code here.
+     switch($.mobile.activePage.attr('id')){
+	     case "dvEdit": case "dvCategory": case "dvLocaldb": case "UlList": case "dvProddetail": case "dvChdetail": case "dvChstaff":
+	     	$.mobile.changePage("#setting");
+	     break;
+	     case "setting": case "Logindv":
+	     	$.mobile.changePage("#dvMenubar");
+	     break;
+	     case "dvMenubar":
+	     	if(backcnt)
+	     	showmsg('')
+	     	 navigator.notification.confirm(
+		        ("Do you want to Exit?"), // message
+		        alertexit, // callback
+		        'My APp', // title
+		        'YES,NO' // buttonName
+		    );
+	     break;
+	     default:
+		 	navigator.app.backHistory();
+ 		 break;
+	 }
+}
+function alertexit(button){
+	
+    if(button=="1" || button==1)
+    {
+        if (navigator.app) {
+            navigator.app.exitApp();
+        }
+        else if (navigator.device) {
+            navigator.device.exitApp();
+        }
+    }
+    else if(button=="2" || button==2){
+    return;
+    }
+    
+}
+
+function move(loc){
+	var txt="";
+	$.mobile.loading( 'show', {
+	text: "loading...",
+	textVisible: true,
+	theme: 'a',
+	html: ""
+});
+
+if(LoginStatusCheck())
+switch(loc){
+	case "sales":
+		window.location.href="sales.html";
+	break;
+	case "chart":
+		window.location.href="chart.html";
+	break;
+	case "chart1":
+		window.location.href="chart.html#chartlist";
+	break;
+	case "market":
+		window.location.href="market.html";
+	break;
+	case "schedule":
+		window.location.href="schedule.html";
+	break;
+}
+else
+window.location.href="#Logindv";
+
+
+}
+function LoginStatusCheck(){
+var login=localStorage.getItem("login");
+if(login!=null && login!=""){
+//document.location.href="menu.html";
+//navigator.app.loadUrl("file:///android_asset/www/menu.html");
+return true;
+}
+else{
+//document.location.href="#Logindv";
+return false;
+}
+
+}
+function loadsetting(){
+	var set=localStorage.getItem("imcsetting");
+	var obj = eval("(" + set + ")");
+	$("#insom").val(obj.insomnia);
+	$("#savetime").val(obj.savetime);
+	switch(obj.insomnia){
+	case "on":
+		window.plugins.insomnia.keepAwake();
+	break;
+	case "off":
+		window.plugins.insomnia.allowSleepAgain()
+	break;
+	}
+}
+function savesetting(){
+	var set={};
+	set.insomnia=$("#insom").val();
+	set.savetime=$("#savetime").val();
+	set.svctype=$("#inSvctype").val();
+	set.comp=$("#inComp").val();
+	set.name=$("#inName").val();
+	set.id=$("#inId").val();
+	set.pass=$("#inPass").val();
+	set.email=$("#inEmail").val();
+	localStorage.setItem("imcsetting",JSON.stringify(set));
+	//loadsetting();
+}
+function LoginAjax1() {
+	//localstorage check
+	
+	var username = document.getElementById("username").value;
+	var password = document.getElementById("password").value;
+	if(username =="" || password ==""){
+		alert("needs username,password !");
+	}
+	else{
+		$.mobile.loading( 'show', {
+			text: 'Login ....',
+			textVisible: true,
+			theme: 'b',
+			html: ""
+		});
+		$.ajax({
+			
+			url: "http://mobile.imcmaster.co.kr/WebService.asmx/Login",
+			data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
+			contentType: "application/json; charset=utf-8",
+			dataType: "JSON",
+			success: function (data, status) {
+				if(JSON.stringify(data)!="{\"d\":\"login fail\"}"){
+					var rtn=data.d;
+					var obj = eval("(" + rtn + ")");
+					
+					var login={};
+					login.id=username;
+					login.pass=password;
+					login.name=obj.name;
+					login.comp=obj.comp;
+					login.boss=obj.boss;
+					//savelocal("login","{ id:"+ username+", pass:"+password+"}" );
+					savelocal("login",JSON.stringify(login) );
+					//document.location.href="menu.html";
+					//navigator.app.loadUrl("file:///android_asset/www/menu.html");
+					$.mobile.changePage("#dvMenubar","flip",true,false);
+					msgshow('login success');
+				}
+				else
+					alert("Login Failed!");
+			},
+			error: function () { 
+				$.mobile.loading('hide');
+				msgshow('login error');
+			}
+		});
+	}
+}
+function RegisterAjax() {
+	//comp code
+	var comp = $("#inComp").val();
+	if(comp=="")comp="CO"+idMake();
+	//promo & comp info
+	var promo=$("#inPromo").val();
+	var compname=$("#inCompname").val();
+	var comptel=$("#inComptel").val();
+	var compzip=$("#inCompzip").val();
+	var compaddr=$("#inCompaddr").val();
+	//user info
+	var name = $("#inName").val();
+	var id = $("#inId").val();
+	var pass = $("#inPass").val();
+	var email= $("#inEmail").val();
+	var hp=detectNumber();
+	/*
+	if(name =="" || pass ==""){
+	alert("needs username,password !");
+	}
+	else{*/
+	$.mobile.loading( 'show', {
+		text: 'Saving ....',
+		textVisible: true,
+		theme: 'b',
+		html: ""
+	});
+	$.ajax({
+		url: "http://mobile.imcmaster.co.kr/webservice.asmx/Register",
+		data: { comp:JSON.stringify(comp)
+		,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
+		,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
+		,name:JSON.stringify(name),id: JSON.stringify(id)
+		, pass: JSON.stringify(pass),email:JSON.stringify(email),hp:JSON.stringify(hp) },
+		contentType: "application/json; charset=utf-8",
+		dataType: "JSON",
+		success: function (data, status) {
+			if(JSON.stringify(data.d) !="compuser"){
+			var login={};
+			login.id=id;
+			login.pass=pass;
+			login.name=name;
+			login.comp=comp;
+			savelocal("login",JSON.stringify(login) );
+
+			//setting update
+			$("#inSvctype").val("online");
+			$("#lbSvctype").html("Online");
+			//savesetting();
+			$.mobile.changePage("#dvMenubar","flip",true,false);
+			msgshow('save success');
+			$.mobile.loading('hide');
+		}
+		else
+			msgshow(JSON.stringify(data.d));
+		},
+		error: function () { 
+			$.mobile.loading('hide');
+			msgshow('saving error');
+		}
+	});
+}
+function checklocal(){
+alert(localStorage.getItem("login"));
+}
+function clearmarketsave(){
+localStorage.removeItem("marketsave");
+}
+function codeInput(){
+console.log('hi')
+switch($("#svcType").val()){
+
+case "online":
+//$.mobile.changePage("#dvSvctype","flip",true,false);
+
+$( "body" ).pagecontainer( "change", "dvSvctype.html", { transition: "slide" });
+
+//$('#svcType option[value=single]').attr('selected','selected');
+break;
+}
+}
+function checkEmail(val){
+/*
+var email = $(val).val();
+var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
+if(!re.rest(email)){
+alert("tet");
+}
+return re.rest(email);*/
+
+}
+function chkSvttype(){
+	var svc=$("inSvctype").val();
+	$("#selSvc").val(svc);
+	switch(svc){
+		case "single":
+			$("dvComp").css("display","none");
+		break;
+		case "online":
+			$("dvComp").css("display","block");
+			var setting=localStorage.getItem("setting");
+			if(setting!==null)setting=JSON.parse(setting);
+			
+		break;	
+	}
+}
+/*
+	// orientation change-->> label hide
+	$( window ).on( "orientationchange","[id^=dv]", function( event ) {  
+	  	$('[id^=dv] label').show();
+	  if(event.orientation=="portrait") {
+	  	$('[id^=dv] label').hide();
+	  }
+	});
+	 $(document).on("pageshow",function(){
+	 	$('[id^=dv] label').show();
+	  if (screen.height > screen.width){
+	  	$('[id^=dv] label').hide();
+	  }
+	});*/
+
+	
+	</script>
+	<span id="fastclick" >
+		<div data-role="page" data-theme="a" id="dvMenubar"  >
+			<div data-role="header" data-theme="b">
+				<h3> IMCMaster Menu </h3>
+				
+				<div class="ui-btn-left" style="color:white;"><label id="lbUsername"/>
+				</div>
+			</div>
+			<div  class="ui-content" role="main" >
+				<div class="ui-grid-a">
+					<div class="ui-block-a" style="text-align:center;padding-bottom:20px;">
+						<a href="#"    data-clickload="spin" > <img onclick="move('sales')" class="imbiga" src="images/top_sales.png" />
+						<div>
+							영업관리
+						</div> </a>
+					</div>
+					<div class="ui-block-b" style="text-align:center;padding-bottom:20px;">
+						<a href="#"  data-clickload="spin" > <img  onclick="move('market')" class="imbiga"  src="images/top_marketinfo.png" />
+						<div>
+							시장정보
+						</div> </a>
+					</div>
+					<div class="ui-block-a" style="text-align:center;">
+						<a href="#"  onclick="move('chart')" data-clickload="spin" > <img  onclick="move('chart')" class="imbiga"  src="images/top_chart.png" />
+						<div>
+							차트분석
+						</div> </a>
+					</div>
+					<div class="ui-block-b" style="text-align:center;">
+						<a href="#" > <img class="imbiga"  src="images/top_camera.png" onclick="move('schedule')":/>
+						<div>
+							schedule
+						</div> </a>
+					</div>
+				</div>
+				<img id="temp" />
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul style="height:50px;">
+						<li><a id="back"  href="#setting" class="ui-btn ui-icon-grid ui-btn-icon-top">Setting</a></li>
+						<li><a id="set"  onclick="ShowExitDialog()"  class="ui-btn ui-icon-arrow-l ui-btn-icon-top">Exit</a></li>
+						<li><a href="#Logindv" id="login-button" class="ui-btn ui-icon-user ui-btn-icon-top">Login</a></li>
+					</ul>
+				</div>
+				
+				<script>
+					 $(document).on("click","login-button",function(){
+					 	var login=localStorage.getItem("login");
+					 	if(login!=""){
+					 		login=JSON.parse(login);
+						 	$('#username').val(login.id);
+						 	$('#password').val(login.pass);
+					 	}
+					});
+					/*
+					$(document).on("click","set",function(){
+											$.mobile.changePage("#setting");
+											loadsetting();
+										}
+										$(document).on("click","back",function(){
+											ShowExitDialog();
+										}*/
+					
+				</script>
+				<div id="imgcontain" ></div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="setting" >
+			<div data-role="header" data-theme="b">
+				<h1>Setting</h1>
+			</div>
+			<div class="ui-content" role="main" >
+				<ul id="ulSetting2" data-role="listview" data-inset="false">
+					<li data-role="list-divider">
+						Register
+					</li>
+					<li class="sp" style="padding:0 0 10px 0;">
+						<a href="#dvSvctype" data-transition="none" data-ajax="false" onlick="chkSvctype()" ><label  for="lbSvctype" >서비스등록:</label> <label id="lbSvctype" class="ui-li-aside">Single(free)</label>
+						<input id="inSvctype" type="hidden" value="single">
+						</a>
+					</li>
+					
+				</ul>
+				<script>
+				/*
+					$( document ).on( 'click', '#ulSetting2 li', function(){
+						if ( typeof $("#selSvc" ).selectmenu() !== "undefined" ) {
+							$("#selSvc").selectmenu( "refresh",true );
+							$("#selSvc").enhanceWithin();
+							$("#selSvc").css("style","background-color:white;");
+					  	}
+					});
+					*/
+				</script>
+				<ul id="ulSetting3" data-role="listview" data-inset="false">
+					<li data-role="list-divider">
+						기준정보
+					</li>
+					<li class="sp">
+						<a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('pd');" ><label  for="lbProd" >상품:</label> <label class="ui-li-aside" id="lbProd" >100건</label></a>
+					</li>
+					<li class="sp">
+						<a href="#UlList" data-transition="none" data-ajax="false"  onclick="makeUlList('ch');"><label  for="lbChan" >거래선:</label> <label class="ui-li-aside" id="lbChan" ></label></a>
+					</li>
+					<li class="sp" style="padding:0 0 10px 0;">
+						<a href="#dvCategory" data-transition="none" data-ajax="false"  onclick="showCategory()"><label  for="lbCategory" >상품분류:</label> <label class="ui-li-aside" id="lbCategory" ></label></a>
+					</li>
+				</ul>
+				<ul id="ulSetting4" data-role="listview" data-inset="false">
+					<li data-role="list-divider">
+						Server
+					</li>
+					<li class="sp">
+						<a href="#dvSvctype" data-transition="none" data-ajax="false" ><label  for="inSvctype" >DBBackup:</label> <label id="lbBackup" class="ui-li-aside"></label> </a>
+					</li>
+					<li class="sp" style="padding:0 0 10px 0;">
+						<a href="#dvLocaldb"  data-transition="none" data-ajax="false" ><label  for="inLocaldb" >LocalDB:</label> <label id="lbLocaldb" class="ui-li-aside"></label> </a>
+					</li>
+				</ul>
+				
+				<ul id="ulSetting1" data-role="listview" data-inset="false">
+					<li data-role="list-divider">
+						Hardware
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+								<label title="프로그램사용중 화면이 꺼짐방지" for="insom">꺼짐방지:</label>
+							</div>
+							<div  class="ui-block-b" >
+								<select id="insom" name="switch" data-role="flipswitch">
+									<option value="off">Off</option>
+									<option  value="on">On</option>
+								</select>
+							</div>
+						</div>	 
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+								<label  class="select" for="savetime" title="용량 기준:50Kb">저장방식:</label>
+							</div>
+							<div  class="ui-block-b" >
+								<select name="savetime" id="savetime" data-native-menu="false" >
+									<option value="smart" title="50Kb">저용량 always, 고용량 wifi</option>
+									<option value="data">Data always, image wifi</option>
+									<option value="wifi">Wifi Only</option>
+									<option value="always">Always</option>
+								</select>
+							</div>
+						</div>	 
+					</li>
+				</ul>			
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul style="height:50px;">
+						<li><a href="#dvMenubar" onclick="savesetting()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+						<li><a href="#dvMenubar" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="dvCategory" >
+			<div data-role="header">
+				<h3> Category </h3>
+			</div>
+			<div  class="ui-content" role="main">
+				상품분류기준: 항목별구분은 enter
+				<textarea id="txCategory" rows="20" cols="4"></textarea>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul style="height:50px;">
+						<li><a href="#setting" onclick="saveCategory()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+						<li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<div data-role="page" data-theme="a" id="dvSvctype"  >
+			<div data-theme="b" data-role="header">
+				<h3> Service 등록 </h3>
+			</div>
+			<div class="ui-content" role="main" data-theme="b" >
+				<ul id="ulSvctype1" data-role="listview" style="margin-bottom:10px;">
+					<li class="sp1">
+						<div class="ui-grid-a" >
+							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+								<label for="inSvccode">서비스유형:</label>
+							</div>
+							<div  class="ui-block-b" >
+								<select id="selSvc" name="selSvc" onchange="showSvc()"  data-native-menu="false">
+									<option value="single">Single(free)</option>
+									<option value="online">Online</option>
+								</select>
+							</div>
+						</div>	 
+					</li>
+				</ul>
+
+				<div id="dvComp" style="display:none;">
+					<ul id="ulSvctype" data-role="listview" data-inset="false">
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="onlinetype">Type :</label>
+								</div>
+								<div  class="ui-block-b" style="padding:0 0 10px 0;">
+									 <select id="onlinetype" onchange="togglePromo()" data-native-menu="false">
+										<option value="comp">Company Code</option>
+										<option value="promo">Promotion Code</option>
+									</select>
+									<script>
+										function togglePromo(){
+											switch($("#onlinetype").val()){
+												case "comp":
+													$("#dvCompinput").css("display","block");
+													$("#dvPromoinput").css("display","none");
+													$("inPromo").val("");
+													$("inCompname").val("");
+													$("inComptel").val("");
+													$("inCompzip").val("");
+													$("inCompaddr").val("");
+												break;
+												case "promo":
+													$("#InComp").val("");
+													$("#dvCompinput").css("display","none");
+													$("#dvPromoinput").css("display","block");
+												break;
+											}
+										}
+									</script>
+				                </div>
+			                </div>
+						</li>
+					</ul>
+					<ul id="dvCompinput" style="display:block;" data-role="listview" data-inset="false">
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label  for="inComp">CompCode:</label>
+								</div>
+								<div  class="ui-block-b" style="padding:0 0 10px 0;">
+									<input id="inComp"  placeholder="Company Code를 입력하세요" data-clear-btn="true">								
+				                </div>
+			                </div>
+						</li>
+					</ul>
+					<ul id="dvPromoinput" style="display:none;" data-role="listview" data-inset="false">
+						<li data-role="list-divider">
+							Company Information
+						</li>
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="inPromo">PromoCode:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inPromo"   placeholder="Pomotion code" >				
+				                </div>
+			                </div>
+						</li>	
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label  for="inCompname">Name:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inCompname"   placeholder="회사명" >		
+				                </div>
+			                </div>
+						</li>	
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label  for="inComptel">Phone:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inComptel"  placeholder="회사전화" >	
+				                </div>
+			                </div>
+						</li>
+						<li class="sp">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label  for="inCompzip">Zipcode:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inCompzip"   placeholder="우편번호" >	
+				                </div>
+			                </div>
+						</li>	
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label  for="inCompaddr">Address:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inCompaddr"  placeholder="주소" >	
+				                </div>
+			                </div>
+						</li>	
+					</ul>
+					<ul id="ulSvctype1" data-role="listview" data-inset="false">
+						<li data-role="list-divider">
+							User Information
+						</li>
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="inName">이름 :</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inName" name="inName"  placeholder="이름" >
+				                </div>
+			                </div>
+						</li>
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="inId">ID:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inId" name="inId"  placeholder="ID" >
+				                </div>
+			                </div>
+						</li>
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="inPass">Password:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input id="inPass" placeholder="Password" >
+				                </div>
+			                </div>
+						</li>
+						<li class="sp1">
+				   			<div class="ui-grid-a" >
+								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
+									<label for="inEmail">Email:</label>
+								</div>
+								<div  class="ui-block-b" >
+									<input type="email" id="inEmail" onblur="checkEmail(this);"  placeholder="Email" >
+				                </div>
+			                </div>
+						</li>
+					
+					</ul>
+				</div>
+				
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul style="height:50px;">
+						<li><a href="javascript:void(0)" onclick="RegisterAjax();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Apply</a></li>
+						<li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="dvLocaldb"  >
+			<div data-theme="b" data-role="header">
+				<h3> Local Data Check </h3>
+			</div>
+			<div class="ui-content" role="main" data-theme="b" >
+				<select id="selLocaldb" onchange="chkLocaldb();" style="overflow:auto" data-native-menu="false">
+                   <option value="" >-- Select -- </option>
+                   <option value="login" >Login</option>
+                   <option value="imcsetting" >Setting</option>
+                   <option value="sales">Sales</option>
+                   <option value="marketinfo" >Marketinfo</option>
+                   <option value="googlechart" >ChartSetting</option>
+                   <option value="googledata" >ChartData</option>
+                </select>
+                <div  class="ui-grid-a"  >
+					<div class="ui-block-a">
+						<input id="inLocaldb" placeholder="LocalStorage ID">
+					</div>
+					<div class="ui-block-b">
+						<a data-role="button" onclick="chkLocaldb1();" >View</a>
+					</div>
+				</div>
+                
+                <script>
+                	function chkLocaldb(){
+                		$("#txLocaldb").val("");
+                		var va=localStorage.getItem($("#selLocaldb").val());
+                		$("#txLocaldb").val(va);
+                	$("#txLocaldb").css({'min-height':'250px'});
+                	}
+                	function chkLocaldb1(){
+                		$("#txLocaldb").val("");
+                		var va=localStorage.getItem($("#inLocaldb").val());
+                		$("#txLocaldb").val(va);
+                	}		
+                	function updateDB(){
+                		var set=$("#txLocaldb").val();
+                		if(set !="")
+                		localStorage.setItem($("#selLocaldb").val(),set);
+                	}		
+                </script>
+                <div class="wrap1">
+                	<textarea id="txLocaldb" rows="15" cols="10"></textarea>
+                </div>
+			</div>
+			 <div data-role="footer" data-position="fixed" data-theme="b">
+		      	<div data-role="navbar">
+		      		<ul>
+						<li><a href="#" onclick="updateDB();" class="ui-btn">Update</a></li>
+						<li><a href="#setting" class="ui-btn">Close</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="UlList" >
+			<div data-theme="b" data-role="header" >
+
+				<h3><label style="font-weight:bold;" id="lbList" /></h3>
+
+				<a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
+			</div>
+			<div class="ui-content" role="main" >
+				<ul id="ulList" data-role="listview" >
+					<li>
+						<a href="#"><img src="images/search-icon.png" alt="France" class="ui-li-icon">France
+						<p class="ui-li-aside">
+							<strong>6:24</strong>PM
+						</p></a>
+					</li>
+					<li>
+						<a href="#"><img src="images/search-icon1.png" alt="Germany" class="ui-li-icon">Germany</a>
+					</li>
+					<li>
+						<a href="#"><img src="images/map-icon.png" alt="Great Britain" class="ui-li-icon">Great Britain</a>
+					</li>
+					<li>
+						<a href="#"><img src="images/search-red.png" alt="Finland" class="ui-li-icon">Finland</a>
+					</li>
+					<li>
+						<a href="#"><img src="images/comment.png" alt="United States" class="ui-li-icon">United States</a>
+					</li>
+				</ul>
+				<input id="inList" type="hidden"/>
+				<div style="margin-top:20px;" >
+					<a id="cancel1" href="#setting" data-transition="none" data-ajax="false" data-role="button" data-inline="false" data-theme="a" >Cancel</a>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="dvProddetail" >
+			<div data-role="header" data-theme="b">
+				<h3> Product Detail </h3>
+				<a href="#" onclick="if(confirm('상품을 삭제하시겠습니까?'))delList('pd',$('#inProdcode').val());"  data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
+			</div>
+			<div class="ui-content" role="main" >
+				<ul id="ulProdDetail" data-role="listview" data-inset="false" >
+					<li data-role="list-divider">일반</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inProdname">상품명:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input id="inProdname" name="inProdname" value="" placeholder="상품명" data-clear-btn="false" >
+							</div>
+						</div>
+					</li>
+					
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label class="select" for="selCat">분류:</label>
+							</div>
+							<div class="ui-block-b" >
+								<select id="selCat"  >
+								</select>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<ul id="ulProdDetail1" data-role="listview" data-inset="false" >
+					<li data-role="list-divider">
+						가격
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inStd">평균:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="number" style="margin:0" id="inStd"  value="" placeholder="상품의 평균값" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inA">A:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="number" id="inA"  value="" placeholder="A등급 가격" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inB">B:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="number" id="inB"  value="" placeholder="B등급 가격" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inC">C:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="number" id="inC"  value="" placeholder="C등급 가격" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li data-role="list-divider">
+						Images
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inC">Attach</label>
+							</div>
+							<div class="ui-block-b" >
+								
+							</div>
+						</div>
+					</li>
+				</ul>
+				<input id="inProdcode" type="hidden">
+				<ul id="ulProdDetail2" data-role="listview" data-inset="false">
+					<li class="ui-field-contain">
+						<label for="txNote">Notes:</label>
+						<input id="txNote" value="" placeholder="" data-clear-btn="true">
+					</li>
+				</ul>
+
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul>
+						<li><a href="#UlList" onclick="saveProd();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+						<li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="dvChdetail"  >
+			<div data-role="header" data-theme="b">
+				<h3> 거래선 Detail </h3>
+				<a href="#" onclick="if(confirm('거래선을 삭제하시겠습니까?'))delList('ch',$('#inChcode').val());"  data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
+			</div>
+			<div class="ui-content" role="main" >
+				<ul id="ulChDetail" data-role="listview" data-inset="true" >
+					<li data-role="list-divider">일반</li>
+					
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inChname">회사명:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input id="inChname" name="inChname" value="" placeholder="거래선명" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label class="select" for="selLevel">등급:</label>
+							</div>
+							<div class="ui-block-b" >
+								<select id="selLevel"  >
+								</select>
+							</div>
+						</div>
+					</li>
+					<li class="ui-field-contain">
+						<label for="txChnote">Notes:</label>
+						<input id="txChnote" value="" placeholder="Meno입력" data-clear-btn="true">
+					</li>
+				</ul>
+				<ul id="ulChDetail1" data-role="listview" data-inset="true">
+					<li data-role="list-divider">
+						Contact
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inZip">Zip:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input id="inZip" name="inZip" value="" placeholder="우편번호" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inAddr">주소:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input id="inAddr" name="inAddr" value="" placeholder="주소" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inLatLng">위치:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input id="inLatLng" name="inLatLng" value="" placeholder="위도경도표시" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					
+				</ul>
+				<ul id="ulChDetail2" data-role="listview" data-inset="true">
+					<li data-role="list-divider">
+						직원<span  style="margin:-15px -40px 0 0;" onclick="alert('hi')" class="ui-li-aside ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-nodisc-icon ui-alt-icon"></span>
+					</li>
+					
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inStaffname">이름:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="text" id="inStaffname"  value="" placeholder="직원명" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inDiv">부서:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="text" id="inDiv"  value="" placeholder="부서명" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inPos">직급:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="text" id="inPos"  value="" placeholder="직급명" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inTel">전화:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="tel" id="inTel"  value="" placeholder="회사전화번호" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inMobile">Mobile:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="tel" id="inMobile"  value="" placeholder="mobile phone" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li class="sp">
+						<div class="ui-grid-a" >
+							<div class="ui-block-a" >
+								<label for="inEmail">Email:</label>
+							</div>
+							<div class="ui-block-b" >
+								<input type="email" id="inEmail"  value="" placeholder="email" data-clear-btn="true" >
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="ui-field-contain">
+							<label for="inStaffnote">Notes:</label>
+							<input type="text" id="inStaffnote"  value="" placeholder="Memo내용" data-clear-btn="true" >
+						</div>
+					</li>
+				</ul>
+				<input id="inChcode" type="hidden">
+				<ul id="ulChDetail2" data-role="listview" data-inset="true">
+				</ul>
+
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" >
+					<ul>
+						<li><a href="#UlList" onclick="saveChan();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+						<li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
+					</ul>
+				</div>
+			</div>
+		
+		</div>
+		<div data-role="page" data-theme="a" id="dvChStaff">
+			<div data-role="header" data-theme="b">
+				<h3> Customer List </h3>
+				<a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
+			</div>
+			<div class="ui-content" role="main" data-theme="b" >
+				<ul id="ulChDetail2" data-role="listview" data-inset="true" data-divider-theme="a" >
+					<li>
+						<fieldset data-role="controlgroup" >
+							<legend></legend>
+							<div class="ui-field-contain">
+								<label for="inStaffname">이름:</label>
+								<input type="text" id="inStaffname"  value="" placeholder="이름" data-clear-btn="true" >
+							</div>
+							<div class="ui-field-contain">
+								<label for="inDiv">부서:</label>
+								<input type="text" id="inDiv"  value="" placeholder="부서명" data-clear-btn="true" >
+							</div>
+							<div class="ui-field-contain">
+								<label for="inPos">직급:</label>
+								<input type="text" id="inPos"  value="" placeholder="직급명" data-clear-btn="true" >
+							</div>
+							<div class="ui-field-contain">
+								<label for="inTel">전화:</label>
+								<input type="tel" id="inTel"  value="" placeholder="회사전화번호" data-clear-btn="true" >
+							</div>
+							<div class="ui-field-contain">
+								<label for="inMobile">Mobile:</label>
+								<input type="tel" id="inMobile"  value="" placeholder="Mobile phone" data-clear-btn="true" >
+								`
+							</div>
+							<div class="ui-field-contain">
+								<label for="inEmail">Email:</label>
+								<input type="email" id="inEmail"  value="" placeholder="email" data-clear-btn="true" >
+								`
+							</div>
+							<div class="ui-field-contain">
+								<label for="inStaffnote">Notes:</label>
+								<input type="text" id="inStaffnote"  value="" placeholder="" data-clear-btn="true" >
+								`
+							</div>
+						</fieldset>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div data-role="page" data-theme="a" id="Logindv" >
+		<div data-role="header" data-theme="b">
+			<h1>Log In</h1>
+		</div>
+		<div class="ui-content" role="main" >
+			<label for="username">ID:</label>
+			<input type="text" name="username" id="username" placeholder="Username">
+			<label for="password">Password:</label>
+			<input type="password"  id="password" placeholder="Password">
+			
+			
+			
+			<div class="ui-grid-b" style="margin-top:10px;">
+				<div class="ui-block-a">
+					<a href="#dvMenubar"  data-role="button" data-theme="a">Cancel</a>
+				</div>
+				<div class="ui-block-b" style="padding-left:5px;">
+					<a href="#dvSvctype"  data-role="button" data-theme="a">Join</a>
+				</div>
+				<div class="ui-block-c" style="padding-left:5px;">
+					<a href="#" onclick="LoginAjax1();"  data-role="button" data-theme="a">Login</a>
+				</div>
+			</div>
+			
+		</div>
+	</div>  </span>
+	<script>
+		function saveCategory() {
+			localStorage.setItem("category", $("#txCategory").val());
+		}
+
+		function showCategory() {
+			var clist = localStorage.getItem("category");
+			$("#txCategory").val(clist);
+		}
+
+		function showSvc() {
+			var dvcomp = document.getElementById("dvComp");
+			dvcomp.style.display = "none";
+			if ($("#selSvc").val() == "online")
+				dvcomp.style.display = "block";
+		}
+
+
+		$("#btn2").click(function() {
+			$.mobile.utils.showWaitBox("a", "loading...");
+			makeProd();
+			$('#ol1').trigger('create');
+			setTimeout(function() {
+				$.mobile.utils.hideWaitBox()
+			}, 1000);
+
+		});
+		$(document).on("click", '[id^=cancel]', function(event, ui) {
+			//$.mobile.changePage("#setting");
+			$.mobile.changePage("#setting");
+			//$( "body" ).pagecontainer( "change", "setting.html", { transition: "slide" });
+			return false;
+		})
+		function populateCat(id, content, selcode) {
+			var selected = "";
+			$(id).empty();
+			var newOptions = '<option value="">-- Select --</option>';
+			for (i in content) {
+				if (selcode == content[i])
+					selected = "selected";
+				newOptions += '<option ' + selected + ' value="' + content[i] + '">' + content[i] + '</option>';
+				selected = "";
+			}
+			$(id).append(newOptions);
+			$(id).selectmenu().selectmenu('refresh', true);
+
+			$(id).css("data-native-menu", "false");
+			$(id).attr("selectedIndex", -1)
+		}
+
+
+		$(document).on('click', '#ulList li', function() {
+			//e.preventDefault();
+			var Id = $(this).attr('id');
+			var data = $("#inList").val();
+			data = JSON.parse(data);
+			var cat = localStorage.getItem("category");
+			if (cat !== null) {
+				cat = cat.split('\n');
+			}
+			for (i in data) {
+				if (data[i]["code"] == Id) {
+					switch($("#lbList").html()) {
+					case "상품 List":
+						$("#inProdcode").val(data[i]["code"]);
+						$("#inProdname").val(data[i]["name"]);
+						$("#inStd").val(data[i]["price"][0]);
+						$("#inA").val(data[i]["price"][1]);
+						$("#inB").val(data[i]["price"][2]);
+						$("#inC").val(data[i]["price"][3]);
+						$("#inD").val(data[i]["price"][4]);
+						$("#txNote").val(data[i]["note"]);
+						populateCat("#selCat", cat, data[i]["category"]);
+						//ins.pic=data[i]["pic"];
+						$.mobile.changePage("#dvProddetail");
+						//$( "body" ).pagecontainer( "change", "dvProddetail.html", { transition: "slide" });
+						break;
+					case "거래선 List":
+						$("#inChcode").val(data[i]["code"]);
+						$("#inChname").val(data[i]["name"]);
+
+						$("#inLatLng").val(data[i]["latlng"]);
+						var staff = data[i]["staff"][0];
+						$("#inStaffname").val(staff["name"]);
+						$("#inDiv").val(staff["div"]);
+						$("#inPos").val(staff["pos"]);
+						$("#inTel").val(staff["tel"]);
+						$("#inMobile").val(staff["mobile"]);
+						$("#inEmail").val(staff["email"]);
+						$("#inStaffnote").val(staff["note"]);
+						$("#txChnote").val(data[i]["note"]);
+						var l = ["A", "B", "C", "D"];
+						
+						populateCat("#selLevel", l, data[i]["level"]);
+						$.mobile.changePage("#dvChdetail");
+						//$( "body" ).pagecontainer( "change", "dvChdetail.html", { transition: "slide" });
+						break;
+					}
+				}
+			}
+		});
+		//use both of prodlist & chlist
+		function makeUlList(type) {
+			var data1 = "";
+			$("#inList").val("");
+			if (localStorage.getItem(type))
+				data1 = localStorage.getItem(type);
+			var data = [];
+			$("#inList").val(data1);
+			if (data1 != "")
+				data = JSON.parse(data1);
+			switch(type) {
+			case "pd":
+				$("#lbList").html("상품 List");
+				break;
+			case "ch":
+				$("#lbList").html("거래선 List");
+				break;
+			}
+			$("#ulList" + ' li').remove();
+			if (data1 != "") {
+
+				for (i in data) {
+					var li = document.createElement("li");
+					li.id = data[i]["code"];
+					var a1 = document.createElement("a");
+					var pic = document.createElement("img");
+					var p = document.createElement("p");
+					switch(type) {
+					case "pd":
+						pic.src = "images/homepage.png"
+						if (data[i]["pic"] != "")
+							pic.src = data[i]["pic"];
+						p.appendChild(document.createTextNode("￦" + data[i]["price"][0]));
+						a1.appendChild(pic);
+						console.log("check", type);
+						break;
+					case "ch":
+						break;
+					}
+					//pic.setAttribute("class","ui-li-icon");
+					p.setAttribute("class", "ui-li-aside");
+
+					li.appendChild(a1);
+					a1.appendChild(document.createTextNode(data[i]["name"]));
+					a1.appendChild(p);
+					$("#ulList").append(li);
+				}
+				$('#ulList').listview('refresh');
+			}
+		}
+
+		function saveProd() {
+			var pd = $("#inList").val();
+			if (pd == "")
+				pd = [];
+			else {
+				pd = JSON.parse(pd);
+				//when update delete current
+				for (i in pd) {
+					if (pd[i]["code"] == $("#inProdcode").val())
+						pd.splice(i, 1);
+				}
+			}
+
+			var ins = {};
+			ins.code = $("#inProdcode").val();
+			ins.name = $("#inProdname").val();
+			ins.category = $("#selCat").val();
+			ins.price = [];
+			ins.price.push($("#inStd").val());
+			ins.price.push($("#inA").val());
+			ins.price.push($("#inB").val());
+			ins.price.push($("#inC").val());
+			ins.price.push($("#inD").val());
+			ins.note = $("#txNote").val();
+			ins.pic = "";
+			pd.push(ins);
+			$("#inList").val(JSON.stringify(pd));
+			localStorage.setItem("pd", JSON.stringify(pd));
+			makeUlList('pd');
+		}
+
+		function saveChan() {
+			var ch = $("#inList").val();
+			if (ch == "")
+				ch = [];
+			else {
+				ch = JSON.parse(ch);
+				//when update delete current
+				for (i in ch) {
+					if (ch[i]["code"] == $("#inChcode").val())
+						ch.splice(i, 1);
+				}
+			}
+
+			var ins = {};
+			ins.code = $("#inChcode").val();
+			ins.name = $("#inChname").val();
+			ins.level = $("#selLevel").val();
+			ins.zip = $("#inZip").val();
+			ins.addr = $("#inAddr").val();
+			ins.latlng = $("#inLatLng").val();
+			ins.staff = [];
+			var first = {};
+			first.name = $("#inStaffname").val();
+			first.div = $("#inDiv").val();
+			first.pos = $("#inPos").val();
+			first.tel = $("#inTel").val();
+			first.moble = $("#inMobile").val();
+			first.email = $("#inEmail").val();
+			first.note = $("#inStaffnote").val();
+			ins.staff.push(first);
+
+			ins.note = $("#txChnote").val();
+			ch.push(ins);
+			$("#inList").val(JSON.stringify(ch));
+			localStorage.setItem("ch", JSON.stringify(ch));
+			makeUlList('ch');
+		}
+
+		function clearDetail() {
+			var list = $("#inList").val()
+			var type = "";
+			switch($("#lbList").html()) {
+			case "상품 List":
+				type = "pd";
+				break;
+			case "거래선 List":
+				type = "ch";
+				break;
+			}
+
+			switch(type) {
+			case "pd":
+				$("#inProdcode").val("PD" + idMake());
+				$("#inProdname").val("");
+				var cat = localStorage.getItem("category");
+				if (cat !== null) {
+					cat = cat.split('\n');
+					populateCat("#selCat", cat, "");
+				}
+				$("#selCat").val("");
+				$("#inStd").val("");
+				$("#inA").val("");
+				$("#inB").val("");
+				$("#inC").val("");
+				$("#inD").val("");
+				$("#txNote").val("");
+				$.mobile.changePage("#dvProddetail");
+				//$( "body" ).pagecontainer( "change", "dvProddetail.html", { transition: "slide" });
+				break;
+			case "ch":
+				$("#inChcode").val("CH" + idMake());
+				$("#inChname").val("");
+				var l = ["A", "B", "C", "D"];
+				populateCat("#selLevel", l, "");
+				$("#selLevel").val("");
+				$("#inZip").val("");
+				$("#inAddr").val("");
+				$("#txChnote").val("");
+				//staff
+				$("#inStaffname").val("");
+				$("#inDiv").val("");
+				$("#inPos").val("");
+				$("#inTel").val("");
+				$("#inMobile").val("");
+				$("#inEmail").val("");
+				$("#inStaffnotes").val("");
+				$.mobile.changePage("#dvChdetail");
+				//$( "body" ).pagecontainer( "change", "dvChdetail.html", { transition: "slide" });
+				break;
+			}
+
+		}
+
+		function delOk(code) {
+			var sales = localStorage.getItem("sales");
+			var mkt = localStorage.getItem("marketinfo");
+			var unuse=true;
+			if (sales !== null){
+				sales = JSON.parse(sales);
+				if (!chkUnuse(sales, code))
+				unuse=false;
+			}
+			if (mkt !== null){
+				mkt = JSON.parse(mkt);
+				if(!chkUnuse(mkt, code))
+				unuse=false;
+			}
+			return unuse;
+		}
+
+		function chkUnuse(data, code) {
+			$.each(data, function(key, value) {
+				if (value == code) {
+					return false;
+				} else
+					return true;
+			})
+		}
+
+		function delList(type, code) {
+			switch(type) {
+			case "pd":
+			case "ch":
+				var list = localStorage.getItem(type);
+				if (list !== null) {
+					list = JSON.parse(list);
+					for (i in list) {
+						if (list[i]["code"] == code) {
+							if (delOk(code))
+								list.splice(i, 1);
+							else
+								alert("이미 사용중이라 삭제할 수 없습니다.");
+
+						}
+
+					}
+					localStorage.setItem(type, JSON.stringify(list));
+					makeUlList(type);
+					$.mobile.changePage("#UlList");
+					//	$( "body" ).pagecontainer( "change", "UlList.html", { transition: "slide" });
+				}
+				break;
+			}
+
+		}
+
+		function checkConnection() {
+			var networkState = navigator.connection.type;
+
+			var states = {};
+			states[Connection.UNKNOWN] = 'Unknown connection';
+			states[Connection.ETHERNET] = 'Ethernet connection';
+			states[Connection.WIFI] = 'WiFi connection';
+			states[Connection.CELL_2G] = 'Cell 2G connection';
+			states[Connection.CELL_3G] = 'Cell 3G connection';
+			states[Connection.CELL_4G] = 'Cell 4G connection';
+			states[Connection.CELL] = 'Cell generic connection';
+			states[Connection.NONE] = 'No network connection';
+
+			alert('Connection type: ' + states[networkState]);
+		}
+
+		function onOnline() {
+
+			alert('its online!')
+		}
+
+		function onOffline() {
+
+			alert('its offline!')
+		}
+
+		function ContactInfo() {
+			// find all contacts
+			var options = new ContactFindOptions();
+			options.filter = "";
+			var filter = ["displayName", "addresses"];
+			navigator.contacts.find(filter, onSuccess, onError, options);
+		}
+
+		// onSuccess: Get a snapshot of the current contacts
+		//
+		function onSuccess(contacts) {
+			// display the address information for all contacts
+			for (var i = 0; i < contacts.length; i++) {
+				for (var j = 0; j < contacts[i].addresses.length; j++) {
+					alert("Pref: " + contacts[i].addresses[j].pref + "\n" + "Type: " + contacts[i].addresses[j].type + "\n" + "Formatted: " + contacts[i].addresses[j].formatted + "\n" + "Street Address: " + contacts[i].addresses[j].streetAddress + "\n" + "Locality: " + contacts[i].addresses[j].locality + "\n" + "Region: " + contacts[i].addresses[j].region + "\n" + "Postal Code: " + contacts[i].addresses[j].postalCode + "\n" + "Country: " + contacts[i].addresses[j].country);
+				}
+			}
+		};
+
+		// onError: Failed to get the contacts
+		//
+		function onError(contactError) {
+			alert('onError!');
+		}
+
+		// onSuccess Geolocation
+		//
+		function chkloc() {
+			navigator.geolocation.getCurrentPosition(onSuccess, onError);
+		}
+
+		function onSuccess(position) {
+			var element = document.getElementById('geolocation');
+			element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' + 'Longitude: ' + position.coords.longitude + '<br />' + 'Altitude: ' + position.coords.altitude + '<br />' + 'Accuracy: ' + position.coords.accuracy + '<br />' + 'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' + 'Heading: ' + position.coords.heading + '<br />' + 'Speed: ' + position.coords.speed + '<br />' + 'Timestamp: ' + new Date(position.timestamp) + '<br />';
+		}
+
+		function chkdevice() {
+
+			var element = document.getElementById('deviceProperties');
+
+			element.innerHTML = 'Device Name: ' + device.name + '<br />' + 'Device PhoneGap: ' + device.phonegap + '<br />' + 'Device Platform: ' + device.platform + '<br />' + 'Device UUID: ' + device.uuid + '<br />' + 'Device Version: ' + device.version + '<br />';
+		}
+
+		// onError Callback receives a PositionError object
+		//
+		function onError(error) {
+			alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+		}
+
+	</script>
+
+	<script src="http://debug.build.phonegap.com/target/target-script-min.js#imcmobile"></script>
+</body>
+</html>

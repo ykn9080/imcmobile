@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Capture Photo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+	<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />	
+	<link rel="stylesheet" href="css/stylesheet.css" />
+	<link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
+	
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>    
+	<script src="js/common.js"></script>
+	<script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
+
+	<link href='js/fullcalendar/fullcalendar.css' rel='stylesheet' />
+	<link href='js/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+	<script src='js/fullcalendar/moment.min.js'></script>
+	<script src='js/fullcalendar/jquery.min.js'></script>
+	<script src='js/fullcalendar/fullcalendar.min.js'></script>
+	
+	<script>
+	
+	var data='[{"title":"all day event","start":"2014-11-01"},{	"title": "Long Event","start": "2014-11-07","end": "2014-11-10"}]';
+	
+	$(document).ready(function() {
+		// RESIZE HANDLING START
+	    function resizeCalendar() {
+	        var currentView = $('#calendar').fullCalendar('getView');
+	        if(currentView.name === 'agendaWeek' || currentView.name === 'agendaDay') {
+	            currentView.setHeight(9999);
+	        }
+	    }
+	    $(window).on('resize', resizeCalendar);
+    
+		$('#calendar').fullCalendar({
+			viewDisplay: resizeCalendar,
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			defaultDate: new Date(),
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end) {
+				var title = prompt('Event Title:');
+				var eventData;
+				if (title) {
+					eventData = {
+						title: title,
+						start: start,
+						end: end
+					};
+					$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+				}
+				$('#calendar').fullCalendar('unselect');
+			},
+			eventClick: function (calEvent, jsEvent, view) {
+                edit(calEvent._id);
+                var r = ""; //confirm("Delete " + calEvent.title);
+                //if (r===true)
+                //{
+                //$('#calendar').fullCalendar('removeEvents', calEvent._id);
+                // }
+            },
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			height:600,
+			events: JSON.parse(data)
+		});
+		
+	});
+
+	</script>
+	<style>
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+	.fc-title{
+	   text-shadow:none;
+	   color:white;
+	}
+	.fc-time{
+	   text-shadow:none;
+	   color:white;
+	}
+	.ui-content{
+		height:600px !important;
+	}
+	</style>
+</head>
+<body>
+	<div data-role="page" data-theme="a" id="dvMenubar"  data-add-back-btn=¡±true¡±>
+		<div data-role="header" data-theme="b">
+			<a href="#" onclick="change('index');" id="returnhome" class="ui-btn ui-btn-left ui-icon-home ui-btn-icon-left ui-btn-notext">Home</a>
+			<h3> 

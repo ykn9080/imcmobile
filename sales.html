@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html style="height:100%">
+  <head>
+    <title>Sales Order</title>   
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta http-equiv="content-type" content="text/html; charset=EUC-KR" />
+	   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+	<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />	
+
+	<link rel="stylesheet" href="css/stylesheet.css" />
+	<link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>    
+	<script type="text/javascript" src="js/jqm-datebox.core.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/filemanage.js"></script>
+	<script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
+	<script src="js/jsapi.js" type="text/javascript"></script>
+	<script src="phonegap.js"></script>
+	<style type="text/css">
+		html, body, #map_daum,#map_canvas {margin: 0; padding: 0; width: 100%; height: 100%;font-family:dotum;}
+		#map_canvas{ 	height:600px;    }
+		#custom-footer .ui-block-a {width: 50% !important;		}
+		#custom-footer .ui-block-b {width: 30% !important;    	}
+		#custom-footer .ui-block-c {width: 20% !important;    	}
+		#loc .ui-block-a {width: 40% !important;		}
+		#loc .ui-block-b {width: 40% !important;    	}
+		#loc .ui-block-c {width: 20% !important;    	}
+		#searchbar  .ui-block-a {width: 70% !important;		}
+		#searchbar  .ui-block-b {width: 30% !important;    	}
+		#search  .ui-block-a {width: 19% !important;		}
+		#search  .ui-block-b {width: 19% !important;    	}
+		#search  .ui-block-c {width: 19% !important;    	}
+		#search  .ui-block-d {width: 19% !important;    	}
+		#search  .ui-block-e {width: 24% !important;    	}
+		.viewpage {padding:0 0 5px 0;}
+		.viewpage small {font-size:small}
+		.ui-header .ui-title {
+		  overflow: visible !important;
+		  text-overflow: ellipsis !important;
+		}
+	    .iconFloat {
+            float: left;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            border-top-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            border-right-width: 0px;
+            top: 2px;
+            padding-bottom: 0px;
+        }
+        .ui-listview>li.ui-li-has-alt>.ui-btn{
+        	margin-right:0.5em !important;
+        }
+        .ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb{
+        	min-height:0 !important;
+        	padding-left:20px !important;
+        }
+       .ui-listview>.ui-li-static{
+        	padding:0px !important;
+        }
+       [id^="tb"] {
+		  border-collapse: collapse;
+		}
+		
+		[id^="tb"] td, th {
+		  border: 1px solid #999;
+		  padding: 0.5rem;
+		  text-align: left;
+		}
+		[id^="tb"] th {
+		  background-color:#313031;
+		  color:white;
+		}
+		[id^="tb"] td {
+		  font-weight: normal;
+		}
+		h1 {
+		    margin: 1em;
+		    cursor: pointer;
+		}
+		#ulProd .ui-input-text{
+			margin:0 !important;
+		}
+	</style>
+  </head>
+  <body  style="height:100%;margin:0">
+  	<script>//Page Init
+    // device APIs are available
+    //
+    $(document).on("mobileinit",function() {
+	    $.mobile.autoInitializePage = false;
+	     $.mobile.activeBtnClass = 'unused';
+	     $.mobile.page.prototype.options.domCache = true;
+	});
+	document.addEventListener("deviceready",onDeviceReady,false);
+	function onDeviceReady() {
+		//document.getElementById("new").setAttribute("data-role","page");
+		
+		//localStorage.removeItem("salessave");
+    
+	    PageInit();
+	   
+		$.mobile.defaultDialogTransition = "none";
+    	$.mobile.defaultPageTransition = "none"; 
+		document.addEventListener("online", onOnline, false);
+	}
+
+	function onOnline(){
+		var conn=navigator.connection.type;
+		var salessave=localStorage.getItem("salessave");
+		if(conn !="none" && (salessave !="" && salessave !=null)){
+			saveRemotesales();
+		}
+	}
+	//page별 키보드 할당
+	$(document).keypress(function(e) {
+	    if(e.keyCode == 13) 
+	    {
+	      $("#b").trigger('click'); 
+	    }
+	  });
+	  
+    // document.addEventListener("offline", onOffline, false);
+    document.addEventListener("backbutton", backKeyDown); 
+	function backKeyDown() { 
+	     // Call my back key code here.
+	     switch($.mobile.activePage.attr('id')){
+	     case "dvList":
+	     $.mobile.loading( 'show', {
+			text: 'Returing Home...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+	     navigator.app.loadUrl("file:///android_asset/www/index.html");
+	     break;
+	     case "dvEdit":
+	     $.mobile.changePage("#dvList");
+	     break;
+	     case "imgshow":
+	     $.mobile.changePage("#imglist");
+	     break;
+	     case "imglist": 
+	     case "dvLocation":
+	     case "pic":
+	     $.mobile.changePage("#dvEdit");
+	     break;
+	     default:
+	 	navigator.app.backHistory();
+	 	break;
+	 }
+	}
+
+	var mardata;
+    function PageInit(){
+    	//localstorage check
+    	var sales=localStorage.getItem("sales");
+    	//alert(sales);
+		if(sales==null){
+     		SalesAjax();
+    		sales=localStorage.getItem("sales");
+     	}
+  		var obj = eval("(" + sales + ")");
+
+  		sorttype="";
+  		
+  		//setTimeout(function(){ListViewLoad(obj.data)},500);
+		if( !$("#rangeMth option[value='1']").length ){
+			
+  			populateYr();
+  			populateMth();
+  		}
+  		 
+		setTimeout(function(){ListViewLoad(filterData(obj.data))},500);
+		
+    }
+    	
+
+    function filterData(data){
+    	
+    	var mth=$("#rangeMth").val();
+  		var yr=$("#rangeYr").val();
+  		if(mth==null){
+  			mth=new Date().getMonth()+1;
+  			yr=new Date().getFullYear();
+  		}
+  		mth=mth.toString().split(',');
+  		//mth.push("10");// for testing only pls delete!!!!
+  		yr=yr.toString().split(',');
+  		
+    	for(i in data){
+    		var omth=new Date(data[i]["odate"]).getMonth()+1;
+  			var oyr=new Date(data[i]["odate"]).getFullYear();
+  			if($.inArray(omth.toString(), mth)==-1 | $.inArray(oyr.toString(), yr)==-1){
+  				delete data[i];
+  			}  
+  		}
+  		
+  		mardata=data;
+  		return mardata;
+    }
+    function checkprice(code){
+    	var sales=localStorage.getItem("sales");
+    	var obj = eval("(" + sales + ")");
+  		var content=obj.price;
+  		var chcode=$("#ch").val();
+    	var price="";
+    	for (i in content){
+    		if(code==content[i]["prod"] && chcode==content[i]["chcode"]){
+    				price=content[i]["exfprice"]
+	    	}
+  		}
+  		//if by prod,chan price list not exists,general prod price
+  		if(price==""){
+	    	for (i in content){
+    			if(code==content[i]["prod"] && content[i]["chcode"]=="CH00000000"){
+    				price=content[i]["exfprice"]
+	    		}
+  			}
+  		}
+		return price;
+    }
+
+
+	function populateYr(){
+    	var thisyr=parseInt(new Date().getFullYear());
+    	var selected="";
+
+    	$("#rangeYr").empty();
+		  for (i=-1; i<1; i++) {
+		  	var yr=thisyr+parseInt(i);
+		  	selected="";
+		  	if(i=="0") selected="selected";
+		   	$("#rangeYr").append('<option '+selected+' value="' + yr + '">' + yr + '</option>');
+		  }
+		   $("#rangeYr").enhanceWithin();
+	}
+	function populateMth(){
+	    var selected="";
+	    $("#rangeMth").empty();
+        for (j=1; j<=12; j++) {
+        	selected="";
+        	if(parseInt(j)==parseInt(new Date().getMonth())+1) selected="selected";
+	   		$("#rangeMth").append('<option '+selected+' value="' + j + '">' + j + '</option>');
+        }
+        $("#rangeMth").enhanceWithin();
+	}
+  </script>
+  		
+	<script>//Market Info
+	function SalesAjax() {
+		var comp1=localStorage.getItem("login");
+		var obj = eval("(" + comp1 + ")");
+  		var staff=obj.id;
+  		var comp=obj.comp;
+  		var dd = new Date();
+		var thisyr = dd.getFullYear();
+		var thismth = dd.getMonth()+1;
+		$.mobile.loading( 'show', {
+			text: 'Reload List...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+		$.ajax({
+			url: "http://mobile.imcmaster.co.kr/WebService.asmx/SalesOrderList",
+			data: { comp: JSON.stringify(comp),staff: JSON.stringify(staff),yr:thisyr,month:thismth},
+			//data: JSON.stringify({ "comp":comp,"staff":staff,"month":thismth }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "JSON",
+			success: function (data, status) {	
+				if(JSON.stringify(data)!="{\"d\":\"fail\"}"){
+					savelocal("sales",data.d );
+					//alert("load sales success !!!"+JSON.stringify(data))
+					PageInit();
+					$.mobile.loading( 'hide');
+				}
+				else
+					 msgshow("Loading Failed!");
+				},
+				error: function () { 
+					$.mobile.loading( 'hide');
+					msgshow("Error!"); } 
+		});
+		
+   	}    
+	
+	
+	function sortDate(a,b){
+		return new Date(b.odate).getTime() - new Date(a.odate).getTime();
+	}
+	function sortChname(a,b){
+		return ((a.chname == b.chname) ? 0 : ((a.chname > b.chname) ? 1 : -1 ));
+	}
+	function sortStaffname(a,b){
+		return ((a.staffname == b.staffname) ? 0 : ((a.staffname > b.staffname) ? 1 : -1 ));
+	}
+  	function sortName(a,b){
+		return ((a.iname == b.iname) ? 0 : ((a.iname > b.iname) ? 1 : -1 ));
+	}
+	
+	function sortList(code){
+		$('#list').empty();
+		var d = new Date();	
+    	var yr=d.getFullYear().toString()
+    	var month = d.getMonth()+1;
+		var day = d.getDate();
+		var tday=yr+"-"+month+"-"+day+" "+"00:00";
+		tday=new Date(tday).getTime();
+		switch(code){
+			case "odate":
+  				ListViewLoad(mardata.sort(sortDate),"odate");
+  			break;
+  			case "chname":
+  				ListViewLoad(mardata.sort(sortChname),"chname");
+  			break;
+  			
+  		}
+	}
+	
+
+	$(document).on("click", '[id^=scodes]', function(event, ui) {
+	    var scode=$(this).attr('id').replace("scode","");
+  		//ContentViewLoad(scode);
+        ContentEditLoad(scode);
+  		LoadSelect();
+	  })
+	$(document).on("click","ul a", function(){
+        $(this).children("div:last").toggle(200);
+        if($(this).attr("title")) {
+            console.log("clicked delete");
+         
+        } else {
+            //Clicked the link to toggle the content
+        }
+        $(this).children("div:first").toggleClass("ui-icon-plus ui-icon-minus");
+        
+         var img = $(this).find('img');
+	    var src = img.attr('src');
+	
+	    //image is neither on nor off, so change src to on and return
+	    if(src != 'x-on.png' && src != 'x-off.png') {
+	        img.attr('src','x-on.png');
+	        return false;
+	    }
+	
+	    //image is on, so change src to off and return
+	    if(src == 'x-on.png') {
+	        img.attr('src','x-off.png');
+	        return false;    
+	    }
+	
+	    //image is off, so change src to x and return
+	    if(src == 'x-off.png') {
+	        img.attr('src','x.png');
+	        return false;    
+	    }
+	    
+	    
+    });
+  
+	var listhead="";
+  	function ListViewLoad(data,sorttype1){
+  		//page head
+  		$("#list"+' li').remove();
+
+  		var range=$("#rangeYr").val();
+  		var range1=$("#rangeMth").val();
+  		if(range ==null)range=new Date().getFullYear();
+  		if(range1==null)range1=new Date().getMonth()+1; 
+  		range=" ("+range+" / "+range1+")"
+  		$("#dvListHead").html("Sales"+range);
+  		
+  		
+  		if(sorttype1!=""){
+	  		var arr=[];
+	  		var hcnt={};
+	  		for (i in data) {
+	  			var sortname1=data[i][sorttype1];
+	  			if(sorttype1=='odate'){
+	  				var now=new Date(data[i].odate);
+	  				var day = ("0" + now.getDate()).slice(-2);
+				    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				    sortname1 = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				    if(makeDate(new Date(),"-")==sortname1)
+				    	sortname1="Today";
+	  			}
+
+		  		if(listhead!==sortname1){
+		  			hcnt={};
+		  			hcnt.uname=sortname1;
+		  			hcnt.cnt=1;
+		  			hcnt.rev=parseInt(data[i]["rev"]);
+		  			arr.push(hcnt);
+		  			listhead=sortname1;
+		  		}
+		  		else{
+					for(j in arr){
+		  			 if (arr[j].uname == sortname1) {
+					    arr[j].cnt = parseInt(arr[j].cnt)+1;
+					    arr[j].rev +=parseInt(data[i]["rev"]);
+					  }
+					}
+					
+		  		}
+	  		}
+		}
+		        		//console.log("toay",JSON.stringify(arr));
+  		for (i in data) {
+  	    	
+	        //list-divider
+	        if(sorttype1!=""){
+	       
+			  	var sortname=data[i][sorttype1];
+	
+	  			if(sorttype1=='odate'){
+				    sortname =makeDate(new Date(data[i].odate),"-");
+				     if(makeDate(new Date(),"-")==sortname)
+				    	sortname="Today";
+	  			}
+
+	  			if(listhead!=sortname){
+		        	li = document.createElement( "li" );
+		        	li.setAttribute("data-role","list-divider");	
+	
+		        	//right count insert
+		        	var listcnt;
+		        	var sp=document.createElement("span");
+		        	sp.setAttribute("class","ui-li-count");
+		        	
+		        	for (var j=0; j<arr.length; j++) {
+					    if (arr[j].uname == sortname) {
+					        listcnt=arr[j].cnt;
+					        break;
+					    }
+					}
+		        	sp.innerHTML=listcnt;
+		        	li.appendChild(sp);
+		        	
+		        	//subhead label
+		        	var big = document.createElement( "label" );
+		        	big.innerText=sortname;
+		        	li.appendChild(big);
+		        	
+					$("#list").append( li );
+					listhead=sortname;
+	  			}
+  			}
+  			var ul=document.getElementById("list");
+  			ul.setAttribute("data-role","listview");	
+        	ul.setAttribute("data-inset","false");
+        	ul.setAttribute("data-split-icon","delete");
+	        var li = document.createElement( "li" );
+			
+
+			var a1=document.createElement("a");
+			a1.href="#";
+			//a1.id="scode"+data[k]["scode"];
+			var dvbody=document.createElement("div");
+			dvbody.setAttribute("class","iconFloat ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext");
+			var img=document.createElement("img");
+			img.src="images/add-1-icon.png";
+			
+			dvbody.appendChild(img);
+			//dvbody.id=data[k]["scode"];
+			
+			var big = document.createElement( "h3" );
+			switch(sorttype1){
+				case "odate": default:
+					big.innerText = data[i]["chname"];
+				break;
+				case "chname":
+					big.innerText = makeDate(new Date(data[i].odate),"-");
+				break;
+			}
+			
+			var small = document.createElement( "p" );
+			small.setAttribute("class","ui-li-aside");
+
+			var now=new Date(data[i]["odate"]);
+			var date1=convertDate(now,"date","/");
+			if(sorttype1=="chname")date1="";
+			listrev =calrev(data[i]["prodlist"]).rev;;//parseInt(arr[j].rev);
+			var listcnt="";
+        	small.innerHTML=""+listrev+"<span style='font-weight:normal;font-size:smaller;color:gray;padding-left:5px;'><br/>"+date1+"</span>";
+   			
+   			//table hide & show
+   			var dvdisplay=document.createElement("div");
+			dvdisplay.setAttribute("style","display:none;");
+
+			var list=data[i]["prodlist"];
+   			dvdisplay.appendChild(makeTable(list,data[i]["scode"]));
+
+   			
+			a1.appendChild( dvbody );
+			a1.appendChild(big);
+
+			a1.appendChild(small);
+			a1.appendChild(dvdisplay);
+
+			
+			var a2=document.createElement("a");
+			a2.href="#";
+			a2.id="scode"+data[i]["scode"];
+			li.appendChild(a1);
+			li.appendChild(a2);
+
+			ul.appendChild(li)
+			//pli.appendChild(ul)
+	    }
+	  
+	    $("#list").listview( "refresh" );	
+  	}	
+	function calrev(list){
+    	var rev=0;
+    	var cnt=0;
+		for(c in list){
+			rev +=parseInt(list[c]["rev"]);	
+			cnt++;
+		}
+		return {rev:addCommas(rev), cnt:cnt};
+    }
+	
+	
+	function makeTable(list,scode){
+		var tb=document.createElement("table");
+		var th=document.createElement("th");
+		var tbody=document.createElement("tbody");
+		var tfoot=document.createElement("tfoot");
+		var tr=document.createElement("tr");
+		var td=document.createElement("td");
+		tb.setAttribute("style","font-size:small;");
+		tb.id="tb"+scode;
+		
+		//th make
+		for (var key in list[0]) {
+			if(key !="prod" && key !="unitp"){
+		  if (list[0].hasOwnProperty(key)) {
+		    th=document.createElement("th");
+		    switch(key){
+		    	case "num":
+		    		key="갯수";
+		    		break;
+		    	case "rev":
+		    		key="금액";
+		    		break;
+		    	case "prodname":
+		    		key="상품명";
+		    		break;
+		    }
+		    th.appendChild(document.createTextNode(key));
+		    tr.appendChild(th);
+		  }
+		}
+		}
+		//thead.appdneChild(tr)
+		tb.appendChild(tr);
+		tb.appendChild(tbody);
+		for(var m=0;m<list.length;m++){
+			tr=document.createElement("tr");
+			var li=list[m]["prodname"]+"|";
+			li+=list[m]["num"]+"|";
+			li+=list[m]["rev"];
+			li=li.split('|');
+			for(var l=0; l<li.length;l++){
+			td=document.createElement("td");
+		    td.appendChild(document.createTextNode(li[l]));
+		    
+			td.setAttribute("style","height:10px;text-align:right;");
+		    tr.appendChild(td);
+		   }
+			tbody.appendChild(tr)
+		   tb.appendChild(tbody);
+		}
+		//footer
+		tfoot.setAttribute("style","background-color:#C3C3C3;")
+		tr=document.createElement("tr");
+		var tx="";
+		for(var l=0; l<3;l++){
+			td=document.createElement("td");
+			switch(l){
+				case 0:
+					tx="Sum";
+			    break;
+			    case 1:
+					tx="";
+			    break;
+			    case 2:
+					tx=calrev(list).rev;
+			    break;
+		   }
+		    td.appendChild(document.createTextNode(tx));
+		    td.setAttribute("style","height:10px;text-align:right;");
+		    tr.appendChild(td);
+		   }
+		tfoot.appendChild(tr);
+		tb.appendChild(tfoot);
+		return tb;
+	}
+	
+	//Apply prod all list dialog
+	function applyProdAll(){
+		var arr = new Array();
+		$( "#ulProd li" ).each(function( index ) {
+			//var productVal =$(this).find('input').eq(0).val();
+			var productVal=$(this).attr('id');
+            var num = $(this).find('input').eq(1).val();
+	        var chk=checkNum($("#scode").html(),productVal);
+	        var rev=parseFloat(num)* parseFloat(chk["unitp"]);
+	        var li = new Object();
+	        li.prod=productVal;
+	        li.prodname=chk.prodname;
+	        li.num=num;
+	        li.unitp=chk.unitp;
+	        li.rev=parseInt(rev);
+	        if(num!=""){
+	        	arr.push(li);
+	        }
+        });
+		
+	
+		$("#inProdAll").val(JSON.stringify(arr));
+		makeProdData(arr);
+		$('#ol1').enhanceWithin();
+	}
+	
+	function makeProdAllTable() {
+		var data1 = "";
+		if (localStorage.getItem("sales"))
+			data1 = localStorage.getItem("sales");
+		var pall=makeProdlist();
+		$("#ulProd" + ' li').remove();
+		if (data1 != "") {
+			var data = JSON.parse(data1).pd;
+			for (i in data) {
+				var li = document.createElement("li");
+				li.id = data[i]["code"];
+				li.setAttribute("data-icon","false");
+				var a1 = document.createElement("a");
+				var pic = document.createElement("img");
+				var p = document.createElement("p");
+					p.setAttribute("class", "ui-li-aside");
+					p.setAttribute("style","margin-right:-20px")
+				var inp=document.createElement("input");
+					inp.setAttribute("type","number");
+					inp.setAttribute("style","padding-bottom:5px;width:100px;text-align:right;");
+				var inp1=document.createElement("input");
+					inp1.setAttribute("type","number");
+					inp1.setAttribute("style","display:none;");
+					inp1.value=data[i]["code"];
+				//inp.value='goo';
+				li.appendChild(inp1);
+				p.appendChild(inp);
+				
+				for(k in pall){
+					if(pall[k]["prod"]==li.id){
+						inp.value=pall[k]["num"];
+					}
+				}
+				li.appendChild(a1);
+				a1.appendChild(document.createTextNode(data[i]["name"]));
+				a1.appendChild(p);
+				$("#ulProd").append(li);
+				
+			}
+			if ( typeof $( "#ulProd" ).listview() !== "undefined" )
+			$('#ulProd').listview('refresh');
+		}
+	}
+	
+	function IsNumeric(num) {
+	     return (num >=0 || num < 0);
+	}
+	function checkNum(scode,prod){
+		var mkt=localStorage.getItem("sales");
+  		var obj = eval("(" + mkt + ")");
+  		var list=obj.data;
+  		var prlist=obj.price;
+  		var plist=obj.pd;
+  		var unitp="";
+  		var pname="";
+  		var rev="";
+  		var num="";
+  		for(i in prlist){
+  			if(prlist[i]["prod"]==prod)
+  			unitp=prlist[i]["exfprice"]
+		}
+		for(i in plist){
+  			if(plist[i]["code"]==prod)
+  			pname=plist[i]["name"]
+		}
+		var rtn="";
+		for(i in list){
+			if(list[i].scode==scode){
+				var plist=list[i].prodlist;
+				for(j in plist){
+					if(plist[j].prod==prod){
+						rev=plist[j].rev;
+						num=plist[j].num;
+					}
+				}
+			}
+		}
+		rtn={"rev":rev, 
+			"num":num, 
+			"unitp":unitp, 
+			"prodname":pname};
+		return rtn;
+	}
+	function updateTable(list,tableObject) {
+		list="scode,#,6;chcode,Channel,;prod,Product,1;odate,Date,2;unitp,Ucost,3;num,Num,4;rev,Revenue,5"
+		var lss=list.split(';');
+		
+		var sales=localStorage.getItem("sales");
+	    tableObject = jQuery.parseJSON(sales).data;
+	   
+	    var table=$("#table");
+	    var tbody = $("#table > tbody");
+  	    tbody.empty();
+	    
+	    var html = "<tr>\n";
+		for(i in lss){
+			var ls=lss[i].split(',');
+			var thtag="<th>";
+			if(ls[2]!="") thtag="<th data-priority='"+ls[1]+"'>";
+			html += thtag + ls[1] + "</th>\n";
+		}
+	 	html += "</tr>\n\n";
+	 	table.append(html);
+	 	if(tableObject.length>0){
+		 html = "<tr>\n";
+		 for(i in lss){
+			 var ls=lss[i].split(',');
+			 html += "<td>" + tableObject[i][ls[0]] + "</td>\n";
+		 }
+		 html += "</tr>\n\n";
+		 tbody.append(html);
+		 }
+				
+		$("#table").table("refresh");
+	}
+    
+	
+    var sval={}; // populate()에 넘겨줄 값
+	function ContentEditLoad(scode){
+		var mkt=localStorage.getItem("sales");
+  		var obj = eval("(" + mkt + ")");
+  		var data=obj.data;
+  		for( i in data){
+  			if(scode==data[i]["scode"]){
+  				$('#scode').html(scode);
+				sval.ch=data[i]["chcode"];
+
+				var sd = new Date(data[i]["odate"]);
+				var ed = new Date(data[i]["ddate"]);
+				
+				$('#odate').val(convertDate(sd,"date","-"));
+				$('#otime').val(convertDate(sd,"time",""));
+				$('#ddate').val(convertDate(ed,"date","-"));
+				$('#dtime').val(convertDate(ed,"time",""));
+				var proddt=data[i]["prodlist"];
+				$("#inProdAll").val(JSON.stringify(proddt));
+				makeProdData(proddt);//makeProdData(proddt);
+  			}
+  		}
+  		//if(cancelcnt>0)
+  		$('#ol1').enhanceWithin();
+		$.mobile.changePage("#dvEdit")
+	}
+	
+/*
+	$('#clear').live('click', function() {
+		$.mobile.changePage("#dvEdit")
+       	LoadSelect();
+    }); */
+
+    function convertDate(now,type,divider){
+    	if(devider="")devider="-";
+    	 var rtn;
+		 switch(type){
+		 	case "date":
+			    var day = ("0" + now.getDate()).slice(-2);
+			    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+			    rtn = now.getFullYear()+divider+(month)+divider+(day) ;
+			break;
+			case "time":
+				var time=("0" + now.getHours()).slice(-2);
+				var min=("0" + now.getMinutes()).slice(-2);
+				rtn=(time)+":"+(min);
+			break;
+		}
+		return rtn;
+    }
+    
+	function LoadSelect(){
+		var sales=localStorage.getItem("sales");
+		var obj = eval("(" + sales + ")");
+  		populate("#ch",obj.ch,"code","name",sval.ch);
+	}
+	
+	
+   	
+	function handlddates(elm, options) {
+        event.stopPropagation();
+        var currentField = $(elm);
+        var opts = options || {};
+        var minVal = opts.min || 0;
+        var maxVal = opts.max || 0;
+
+        var myNewDate = Date.parse(currentField.val()) || new Date();
+        if(typeof myNewDate === "number") {
+            myNewDate = new Date (myNewDate);
+        }
+
+        window.plugins.datePicker.show({
+            date : myNewDate,
+            mode : 'date',
+            minDate: Date.parse(minVal),
+            maxDate: Date.parse(maxVal)
+        }, function(returnDate) {
+            if(returnDate !== "") {
+                var newDate = new Date(returnDate);
+                currentField.val(getFormattedDate(newDate));
+            }
+            currentField.blur();
+        });
+    }
+    
+    function handldtime(elm) {
+        var currentField = $(elm);
+        var time = currentField.val();
+        var myNewTime = new Date();
+
+        if(time) {
+            myNewTime.setHours(time.substr(0, 2));
+            myNewTime.setMinutes(time.substr(3, 2));
+        }
+        plugins.datePicker.show({
+            date : myNewTime,
+            mode : 'time'
+        }, function(returnDate) {
+            if(returnDate !== "") {
+                var newDate = new Date(returnDate);
+                currentField.val(getFormattedTime(newDate));
+            }
+            currentField.blur();
+        });
+    }
+    
+
+    function saveLocalsales(){
+		var id =$("#scode").html();
+		var obj = eval("(" + localStorage.getItem("login") + ")");
+  		
+    	var mi={};
+    	mi.scode=id;
+    	mi.comp=obj.comp;
+		mi.prodlist=makeProdlist();
+		mi.chcode=$("#ch").val();
+		mi.chname=$("#ch option:selected").text();
+    	var log1=localStorage.getItem("login");
+		var obj = eval("(" + log1 + ")");
+		mi.staff=obj.id;
+		//mi.odate=d;
+		mi.odate=$("#odate").val()+" "+$("#otime").val();
+		mi.ddate=$("#ddate").val()+" "+$("#dtime").val();
+		mi.num=$("#num").val();
+		mi.unitp=$("#unitp").val();
+		mi.rev=$("#rev").val();
+		mi.leadcode="";
+		
+    	//var data=JSON.stringify(mi);
+    	appendToStorage("salessave", id,mi);
+
+		var conn=navigator.connection.type;
+		
+    	if(conn !="none" ){
+    		saveRemoteExecute();
+    	}
+    	else{
+    		var ss1 = eval("(" + localStorage.getItem("sales") + ")");
+    		
+    		var ss=ss1.data;
+    		 for (var i = ss.length - 1; i >= 0; i--) {
+		        if (ss[i]['scode'] == id) {
+		            ss.splice(i, 1);
+		        }
+		    }
+    		ss.push(mi);
+    		ListViewLoad(filterData(ss));
+    		$.mobile.changePage('#dvList');
+    	}
+    }
+   
+ 	function appendToStorage(name, scode,data){
+	    var old = localStorage.getItem(name);
+	    var obj = [];
+	    if(old != null) obj=eval("(" + old + ")");
+	     for (var i = obj.length - 1; i >= 0; i--) {
+	        if (obj[i]['scode'] == scode) {
+	            obj.splice(i, 1);
+	        }
+	    }
+	    obj.push(data);
+	    localStorage.setItem(name, JSON.stringify(obj));
+	}
+	
+	function showList(){
+		var sl = JSON.parse(localStorage.getItem("sales"));
+		var sld=sl.data;
+		
+		var ss = JSON.parse(localStorage.getItem("salessave"));
+		var obj=JSON.parse(localStorage.getItem("login"));
+		
+		var staff = obj.id
+		var exist=false;
+		for(i in ss){
+			exist=false;
+			
+			for(j in sld){
+				
+				if(sld[j]["scode"]==ss[i]["scode"]){
+				//sl[j]["staff"]=staff;
+				sld[j]["prod"]==ss[i]["prod"]
+				sld[j]["odate"]==ss[i]["odate"]
+				sld[j]["ddate"]==ss[i]["ddate"]
+				sld[j]["num"]==ss[i]["num"]
+				sld[j]["unitp"]==ss[i]["unitp"]
+				sld[j]["rev"]==ss[i]["rev"]
+				exist=true;
+			}
+			}
+
+			if(exist==false){
+				var mi={};
+				mi.scode=ss[i]["scode"];
+				mi.staff=staff;
+				mi.staffname=obj.name;
+				mi.prod=ss[i].prod;
+				mi.chcode=ss[i].chcode;
+				mi.odate=ss[i].odate;
+				mi.ddate=ss[i].ddate;
+				mi["num"]=ss[i]["num"];
+				mi.unitp=ss[i].unitp;
+				mi.rev=ss[i].rev;
+				
+				sld.push(mi);
+			}
+		
+		}
+		sl.data=sld;
+		localStorage.setItem("sales",JSON.stringify(sl));
+		PageInit();
+		$.mobile.changePage("#dvList");
+	}
+	function nameSearch(data,value){
+		for(i in data){
+			if(data[i]["code"]==value)
+			return data[i]["name"];
+		}
+	}
+	function continueSave(){
+		var id="s"+idMake();
+	    $("#scode").html(id);
+	    var sd = new Date();
+		$('#odate').val(convertDate(sd,"date","-"));
+		$('#otime').val(convertDate(sd,"time",""));
+	   	sval={};
+	    sval.ch=$("#ch").val();
+	    LoadSelect();
+	   	$("#ol1").empty();
+	}
+    function saveRemotesales() {
+		var mkt="'"+localStorage.getItem("salessave")+"'"
+		$.mobile.loading( 'show', {
+			text: 'Update data...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+		$.ajax({
+		    url: "http://mobile.imcmaster.co.kr/WebService.asmx/SalesOrderUpdate",
+		    data: { data: mkt},
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "JSON",
+		    
+		    success: function (data, status) {	
+				if(JSON.stringify(data)!="{\"d\":\"fail\"}"){
+					localStorage.removeItem("salessave");
+					$.mobile.loading('hide');
+		    	}
+				else
+			 		msgshow("Save Failed!");
+		    },
+		   error: function (response) {
+		   		$.mobile.loading('hide');
+			      var r = jQuery.parseJSON(response.responseText);
+			      alert("Message: " + r.Message);
+			      alert("StackTrace: " + r.StackTrace);
+			      alert("ExceptionType: " + r.ExceptionType);
+			}
+		});
+
+		
+
+	}
+	 function delRemotesales() {
+	 	$.mobile.loading( 'show', {
+			text: 'Deleting...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+		$.ajax({
+			type:"post",
+		    url: "http://mobile.imcmaster.co.kr/WebService.asmx/SalesOrderDel",
+		    data: JSON.stringify({ "scode": $("#scode").html() }),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "JSON",
+		    
+		    success: function (data, status) {	
+				if(JSON.stringify(data)!="{\"d\":\"fail\"}"){
+					$.mobile.loading('hide');
+		    	}
+				else
+			 		msgshow("Delete Failed!");
+		    },
+		    error: function (e) { 
+		    	$.mobile.loading('hide');
+		    	msgshow(e.responseText); 
+		    	}
+		});
+	}
+	function saveRemoteExecute(){
+		saveRemotesales();
+		cancelcnt=0;
+		setTimeout(function(){
+			SalesAjax();setTimeout(function(){
+				var mkt=localStorage.getItem("sales");
+		  		var obj = eval("(" + mkt + ")");
+				ListViewLoad(filterData(obj.data));	
+				$.mobile.changePage('#dvList');
+			},2000);
+		},2000);
+			
+	}
+	//End of Market Info
+	 function ContentViewLoad(scode){
+		
+		var mkt=localStorage.getItem("sales");
+  		var obj = eval("(" + mkt + ")");
+  		var data=obj.data;
+  		var imgc=document.getElementById("imgcontainer");
+  		
+  		//imgc.innerHTML="";
+  		for( var i = 0; i<data.length; i++ ){
+  			if(scode==data[i]["scode"]){
+	
+		  		$("#dv1").html(data[i]["iname"]);
+		  		$("#dv2").html(data[i]["idesc"]);
+		  		$("#lbProd").html("<img src='images/bullet.png'/><b>상품:</b>"+data[i]["prodname"]);
+		  		var ocompname="";
+		  		var oprodname="";
+		  		$("#lbRival").html("");
+		  		if(data[i]["oprodname"] !="") oprodname="/"+data[i]["oprodname"];
+		  		if(data[i]["ocompname"]!="")
+		  		$("#lbRival").html("<img src='images/bullet.png'/><b>경쟁:</b>"+data[i]["ocompname"]+oprodname);
+				$('#LatLng').val("");
+				$('#lbPlace').html("");
+				//localStorage.removeItem("sendlatlng");
+				
+				document.getElementById("dviframe").style.display="none";
+				if(data[i].place !=""){
+					var loc=eval("(" + data[i].place + ")");
+
+					//var expbtn="<a onclick=\"createMapContent('view');daumMap()\"  style='font-size:12px;padding-left:10px;;' class='imbiga'><img src='images/btn_expand.gif'/>지도크게</a>";
+					var expbtn="<a onclick=\"mapmaker();daumMap()\" style='vertical-align:bottom;' class='imbiga'><img  src='images/mapview.png'/></a>";
+					
+					var placename="";
+					if(loc.locname){
+						placename=loc.locname;
+					}
+					$('#lbPlace').html("<img src='images/bullet.png'/><b>Location:</b>"+placename+expbtn);
+					$('#LatLng').val(loc.latlng);
+					//document.getElementById("iframe1").contentDocument.getElementById('LatLng').value=loc.latlng;
+					localStorage.setItem("latlng",loc.latlng);
+					var ifr=document.getElementById("iframe1")
+					ifr.src="map.html";
+					document.getElementById("dviframe").style.display="block";
+	    			$.mobile.changePage("#dvView", { transition: "none" });
+					//document.getElementById('map1').setAttribute("style","width:100%;height:200px;border:solid 1px gray;");
+					
+				}
+
+				var sd = new Date(data[i]["odate"]);
+				var ed = new Date(data[i]["ddate"]);
+				var ddate="";
+				if(data[i]["ddate"] !="") ddate=" - "+convertDate(ed,"date","/")+" "+convertDate(ed,"time","");
+				$('#lbDate').html("<img src='images/bullet.png'/><b>기간:</b>"+convertDate(sd,"date","/")+" "+convertDate(sd,"time","/")+ddate)
+				
+				document.location.href="#dvView"
+				//image capture
+				while (imgc.firstChild) {
+					    imgc.removeChild(imgc.firstChild);
+					}
+				if(data[i]["filename"]!=""){
+					var title=document.createElement('div');
+					title.innerHTML="<img src='images/bullet.png'/><b>Capture:</b>";
+					imgc.appendChild(title);
+					imgc.appendChild(makePhotoView(data[i]["filename"]));
+				}
+  			}
+  		}
+	}
+	
+	function newInfo(){
+    	var id="s"+idMake();
+	    $("#scode").html(id);
+    	var sd = new Date();
+		$('#odate').val(convertDate(sd,"date","-"));
+		$('#otime').val(convertDate(sd,"time",""));
+	   	sval={};
+	    sval.ch="";
+	    LoadSelect();
+	   	$("#ol1").empty();
+	   	$("#inProdAll").val("");
+	   	makeProd();
+	   	$("#ol1").enhanceWithin();
+		cnt=0;
+    }
+    function refreshlistview(){
+    	 PageInit();
+    }
+
+    </script>
+		
+	<div data-role="page" id="dvList">
+		<div data-theme="b" data-role="header" >	
+		   	<h3>
+		        <label id="dvListHead"/>
+		    </h3>
+		   <a href="#" id="gotodate"  class="ui-btn ui-btn-inline ui-icon-calendar ui-btn-right ui-btn-icon-notext"></a>
+		    <div data-role="navbar" data-theme="c" data-iconpos="right">
+				<ul>
+					<li><a href="#" onclick="sortList('odate')">날짜순</a></li>
+					<li><a href="#" onclick="sortList('chname')">거래선별</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		<a href="#" id="gotoedit"  data-theme="a" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline ui-btn-right" >Add</a>
+		   
+		</div>
+		
+		<div  data-role="content">	
+			<ul id="list" data-role="listview" class="ui-listview-outer"   data-divider-theme="b" >
+	       </ul>
+		</div>
+		<div data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" id="returnhome" data-icon="home" data-role="button" >Home</a></li>
+					<li><a href="#" onclick="change('market')" class="ui-btn ui-icon-video ui-btn-icon-top">Marketinfo</a></li>
+					<li><a href="#"  onclick="change('chart')" class="ui-btn ui-icon-grid ui-btn-icon-top">Chart</a></li>
+				</ul>
+			</div><!-- /navbar -->
+	    </div>
+	    
+	</div>    	
+	<script>
+		$("#returnhome").click(function(){
+			$.mobile.loading( 'show', {
+				text: 'Returing Home...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			navigator.app.loadUrl("file:///android_asset/www/index.html");
+		});
+		
+		$("#gotodate").click(function(){
+			$.mobile.changePage("#dvDate");
+		});
+		$("#gotoedit").click(function(){
+			$.mobile.changePage("#dvEdit");
+			newInfo();
+		});
+	</script>
+	<div data-role="popup" id="dvView">
+		<div data-theme="a" data-role="header">	
+		    <h3>
+		        <div id="dv1"></div>
+		    </h3>
+	    </div>	
+	  	<div data-role="content">
+	  		<div id="dv2"  class='viewpage'></div>
+  			<div class='viewpage'>
+  				<label id="lbProd"></label>
+  			</div>
+  			<div class='viewpage'>
+  				<label id="lbRival"></label>
+  			</div>
+	  		<div class='viewpage'>
+	  			<label id="lbDate"></label>
+	  		</div>
+	  		<div class='viewpage'>
+	  			<label id="lbPlace"></label>
+	  			<div id="dviframe" style="display:none">
+   	 				<iframe id="iframe1" style="width:100%;height:200px;border:solid 1px gray;" seamless></iframe>
+   	 			</div>
+   	 			
+	  		</div>
+	  		<div id="imgcontainer" class='viewpage'></div>
+	  	</div>
+	  	<a href="#" onclick="history.back()" data-role="button" data-ajax="false" data-icon="back" data-theme="b">Back</a>
+	  
+  </div>
+	<div data-role="page" id="dvEdit">
+		<div data-theme="a" data-role="header">	
+		    <h3>
+		        Order Input
+		    </h3>
+	    </div>	
+	  	<div data-role="content">
+		    <table width="100%">
+		    	<tr>
+		    		<td width="70px">
+		    			<b>Code:</b>
+	    			
+		    		</td>
+		    		<td>
+		    			<table cellpadding="0" cellspacing="0" width="100%">
+		    				<tr>
+		    					<td><label id="scode" /></td>
+			    				<td style="width:15px;">
+			    					<a href="javascript: if (confirm('Delete?')) { testdel() }; void('')"  class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all" >Delete</a>
+			    				</td>
+		    				</tr>
+	    				</table>
+		    			
+		    			
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<b>거래선:</b>
+		    		</td>
+		    		<td>
+		    			<select name="ch" id="ch" data-native-menu="false" ></select>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<b>주문일:</b>
+		    		</td>
+		    		<td>
+		    			<table width="100%">
+		    				<tr>
+		    					<td width="50%">
+		    						<input type="date" name="date" value="Date" onfocus="handlddates(this,'')" id="odate"/>
+		    					</td>
+		    					<td>
+		    						<input type="time" name="time" value="Time" onfocus="handldtime(this)" id="otime"/>
+		    					</td>
+		    					<td width="15px">
+		    						 <a href="#" onclick="showHidden('dvto')" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" ></a>
+		    					</td>
+		    				</tr>
+		    			</table>
+		    		</td>
+		    	</tr>
+		    </table>
+		    <table   cellspacing="0" id="dvto" style="display:none;" width="100%">
+		    	<tr>
+		    		<td width="70px">
+		    			<b>배송일:</b>
+		    		</td>
+		    		<td>
+		    			<table width="100%">
+		    				<tr>
+		    					<td width="50%">
+		    						<input type="date" name="date" value="Date" onfocus="handlddates(this,'')" id="ddate"/>
+		    					</td>
+		    					<td>
+		    						<input type="time" name="time" value="Time" onfocus="handldtime(this)" id="dtime"/>
+		    					</td>
+		    					<td width="15px">
+		    						 <a href="#" onclick="showHidden('dvto')" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all" ></a>
+		    					</td>
+		    				</tr>
+		    			</table>
+					   
+		    		</td>
+		    	</tr>
+	    	</table>
+	    	
+	    	<table width="100%">
+		    	<tr>
+		    		<td width="70px">
+		    			  <b> 상품:</b>
+		    		</td>
+		    		
+		    		<td>
+		    			 <a href="#" id="btn2" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" >Add</a>
+		    		</td>
+		    		<td width="15px">
+		    			 <a href="#dvProdAll" id="btnall" class="ui-btn ui-icon-grid ui-btn-icon-notext ui-corner-all" >Show Product List</a>
+		    		</td>
+		    	</tr>
+	    	</table>
+	    	<table width="100%">
+		    	<tr>
+		    		<td >
+						 <ul data-role="listview"  data-inset="false" style="border:none;" id="ol1"></ul>
+					     <input id="inProdAll" style="display:none;">
+		    			
+	    			</td>
+    			</tr>
+		    </table>	
+		</div>
+			
+		<div data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+			<div data-role="navbar" >
+			<ul style="height:50px;">
+				<li><a href="#" data-theme="b"  data-icon="check"  data-role="button" id="save">Save</a></li>
+				<li><a href="#" data-theme="c" data-role="button"  onclick="refresh();"  data-icon="back"  id="cancel">Cancel</a></li>				 
+			</ul>
+			</div>
+	    </div>
+	</div>    	
+	<script>
+		$("#save").click(function(){
+			saveLocalsales();//saveRemoteExecute();
+		});
+		$("#cancel").click(function(){
+			$.mobile.changePage("#dvList");
+			refresh();
+		});
+	</script>
+	<div data-role="page" id="dvProdAll" data-overlay-theme="a">
+	  <div data-role="header" data-theme="b" >
+	    <h2>Product List</h2>
+	  </div>
+	  <div role="content" class="ui-content">
+	  	<div id="dvProd">
+	  		<ul id="ulProd" data-role="listview" >
+	  	</div>
+  	</div>
+	<div data-role="footer" style="height:50px;padding:5px;" data-position="fixed">
+		<div data-role="navbar" >
+			<ul style="height:50px;">
+				<li><a href="#" id="prodlistapply"  class="ui-btn ui-icon-check ui-btn-icon-top">Apply</a></li>
+				<li><a href="#" id="prodlistreturn" class="ui-btn ui-icon-back ui-btn-icon-top">Close</a></li>				 
+			</ul>
+			</div>
+	    </div>
+	</div>    	
+	<script>
+		$("#prodlistapply").click(function(){
+			$.mobile.changePage("#dvEdit");
+			applyProdAll();
+		});
+		$("#prodlistreturn").click(function(){
+			$.mobile.changePage("#dvEdit");
+		});
+	</script>
+	
+	
+	</div>
+	<div data-role="page" id="dvDate" data-overlay-theme="a">
+	  <div data-role="header"  >
+	    <h2>Date Range</h2>
+	  </div>
+	  <div role="content" class="ui-content">
+	  	 <table width="100%">
+	    	<tr>
+	    		<td width="70px" style="color:white;">
+	    			Year:
+	    		</td>
+	    		<td>
+				    <select  name="rangeYr" id="rangeYr" data-native-menu="false" multiple="multiple" class="ui-btn-right">
+			        </select>
+		       </td>
+	      </tr>
+	      <tr>
+	      		<td  style="color:white;">
+	    			Month:
+	    		</td>
+	      	   <td>
+	      	   	<select  id="rangeMth" data-native-menu="false" multiple="multiple" class="ui-btn-right">
+			    	
+		        </select>
+	    	</td>
+        </tr>
+       </table>
+       
+	  </div>
+	  <div role="footer">
+	  	<div class="ui-grid-a">
+			<div class="ui-block-a"><a href="#dvList" data-role="button" data-theme="b">Close</a></div>
+			<div class="ui-block-b"><a href="#" onclick="applyDate();" data-role="button" data-theme="a">Apply</a></div>
+		</div><!-- /grid-a -->
+	  </div>
+	</div>
+	<script>
+	
+	
+	function applyDate(){
+		//$('#dvDate').dialog('close');
+		$.mobile.changePage("#dvList");
+		PageInit();
+	}
+	var cancelcnt=0;
+	function refresh(){
+		cancelcnt++;
+	}
+	var cnt=0;
+	//prodlist blank
+	function makeProd(){
+		 var id="btn3_"+cnt;
+		  //prod select create
+		  var sales=localStorage.getItem("sales");
+		  var obj = eval("(" + sales + ")");
+		  var prodsel=populateRtn(obj.pd,"code","name","");
+		  prodsel.id="selprod_"+cnt;
+		  //prodsel.setAttribute("data-native-menu","false");
+		  //prodsel.setAttribute("data-theme","a");
+		  var html=document.createElement("div");
+		  //html.setAttribute("data-role","fieldcontain");
+
+		  var dva=document.createElement("div");
+		  dva.setAttribute("style","float:left;width:40%");
+		  dva.appendChild(prodsel);
+		  html.appendChild(dva);
+		  
+		  //number
+		  var dvc=document.createElement("div");
+		  dvc.setAttribute("style","float:left;padding:0 0px 0 5px;width:20%");		 
+		  dvc.appendChild(makeProdInput("inp0_"+cnt,"개수"));
+		  html.appendChild(dvc);
+		  
+		  // add button
+		  var sp=document.createElement("span");
+		  sp.setAttribute("class","ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext");
+		  sp.setAttribute("style","padding-right:10px;width:15px;");
+
+		  var img=document.createElement("img");
+		  img.src="images/minus1.png";
+		  sp.appendChild(img);
+		  sp.id="btn3_"+cnt;
+
+		  var dvb=document.createElement("div");
+		  dvb.setAttribute("style","float:left;padding-top:10px;");
+		  dvb.appendChild(sp);
+		  html.appendChild(dvb);
+		  
+		  //html.appendChild(dva);		  
+		  //input div
+		  var tb=document.createElement("table");
+		  var tr=document.createElement("tr");
+		  var td=document.createElement("td");
+		  tb.setAttribute("style","display:none");
+		  tb.setAttribute("class","border-collapse:collapse");
+		  
+		  tb.appendChild(tr);
+		  //tr.appendChild(td);
+		  //td.appendChild(makeProdInput("inp0_"+cnt,"개수"));
+		  //td=document.createElement("td");
+		  tr.appendChild(td);
+		  td.appendChild(makeProdInput("inp1_"+cnt,"단가"));
+		  td=document.createElement("td");
+		  tr.appendChild(td);
+		  td.appendChild(makeProdInput("inp2_"+cnt,"금액"));
+  
+		  //li 
+		  var li1=document.createElement("li");
+		  li1.appendChild(html);
+		  li1.appendChild(tb);
+		  li1.setAttribute("style","border:solid 0px #DEDFDE");
+		  $("#ol1").prepend(li1);
+		 	if ( typeof $( '#ol1' ).listview() !== "undefined" )
+	   		$("#ol1").listview( "refresh" );	
+		  cnt++;
+	}
+	// create each input 
+	function makeProdInput(inpid,placeholder){
+		var dvinput=document.createElement("div");
+		  dvinput.setAttribute("style","padding-right:5px;");
+		  var ipt=document.createElement("input");
+		  ipt.setAttribute("type","number");
+		  ipt.setAttribute("placeholder",placeholder);
+		  ipt.setAttribute("class","ui-input-text ui-body-c");
+		  ipt.setAttribute("style","height:43px;text-align:right;padding-right:3px;")
+		  ipt.id=inpid;
+		  dvinput.appendChild(ipt);
+	  return dvinput;
+	}
+	//when contentedit prodlist with data
+	function makeProdData(data){
+		$("#ol1").empty();
+		cnt=0;
+		for(var k=0;k< data.length;k++){
+			makeProd();
+			var ndt=data[k];//JSON.parse(data[k]);
+			$("#selprod_"+k).val(ndt["prod"]);
+			$("#inp0_"+k).val(ndt["num"]);
+			$("#inp1_"+k).val(ndt["unitp"]);
+			$("#inp2_"+k).val(ndt["rev"]);
+		}
+		 
+	}
+	// product new create input field 
+	 $("#btn2").click(function(){
+		makeProd(); 
+		$("#ol1").enhanceWithin();
+		if ( typeof $( '#ol1' ).listview() !== "undefined" )
+	   		$("#ol1").listview( "refresh" );	
+	  });
+	  
+	
+	 	
+   	 $("#btnall").click(function(){
+		 makeProdAllTable();
+	  });
+	 //input del button click  
+	 $(document).on("click", '[id^=btn3_]', function(event, ui) {
+	 	var indx=$(this).attr('id').replace("btn3_","");
+	    $(this).parent().parent().parent().remove();
+	    var prod=$("#selprod_"+indx).val();
+	    var pall=$("#inProdAll").val();
+	  	if(pall !=""){
+	  		pall=JSON.parse(pall);
+	  		for(i in pall){
+	  			if(pall[i]["prod"]==prod)
+	  				pall.splice(i,1)
+	  		}
+	  	}
+  		return false;
+	  })
+	  //input field when prod select fill in unitp
+	 $(document).on("change", '[id^=selprod_]', function(event, ui) {
+	 	var indx=$(this).attr('id').replace("selprod_","");
+	 	
+	    $("#inp1_"+indx).val(checkprice($(this).val()));
+	    var rev=parseInt($("#inp0_"+indx).val())* parseFloat($(this).val());
+	 	
+	 	rev=parseInt(rev);
+	    console.log($("#inp0_"+indx).val(),$("#inp1_"+indx).val());
+	    $("#inp2_"+indx).val(rev);
+	    
+  		return false;
+	  })
+	  // input field unitp * num = rev
+	  $(document).on("keyup", '[id^=inp0_]', function(event, ui) {
+	 	var indx=$(this).attr('id').replace("inp0_","");
+	 	var prod=$("#selprod_"+indx).val();
+	 	var pname=$("#selprod_"+indx+" option:selected").text();
+	 	var unitp=$("#inp1_"+indx).val();
+	 	var num=$("#inp0_"+indx).val();
+	 	 var rev=parseFloat(unitp)* parseFloat($(this).val());
+	 	rev=parseInt(rev);
+	    $("#inp2_"+indx).val(rev);
+	    prodAllUpdate(prod,pname,unitp,num,rev);
+  		return false;
+	  })
+	  function prodAllUpdate(prod,prodname,unitp,num,rev){
+	  	var pall=$("#inProdAll").val();
+	  	if(pall !="")
+	  	pall=JSON.parse(pall);
+	  	else
+	  	pall=[];
+	  	var pro={};
+	  	pro.prod=prod;
+	  	pro.prodname=prodname;
+	  	pro.unitp=unitp;
+	  	pro.num=num;
+	  	pro.rev=rev;
+	  	pall.push(pro);
+	  	$("#inProdAll").val(JSON.stringify(pall));
+	  }
+	  //when save create prodlist
+	function makeProdlist(){
+		var arr = new Array();
+        $( "#ol1 li" ).each(function( index ) {
+            li = new Object();
+            li.prod=$(this).find('select').val();
+            li.prodname=$(this).find('select option:selected').text();
+            li.num=$(this).find('input').eq(0).val();
+            li.unitp=$(this).find('input').eq(1).val();
+            li.rev=$(this).find('input').eq(2).val();
+            arr.push(li); 
+        });
+        return arr;
+	}
+		function delJson(data,id,value){
+			for(i in data){
+				if(data[i][id]==value){
+					data.splice(i,1);
+				}
+			}
+			return data;
+		}
+		function testdel(){
+			var sales=JSON.parse(localStorage.getItem("sales"));
+			var sales1=sales.data;
+			delRemotesales();
+			sales1=delJson(sales1,"scode",$("#scode").html());
+			sales.data=sales1
+			localStorage.setItem("sales",JSON.stringify(sales));
+			
+			PageInit();
+			
+			$.mobile.changePage("#dvList");
+		}
+		//inappbrowser
+		var ref = null;
+		function openInAppBrowserBlank(url){
+			if(url=="")
+			 url=$("#imgurl").html();
+		    try {
+				ref = window.open(encodeURI(url),'_blank','location=yes'); //encode is needed if you want to send a variable with your link if not you can use ref = window.open(url,'_blank','location=no');
+		         ref.addEventListener('loadstop', LoadStop);
+		         ref.addEventListener('exit', Close);
+		    }
+		    catch (err)    
+		    {
+		        alert(err);
+		    }
+		}
+		function LoadStop(event) {
+	         if(event.url == "http://www.mypage.com/closeInAppBrowser.html"){
+	            // alert("fun load stop runs");
+	             ref.close();
+	         }    
+	    }
+		function Close(event) {
+	         ref.removeEventListener('loadstop', LoadStop);
+	         ref.removeEventListener('exit', Close);
+	    } 
+		
+	</script>
+	
+	<script src="http://debug.build.phonegap.com/target/target-script-min.js#imcmobile"></script>
+</body>
+</html>

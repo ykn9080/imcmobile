@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget  xmlns       = "http://www.w3.org/ns/widgets"
+    xmlns:gap       = "http://phonegap.com/ns/1.0"
+    id          = "kr.co.imcmaster.mobile"
+    xmlns:android   = "http://schemas.android.com/apk/res/android">
+    
+    <name>IMC Go Mobile</name>
+    <description>
+        IMCMaster mobile version
+    </description>
+    <author email="ykn9080@empal.com" href="http://www.imcmaster.co.kr">
+        Korea IMC
+    </author>
+ 
+    <!-- Customize your app and platform with the preference element. -->
+    <preference name="phonegap-version"           value="3.6.3" />          <!-- all: current version of PhoneGap -->
+    <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
+    <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
+    <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
+    <preference name="webviewbounce"              value="true" />           <!-- ios: control whether the screen 'bounces' when scrolled beyond the top -->
+    <preference name="prerendered-icon"           value="true" />           <!-- ios: if icon is prerendered, iOS will not apply it's gloss to the app's icon on the user's home screen -->
+    <preference name="stay-in-webview"            value="false" />          <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
+    <preference name="ios-statusbarstyle"         value="black-opaque" />   <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
+    <preference name="detect-data-types"          value="true" />           <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
+    <preference name="exit-on-suspend"            value="false" />          <!-- ios: if set to true, app will terminate when home button is pressed -->
+    <preference name="show-splash-screen-spinner" value="true" />           <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
+    <preference name="auto-hide-splash-screen"    value="true" />           <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
+    <preference name="disable-cursor"             value="false" />          <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
+    <preference name="android-minSdkVersion"      value="7" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
+    <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
+	
+     <!-- Plugins -->
+    <gap:plugin name="org.apache.cordova.battery-status" />
+    <gap:plugin name="org.apache.cordova.camera"  />
+    <gap:plugin name="org.apache.cordova.media-capture" />
+    <gap:plugin name="org.apache.cordova.console" />
+    <gap:plugin name="org.apache.cordova.contacts" />
+    <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.device-motion" />
+    <gap:plugin name="org.apache.cordova.device-orientation" />
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.file" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="org.apache.cordova.geolocation" />
+    <gap:plugin name="org.apache.cordova.globalization" />
+    <gap:plugin name="org.apache.cordova.media" />
+    <gap:plugin name="org.apache.cordova.network-information" />
+    <gap:plugin name="org.apache.cordova.vibration" />
+	
+	    <gap:plugin name="tr.bel.mamak.sms_plagin"  />
+    <gap:plugin name="com.auth0.sdk" />
+    <gap:plugin name="nl.x-services.plugins.insomnia" version="3.0" />
+    <gap:plugin name="com.dileep.plugins.datepicker" version="0.0.1" />
+    <gap:plugin name="com.dawsonloudon.videoplayer" version="1.0.0" />
+    <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.0.0" />
+    <gap:plugin name="org.chromium.zip"  />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <feature name="http://api.phonegap.com/1.0/device" />
+	<gap:plugin name="com.simonmacdonald.telephonenumber" version="1.0.0" />
+	<gap:plugin name="com.badrit.backbutton" version="0.1.0" />
+
+	<preference name="SplashScreen" value="screen" />
+	<preference name="SplashScreenDelay" value="10000" />
+    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
+    <preference name="fullscreen" value="false" />
+    <icon src="icon/imc.png" />
+<!--
+    <gap:config-file platform="android" parent="/manifest/application">
+	    <activity android:launchMode="singleTop" />
+	</gap:config-file>
+    <platform name="android">
+	  <icon src="icon/android/ldpi.png" density="ldpi" />
+	  <icon src="icon/android/mdpi.png" density="mdpi" />
+	  <icon src="icon/android/hdpi.png" density="hdpi" />
+	  <icon src="icon/android/xhdpi.png" density="xhdpi" />
+     </platform>
+    <icon src="icon/iphone/Icon.png" gap:platform="ios" width="57" height="57" />
+    <icon src="icon/iphone/Icon-72.png" gap:platform="ios" width="72" height="72" />
+    <icon src="icon/iphone/Icon-2x.png" gap:platform="ios" width="114" height="114" />
+    <icon src="icon/iphone/Icon-72-2x.png" gap:platform="ios" width="144" height="144" />
+    <icon src="icon/android/ldpi.png" gap:platform="android" gap:density="ldpi" />
+    <icon src="icon/android/mdpi.png" gap:platform="android" gap:density="mdpi" />
+    <icon src="icon/android/hdpi.png" gap:platform="android" gap:density="hdpi" />
+    <icon src="icon/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" />
+    <preference name="AndroidLaunchMode" value="singleTask" />
+-->
+    <gap:splash src="splash/iphone/Default.png" width="320" height="480" />
+    <gap:splash src="splash/iphone/Default-2x.png" width="640" height="960" />
+    <gap:splash src="splash/iphone/Default-568h2x.png" width="640" height="1136" />
+    <gap:splash src="splash/iphone/Default-Portrait.png" width="768" height="1024 " />
+    <gap:splash src="splash/android/ldpi.png" gap:platform="android" gap:density="ldpi" />
+    <gap:splash src="splash/android/mdpi.png" gap:platform="android" gap:density="mdpi" />
+    <gap:splash src="splash/android/hdpi.png" gap:platform="android" gap:density="hdpi" />
+
+    
+    
+    <gap:config-file platform="android" parent="/manifest/application">
+	    <activity android:launchMode="singleTask" />
+	</gap:config-file>
+	<feature name="Camera">
+	    <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+	</feature>
+	<feature name="Media">
+	    <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
+	</feature>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<feature name="Insomnia">
+	  <param name="android-package" value="nl.xservices.plugins.Insomnia" />
+	</feature>
+
+    <gap:plugin name="com.phonegap.plugins.childbrowser" />
+ 	<feature name="http://plugins.phonegap.com/ChildBrowser/2.0.0" />
+    <feature name="http://api.phonegap.com/1.0/file"/>
+
+
+
+    <content src="index.html" />
+    <access origin="*" />
+</widget>

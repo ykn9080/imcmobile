@@ -1,0 +1,96 @@
+.imdim
+{
+	cursor:pointer;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+.imdim:hover
+{
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+	-moz-opacity: 0.8;
+	opacity: 0.8;
+	background-color:transparent;
+}
+.imbig
+{
+	cursor:pointer;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+.imbig:active
+{
+	filter:
+	background-color:transparent;
+	width:50px;
+}
+.imbiga
+{
+	cursor:pointer;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+.imbiga:active
+{
+	filter:
+	background-color:transparent;
+	width:40px;
+}
+.msgbox
+{
+	width:250px;
+	height:300px;
+	overflow:auto;
+	padding:5px 5px 5px 10px;
+	position:absolute;
+	background-color:#e5e5e5;
+	border:1px solid #999999;
+	z-index:1000;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px; 
+	-khtml-border-radius: 5px;
+	box-shadow: 1px 1px 1px #888888;
+	-moz-box-shadow:0 5 5px #000000;
+	-webkit-box-shadow:0 5 5px #000000;
+
+}
+
+.button {
+    display: inline-block;
+    margin-top: 20%;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow:    0 8px 0 #c5376d, 0 15px 20px rgba(0, 0, 0, .35);
+    -moz-box-shadow: 0 8px 0 #c5376d, 0 15px 20px rgba(0, 0, 0, .35);
+    box-shadow: 0 8px 0 #c5376d, 0 15px 20px rgba(0, 0, 0, .35);
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
+    -moz-transition: -moz-box-shadow .1s ease-in-out;
+    -o-transition: -o-box-shadow .1s ease-in-out;
+    transition: box-shadow .1s ease-in-out;
+    font-size: 50px;
+    color: #fff;
+}
+
+
+
+.button:hover span {
+    background-color: #ec6a9c;
+    text-shadow: 0 -1px 1px rgba(175, 49, 95, .9), 0 0 5px rgba(255, 255, 255, .8);
+}
+
+.button:active, #button:focus {
+    -webkit-box-shadow:    0 8px 0 #c5376d, 0 12px 10px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 8px 0 #c5376d, 0 12px 10px rgba(0, 0, 0, .3);
+    box-shadow:    0 8px 0 #c5376d, 0 12px 10px rgba(0, 0, 0, .3);
+}
+
+.button:active span {
+    -webkit-transform: translate(0, 4px);
+    -moz-transform: translate(0, 4px);
+    -o-transform: translate(0, 4px);
+    transform: translate(0, 4px);
+}
