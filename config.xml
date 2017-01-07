@@ -90,9 +90,7 @@
 	<feature name="Insomnia">
 	  <param name="android-package" value="nl.xservices.plugins.Insomnia" />
 	</feature>
-
-    <plugin name="com.phonegap.plugins.childbrowser" />
- 	<feature name="http://plugins.phonegap.com/ChildBrowser/2.0.0" />
+<plugin name="com.phonegap.plugins.childbrowser" spec="5.0.0" source="pgb" />
     <feature name="http://api.phonegap.com/1.0/file"/>
 
 
