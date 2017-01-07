@@ -30,66 +30,48 @@
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 	
      <!-- Plugins -->
-    <gap:plugin name="org.apache.cordova.camera"  />
-    <gap:plugin name="org.apache.cordova.media-capture" />
-    <gap:plugin name="org.apache.cordova.console" />
-    <gap:plugin name="org.apache.cordova.contacts" />
-    <gap:plugin name="org.apache.cordova.device" />
-    <gap:plugin name="org.apache.cordova.device-motion" />
-    <gap:plugin name="org.apache.cordova.device-orientation" />
-    <gap:plugin name="org.apache.cordova.dialogs" />
-    <gap:plugin name="org.apache.cordova.file" />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
-    <gap:plugin name="org.apache.cordova.geolocation" />
-    <gap:plugin name="org.apache.cordova.globalization" />
-    <gap:plugin name="org.apache.cordova.media" />
-    <gap:plugin name="org.apache.cordova.network-information" />
-    <gap:plugin name="org.apache.cordova.vibration" />
-	
-	    <gap:plugin name="tr.bel.mamak.sms_plagin"  />
-    <gap:plugin name="com.auth0.sdk" />
-    <gap:plugin name="nl.x-services.plugins.insomnia" version="3.0" />
-    <gap:plugin name="com.dileep.plugins.datepicker" version="0.0.1" />
-    <gap:plugin name="com.dawsonloudon.videoplayer" version="1.0.0" />
-    <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.0.0" />
-    <gap:plugin name="org.chromium.zip"  />
-    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <plugin name="cordova-plugin-camera"  />
+	<plugin name="cordova-plugin-camera" spec="~2.3.1" />
+	<plugin name="phonegap-plugin-barcodescanner" />
+    <plugin name="cordova-plugin-media-capture" />
+    <plugin name="cordova-plugin-console" />
+    <plugin name="cordova-plugin-contacts" />
+    <plugin name="cordova-plugin-device" />
+    <plugin name="cordova-plugin-device-motion" />
+    <plugin name="cordova-plugin-device-orientation" />
+    <plugin name="cordova-plugin-dialogs" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-file-transfer" />
+    <plugin name="cordova-plugin-geolocation" />
+    <plugin name="cordova-plugin-globalization" />
+    <plugin name="cordova-plugin-media" />
+    <plugin name="cordova-plugin-network-information" />
+    <plugin name="cordova-plugin-vibration" />
+	<plugin name="tr.bel.mamak.sms_plagin"  />
+    <plugin name="com.auth0.sdk" />
+    <plugin name="nl.x-services.plugins.insomnia" version="3.0" />
+    <plugin name="com.dileep.plugins.datepicker" version="0.0.1" />
+    <plugin name="com.dawsonloudon.videoplayer" version="1.0.0" />
+    <plugin name="com.phonegap.plugins.barcodescanner" version="2.0.0" />
+    <plugin name="org.chromium.zip"  />
+    <plugin name="cordova-plugin-inappbrowser" />
     <feature name="http://api.phonegap.com/1.0/device" />
-	<gap:plugin name="com.simonmacdonald.telephonenumber" version="1.0.0" />
-	<gap:plugin name="com.badrit.backbutton" version="0.1.0" />
+	<plugin name="com.simonmacdonald.telephonenumber" version="1.0.0" />
+	<plugin name="com.badrit.backbutton" version="0.1.0" />
 
 	<preference name="SplashScreen" value="screen" />
 	<preference name="SplashScreenDelay" value="10000" />
-    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
+    <plugin name="cordova-plugin-splashscreen" version="0.2.7" />
     <preference name="fullscreen" value="false" />
     <icon src="icon/imc.png" />
-<!--
-    <gap:config-file platform="android" parent="/manifest/application">
-	    <activity android:launchMode="singleTop" />
-	</gap:config-file>
-    <platform name="android">
-	  <icon src="icon/android/ldpi.png" density="ldpi" />
-	  <icon src="icon/android/mdpi.png" density="mdpi" />
-	  <icon src="icon/android/hdpi.png" density="hdpi" />
-	  <icon src="icon/android/xhdpi.png" density="xhdpi" />
-     </platform>
-    <icon src="icon/iphone/Icon.png" gap:platform="ios" width="57" height="57" />
-    <icon src="icon/iphone/Icon-72.png" gap:platform="ios" width="72" height="72" />
-    <icon src="icon/iphone/Icon-2x.png" gap:platform="ios" width="114" height="114" />
-    <icon src="icon/iphone/Icon-72-2x.png" gap:platform="ios" width="144" height="144" />
-    <icon src="icon/android/ldpi.png" gap:platform="android" gap:density="ldpi" />
-    <icon src="icon/android/mdpi.png" gap:platform="android" gap:density="mdpi" />
-    <icon src="icon/android/hdpi.png" gap:platform="android" gap:density="hdpi" />
-    <icon src="icon/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" />
-    <preference name="AndroidLaunchMode" value="singleTask" />
--->
-    <gap:splash src="splash/iphone/Default.png" width="320" height="480" />
-    <gap:splash src="splash/iphone/Default-2x.png" width="640" height="960" />
-    <gap:splash src="splash/iphone/Default-568h2x.png" width="640" height="1136" />
-    <gap:splash src="splash/iphone/Default-Portrait.png" width="768" height="1024 " />
-    <gap:splash src="splash/android/ldpi.png" gap:platform="android" gap:density="ldpi" />
-    <gap:splash src="splash/android/mdpi.png" gap:platform="android" gap:density="mdpi" />
-    <gap:splash src="splash/android/hdpi.png" gap:platform="android" gap:density="hdpi" />
+
+    <splash src="splash/iphone/Default.png" width="320" height="480" />
+    <splash src="splash/iphone/Default-2x.png" width="640" height="960" />
+    <splash src="splash/iphone/Default-568h2x.png" width="640" height="1136" />
+    <splash src="splash/iphone/Default-Portrait.png" width="768" height="1024 " />
+    <splash src="splash/android/ldpi.png" platform="android" width="320" height="480"/>
+    <splash src="splash/android/mdpi.png" platform="android" width="640" height="960"  />
+    <splash src="splash/android/hdpi.png" platform="android" width="640" height="1136" />
 
     
     
@@ -108,7 +90,7 @@
 	  <param name="android-package" value="nl.xservices.plugins.Insomnia" />
 	</feature>
 
-    <gap:plugin name="com.phonegap.plugins.childbrowser" />
+    <plugin name="com.phonegap.plugins.childbrowser" />
  	<feature name="http://plugins.phonegap.com/ChildBrowser/2.0.0" />
     <feature name="http://api.phonegap.com/1.0/file"/>
 
