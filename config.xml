@@ -47,6 +47,7 @@
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-plugin-vibration" />
+	<!--
 	<plugin name="tr.bel.mamak.sms_plagin"  />
     <plugin name="com.auth0.sdk" />
     <plugin name="nl.x-services.plugins.insomnia" version="3.0" />
@@ -58,7 +59,7 @@
     <feature name="http://api.phonegap.com/1.0/device" />
 	<plugin name="com.simonmacdonald.telephonenumber" version="1.0.0" />
 	<plugin name="com.badrit.backbutton" version="0.1.0" />
-
+-->
 	<preference name="SplashScreen" value="screen" />
 	<preference name="SplashScreenDelay" value="10000" />
     <plugin name="cordova-plugin-splashscreen" version="0.2.7" />
