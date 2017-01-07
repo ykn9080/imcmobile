@@ -13,7 +13,7 @@
     </author>
  
     <!-- Customize your app and platform with the preference element. -->
-   <preference name="phonegap-version" value="cli-5.2.0" />         <!-- all: current version of PhoneGap -->
+   <preference name="phonegap-version" value="cli-6.3.0" />         <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
@@ -56,6 +56,8 @@
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-plugin-vibration" />
+
+	<gap:plugin name="cordova-plugin-inappbrowser" source="npm" /> 
 	<!--
 	<plugin name="tr.bel.mamak.sms_plagin"  />
     <plugin name="com.auth0.sdk" />
