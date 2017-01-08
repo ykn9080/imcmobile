@@ -435,7 +435,7 @@
 			html: ""
 		});
 		$.ajax({
-	        url: "http://www.imcmaster.co.kr/WebService.asmx/MarketInfoList",
+	        url: "http://mobile.imcmaster.co.kr/WebService.asmx/MarketInfoList",
 	        data: { comp: JSON.stringify(comp)},
 	        contentType: "application/json; charset=utf-8",
 	        dataType: "JSON",
@@ -962,7 +962,7 @@
 		});
 		console.log(mkt)
 		$.ajax({
-		    url: "http://www.imcmaster.co.kr/WebService.asmx/MarketInfoSave",
+		    url: "http://mobile.imcmaster.co.kr/WebService.asmx/MarketInfoSave",
 		    data: { data: mkt},
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "JSON",
@@ -1592,7 +1592,7 @@
 				);
 				}
 				function imgStore(){
-				  var url = "http://www.imcmaster.co.kr/data/document/acuvue/obama(1).jpg"; 
+				  var url = "http://mobile.imcmaster.co.kr/data/document/acuvue/obama(1).jpg"; 
 				  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
 				      var imagePath = fs.root.toURL() + url.substr(url.lastIndexOf("/")+1); // full file path
 				      showmsg(imagePath);
