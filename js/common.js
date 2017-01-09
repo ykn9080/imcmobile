@@ -1,4 +1,4 @@
-﻿//#region login
+//#region login
 var googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
 var extlink = [];
 function jscssload(list, callback) {
