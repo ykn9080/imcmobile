@@ -10,6 +10,18 @@
 		var center;
 		var marker;
         function initialize() {
+ /*$.AJAX({
+            TYPE:"get",
+            URL:"HTTPS://APIS.DAUM.NET/SEARCH/BOOK?APIKEY=07C38E21D8852668FA88476C1B59F8CC&Q=다음카카오&OUTPUT=JSON",
+            SUCCESS:FUNCTION(JSON){
+                //ALERT(JSON);
+                VAR TRANmSG = JqUERY.PARSEjson(JSON);
+                ALERT(TRANmSG.MSG + "\R\N" + TRANmSG.DATA);
+
+            }
+        })
+
+*/
             //var myLatlng = new google.maps.LatLng( 51.520838, -0.140261 );
             var latlng=localStorage.getItem("latlng").split(',');
             console.log(latlng);
