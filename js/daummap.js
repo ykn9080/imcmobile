@@ -3,7 +3,7 @@
 	 	var q = document.getElementById('q');
 		var b = document.getElementById('b');
 		var r = document.getElementById('r');
-		var apikey= "d480a1668da6ead107eee5bb2be9ee2f0c9d7d86";	
+		var apikey= "14ad1b17a79ec910341d91320b639b766f04fa09";	
 	if (q.value)
 	    {
     	  var s={};
@@ -17,7 +17,7 @@
 	
 	
 	var obj = {
-	apikey: "d480a1668da6ead107eee5bb2be9ee2f0c9d7d86",
+	apikey: "14ad1b17a79ec910341d91320b639b766f04fa09",
 	init : function()
 	{
 		obj.q = document.getElementById('q');
@@ -232,7 +232,7 @@
 	    center = marker.getPosition();
 	    $("#LatLng").val(center.getLat()+","+center.getLng());
 	    var url = "http://apis.daum.net/local/geo/coord2addr";
-	    url += "?apikey=d480a1668da6ead107eee5bb2be9ee2f0c9d7d86";
+	    url += "?apikey=14ad1b17a79ec910341d91320b639b766f04fa09";
 	    url += "&longitude="+center.getLng();
 	    url += "&latitude="+center.getLat();
 	    url += "&output=json";
@@ -261,7 +261,7 @@
 	    
 		var keywd=$("#mapsearch").val();
 		var url = "http://apis.daum.net/local/geo/coord2addr";
-	    url += "?apikey=d480a1668da6ead107eee5bb2be9ee2f0c9d7d86";
+	    url += "?apikey=14ad1b17a79ec910341d91320b639b766f04fa09";
 	    url += "&q="+encodeURI(keywd);
 	    url += "&output=json";
 	    url += "&callback=pongSearch";
