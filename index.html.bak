@@ -13,8 +13,8 @@
 	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>    
 	<script src="js/commonmobile.js"></script>
 	<script src="js/common.js"></script>
-	<script src="js/controls.js"></script>
-	<script src="js/controls1.js"></script>
+	<script src="js/control.js"></script>
+	<script src="js/control1.js"></script>
 	<script src="js/common_misc.js"></script>
 	<script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
 
