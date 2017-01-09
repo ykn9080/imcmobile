@@ -783,16 +783,18 @@
     
 	function LoadSelect(){
 		var mktinfo=localStorage.getItem("marketinfo");
+		if(mkinfo!=null){
 		var obj = eval("(" + mktinfo + ")");
 		populate("#infotype",obj.mi,"code","name",sval.infotype);
 		//$("#infotype").enhanceWithin();
   		
   		populate("#ch",obj.ch,"code","name",sval.ch);
   		//$("#ch").enhanceWithin();
-  		
+  		}
 	}
 	function LoadSelectProd(){
 		var mktinfo=localStorage.getItem("marketinfo");
+		if(mkinfo!=null){
 		var obj = eval("(" + mktinfo + ")");
 	
 		populate("#pd",obj.pd,"code","name",sval.pd);
@@ -812,7 +814,9 @@
   			}
   		}
   		populate("#rivalprod",arr,"rprodcode","rprodname",sval.rprod);
-   }
+   
+		}
+	}
 	function handleDates(elm, options) {
         event.stopPropagation();
         var currentField = $(elm);
