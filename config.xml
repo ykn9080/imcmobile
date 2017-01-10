@@ -81,9 +81,11 @@
     <splash src="splash/iphone/Default-2x.png" width="640" height="960" />
     <splash src="splash/iphone/Default-568h2x.png" width="640" height="1136" />
     <splash src="splash/iphone/Default-Portrait.png" width="768" height="1024 " />
-    <splash src="splash/android/ldpi.png" platform="android" qualifier="ldpi"/>
+    <platform name="android">
+    <splash src="splash/android/ldpi.png" density="port-ldpi"/>
     <splash src="splash/android/mdpi.png" platform="android" width="640" height="960"  />
     <splash src="splash/android/hdpi.png" platform="android" width="640" height="1136" />
+    </platform>
 
     
     
