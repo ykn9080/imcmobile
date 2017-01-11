@@ -531,7 +531,7 @@ function multilangSaveAjax() {
     var path = "/JS2/jquery-lang-js-master/js/langpack/";
     path += language + ".json";
     $.ajax({
-        url: "/WebService.asmx/SaveDataPost",
+        url: "/http://www.imcmaster.co.kr/WebService.asmx/SaveDataPost",
         type:"post",
         //data: { path: JSON.stringify(path), str: JSON.stringify(JSON.stringify(set)) },
         data: JSON.stringify({ path: path, str: JSON.stringify(set) }),
@@ -557,7 +557,7 @@ function multilangReadAjax(language) {
     var path = "/JS2/jquery-lang-js-master/js/langpack/";
     path += language + ".json";
     $.ajax({
-        url: "/WebService.asmx/ReadData",
+        url: "/http://www.imcmaster.co.kr/WebService.asmx/ReadData",
         data: { path: JSON.stringify(path) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -578,7 +578,7 @@ function multilangReadListAjax(callback) {
     var list,list1=[];
     var path = "/JS2/jquery-lang-js-master/js/langpack/";
     $.ajax({
-        url: "/WebService.asmx/ReadDataList",
+        url: "/http://www.imcmaster.co.kr/WebService.asmx/ReadDataList",
         data: { path: JSON.stringify(path),filetype:JSON.stringify("json") },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -5068,7 +5068,7 @@ function cssListGallery(dt,ctrtype) {
     if(urllist.length>0){
         $(urllist).each(function (i, k) {
             $.ajax({
-                url: "/WebService.asmx/ReadData",
+                url: "/http://www.imcmaster.co.kr/WebService.asmx/ReadData",
                 data: { path: JSON.stringify(k.htmlurl) },
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
@@ -5565,7 +5565,7 @@ function sampledommake(domtype,domscheme){
         case "showsampleurl":
             var sam = $("#txhtmlsample"), url = sam.next().next().val();
             $.ajax({
-                url: "/WebService.asmx/ReadData",
+                url: "/http://www.imcmaster.co.kr/WebService.asmx/ReadData",
                 data: { path: JSON.stringify( url) },
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",

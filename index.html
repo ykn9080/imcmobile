@@ -291,7 +291,7 @@ function LoginAjax1() {
 		});
 		$.ajax({
 			
-			url: "http://www.imcmaster.co.kr/WebService.asmx/Login",
+			url: "http://www.imcmaster.co.kr/http://www.imcmaster.co.kr/WebService.asmx/Login",
 			data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
 			contentType: "application/json; charset=utf-8",
 			dataType: "JSON",
@@ -353,7 +353,7 @@ function RegisterAjax() {
 		html: ""
 	});
 	$.ajax({
-		url: "http://www.imcmaster.co.kr/webservice.asmx/Register",
+		url: "http://www.imcmaster.co.kr/http://www.imcmaster.co.kr/WebService.asmx/Register",
 		data: { comp:JSON.stringify(comp)
 		,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
 		,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
@@ -835,7 +835,14 @@ function chkSvttype(){
 						<a data-role="button" onclick="chkLocaldb1();" >View</a>
 					</div>
 				</div>
-                
+                 <div  class="ui-grid-a"  >
+					<div class="ui-block-a">
+						<input id="inFunc" placeholder="Function name">
+					</div>
+					<div class="ui-block-b">
+						<a data-role="button" onclick="runfunction();" >Run</a>
+					</div>
+				</div>
                 <script>
                 	function chkLocaldb(){
                 		$("#txLocaldb").val("");

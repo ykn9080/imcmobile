@@ -9733,7 +9733,7 @@ function jqEditAjaxSave(jqname, jqsetting) {
 }
 function jqgridAjaxDel(name) {
     var param = "{'name':'" + name + "'}";
-    AjaxGeneral("/WebService.asmx/jqgridDataDel", param);
+    AjaxGeneral("/http://www.imcmaster.co.kr/WebService.asmx/jqgridDataDel", param);
 }
 function jqAuto(gridid, pagerid, datasrc,opt) {
     //gridid,pagerid,data만으로 구성되는 data display용 jqgrid

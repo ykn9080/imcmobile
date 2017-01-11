@@ -2420,7 +2420,7 @@ function LaySort(a, b) {
                   var comp=obj.comp;
                   var staff=obj.id;
                 $.ajax({
-                url: "/WebService.asmx/googleDataRequest",
+                url: "/http://www.imcmaster.co.kr/WebService.asmx/googleDataRequest",
                 data: { comp: JSON.stringify(comp),staff: JSON.stringify(staff) },
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
@@ -4114,7 +4114,7 @@ function loadtreewithdata1(jstreeid, data, options) {//plugin, textbox, valuebox
         data1 = JSON.stringify(data1);
         var data2 = "'" + data1 + "'";
         $.ajax({
-            url: "/WebService.asmx/CodemstUpdate",
+            url: "/http://www.imcmaster.co.kr/WebService.asmx/CodemstUpdate",
             data: { data: data2 },
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
@@ -4141,7 +4141,7 @@ function loadtreewithdata1(jstreeid, data, options) {//plugin, textbox, valuebox
     }
     function delete_item(nodeid) {
         $.ajax({
-            url: "/WebService.asmx/CodemstDel",
+            url: "/http://www.imcmaster.co.kr/WebService.asmx/CodemstDel",
             data: { code: JSON.stringify(nodeid) },
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
@@ -4231,7 +4231,7 @@ function loadtreewithdata1(jstreeid, data, options) {//plugin, textbox, valuebox
         var data2 = "'" + data1 + "'";
 
         $.ajax({
-            url: "/WebService.asmx/CodemstOrderChg",
+            url: "/http://www.imcmaster.co.kr/WebService.asmx/CodemstOrderChg",
             data: { data: data2 },
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
@@ -5388,9 +5388,9 @@ function initCalendardata() {
     var login = getlogin();
     var staff = login.id;
     var param = "{'staff':'" + staff + "'}";
-    AjaxAdd("imcsetting", "mychan", "/webservice.asmx/staffChanList", param, "","");
+    AjaxAdd("imcsetting", "mychan", "/http://www.imcmaster.co.kr/WebService.asmx/staffChanList", param, "","");
 //    param = "{'comp':'" + login.comp + "','staff':'" + staff + "'}";
-//    AjaxAdd('imcsetting', 'calendar', '/webservice.asmx/calendarList', param, "", "");
+//    AjaxAdd('imcsetting', 'calendar', '/http://www.imcmaster.co.kr/WebService.asmx/calendarList', param, "", "");
 
 }
 
