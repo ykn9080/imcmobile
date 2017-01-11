@@ -106,353 +106,371 @@
         $.mobile.activeBtnClass = 'unused';
         $.mobile.page.prototype.options.domCache = true;
     });
-document.addEventListener("deviceready",onDeviceReady,false);
-// document.addEventListener("online", onOnline, false);
-// document.addEventListener("offline", onOffline, false);
-// Cordova is ready to be used!
-function onDeviceReady() {
-	//navigator.splashscreen.hide();
-	document.addEventListener("backbutton", ShowExitDialog, false);
-	var log=localStorage.getItem("login");
- pageInit();	
-/*
-	if(localStorage.getItem("resume")===null){
-	localStorage.setItem("resume","yes");
-	navigator.app.exitApp();
-	navigator.app.loadUrl("file:///android_asset/www/index.html", {wait:2000, loadingDialog:"Wait,Loading App", loadUrlTimeoutValue: 60000})
-	}
-*/
+    document.addEventListener("deviceready",onDeviceReady,false);
+    // document.addEventListener("online", onOnline, false);
+    // document.addEventListener("offline", onOffline, false);
+    // Cordova is ready to be used!
+    function onDeviceReady() {
+	    //navigator.splashscreen.hide();
+	    document.addEventListener("backbutton", ShowExitDialog, false);
+	    var log=localStorage.getItem("login");
+        pageInit();	
+        /*
+	    if(localStorage.getItem("resume")===null){
+	    localStorage.setItem("resume","yes");
+	    navigator.app.exitApp();
+	    navigator.app.loadUrl("file:///android_asset/www/index.html", {wait:2000, loadingDialog:"Wait,Loading App", loadUrlTimeoutValue: 60000})
+	    }
+        */
 	
-	
-	if(log!=null){
-	var obj = eval("(" + log + ")");
-	$("#lbUsername").val(obj.name);
-	}
-	$.mobile.defaultDialogTransition = "none";
-	$.mobile.defaultPageTransition = "none";
-	//initFastButtons();
-	//document.addEventListener("resume", onResume, false);
-	//document.addEventListener("pause", onPause, false);
-}
-
-
-function onResume() {
-	// Handle the resume event
-	localStorage.removeItem("resume");
-}function onPause() {
-	// Handle the resume event
-	localStorage.setItem("resume","yes");
-}
-
-//get user mobile phone number
-function detectNumber(){
-	var telephoneNumber = cordova.require("cordova/plugin/telephonenumber");
-	telephoneNumber.get(function(result) {
-		//console.log("result = " + result);
-		showmsg(result);
-		return result;
-		}, function(error) {
-		showmsg("error = " + error.code);
-	});
-}
-$( window ).on( "navigate", function( event, data ) {
-  //showmsg( JSON.stringify(data.state));
-});
-
-var backcnt=0;
-function ShowExitDialog() {
-
-	 // Call my back key code here.
-     switch($.mobile.activePage.attr('id')){
-	     case "dvEdit": case "dvCategory": case "dvLocaldb": case "UlList": case "dvProddetail": case "dvChdetail": case "dvChstaff":
-	     	$.mobile.changePage("#setting");
-	     break;
-	     case "setting": case "Logindv":
-	     	$.mobile.changePage("#dvMenubar");
-	     break;
-	     case "dvMenubar":
-	     	if(backcnt)
-	     	showmsg('')
-	     	 navigator.notification.confirm(
-		        ("Do you want to Exit?"), // message
-		        alertexit, // callback
-		        'My APp', // title
-		        'YES,NO' // buttonName
-		    );
-	     break;
-	     default:
-		 	navigator.app.backHistory();
- 		 break;
-	 }
-}
-function alertexit(button){
-	
-    if(button=="1" || button==1)
-    {
-        if (navigator.app) {
-            navigator.app.exitApp();
+        if (log != null) {
+            var obj = eval("(" + log + ")");
+            $("#lbUsername").val(obj.name);
         }
-        else if (navigator.device) {
-            navigator.device.exitApp();
+	    $.mobile.defaultDialogTransition = "none";
+	    $.mobile.defaultPageTransition = "none";
+    }
+    function onResume() {
+	    // Handle the resume event
+	    localStorage.removeItem("resume");
+    }function onPause() {
+	    // Handle the resume event
+	    localStorage.setItem("resume","yes");
+    }
+    function detectNumber() {
+        //get user mobile phone number
+	    var telephoneNumber = cordova.require("cordova/plugin/telephonenumber");
+	    telephoneNumber.get(function(result) {
+		    //console.log("result = " + result);
+		    showmsg(result);
+		    return result;
+		    }, function(error) {
+		    showmsg("error = " + error.code);
+	    });
+    }
+    var backcnt=0;
+    function ShowExitDialog() {
+
+	     // Call my back key code here.
+         switch($.mobile.activePage.attr('id')){
+	         case "dvEdit": case "dvCategory": case "dvLocaldb": case "UlList": case "dvProddetail": case "dvChdetail": case "dvChstaff":
+	     	    $.mobile.changePage("#setting");
+	         break;
+	         case "setting": case "Logindv":
+	     	    $.mobile.changePage("#dvMenubar");
+	         break;
+	         case "dvMenubar":
+	     	    if(backcnt)
+	     	    showmsg('')
+	     	     navigator.notification.confirm(
+		            ("Do you want to Exit?"), // message
+		            alertexit, // callback
+		            'My APp', // title
+		            'YES,NO' // buttonName
+		        );
+	         break;
+	         default:
+		 	    navigator.app.backHistory();
+ 		     break;
+	     }
+    }
+    function alertexit(button) {
+        if (button == "1" || button == 1) {
+            if (navigator.app) {
+                navigator.app.exitApp();
+            }
+            else if (navigator.device) {
+                navigator.device.exitApp();
+            }
+        }
+        else if (button == "2" || button == 2) {
+            return;
         }
     }
-    else if(button=="2" || button==2){
-    return;
+    function move(loc){
+	    var txt="";
+	    $.mobile.loading( 'show', {
+	    text: "loading...",
+	    textVisible: true,
+	    theme: 'a',
+	    html: ""
+    });
+
+    if(LoginStatusCheck())
+    switch(loc){
+	    case "sales":
+		    window.location.href="sales.html";
+	    break;
+	    case "chart":
+		    window.location.href="chart.html";
+	    break;
+	    case "chart1":
+		    window.location.href="chart.html#chartlist";
+	    break;
+	    case "market":
+		    window.location.href="market.html";
+	    break;
+	    case "schedule":
+		    window.location.href="schedule.html";
+	    break;
     }
-    
-}
-
-function move(loc){
-	var txt="";
-	$.mobile.loading( 'show', {
-	text: "loading...",
-	textVisible: true,
-	theme: 'a',
-	html: ""
-});
-
-if(LoginStatusCheck())
-switch(loc){
-	case "sales":
-		window.location.href="sales.html";
-	break;
-	case "chart":
-		window.location.href="chart.html";
-	break;
-	case "chart1":
-		window.location.href="chart.html#chartlist";
-	break;
-	case "market":
-		window.location.href="market.html";
-	break;
-	case "schedule":
-		window.location.href="schedule.html";
-	break;
-}
-else
-window.location.href="#Logindv";
+    else
+    window.location.href="#Logindv";
 
 
-}
-function LoginStatusCheck(){
-var login=localStorage.getItem("login");
-if(login!=null && login!=""){
-//document.location.href="menu.html";
-//navigator.app.loadUrl("file:///android_asset/www/menu.html");
-return true;
-}
-else{
-//document.location.href="#Logindv";
-return false;
-}
+    }
+    function LoginStatusCheck(){
+    var login=localStorage.getItem("login");
+    if(login!=null && login!=""){
+    //document.location.href="menu.html";
+    //navigator.app.loadUrl("file:///android_asset/www/menu.html");
+    return true;
+    }
+    else{
+    //document.location.href="#Logindv";
+    return false;
+    }
 
-}
-function loadsetting(){
-	var set=localStorage.getItem("imcsetting");
-	var obj = eval("(" + set + ")");
-	$("#insom").val(obj.insomnia);
-	$("#savetime").val(obj.savetime);
-	switch(obj.insomnia){
-	case "on":
-		window.plugins.insomnia.keepAwake();
-	break;
-	case "off":
-		window.plugins.insomnia.allowSleepAgain()
-	break;
-	}
-}
-function savesetting(){
-	var set={};
-	set.insomnia=$("#insom").val();
-	set.savetime=$("#savetime").val();
-	set.svctype=$("#inSvctype").val();
-	set.comp=$("#inComp").val();
-	set.name=$("#inName").val();
-	set.id=$("#inId").val();
-	set.pass=$("#inPass").val();
-	set.email=$("#inEmail").val();
-	localStorage.setItem("imcsetting",JSON.stringify(set));
-	//loadsetting();
-}
-function LoginAjax1() {
-	//localstorage check
+    }
+    function loadsetting(){
+	    var set=localStorage.getItem("imcsetting");
+	    var obj = eval("(" + set + ")");
+	    $("#insom").val(obj.insomnia);
+	    $("#savetime").val(obj.savetime);
+	    switch(obj.insomnia){
+	    case "on":
+		    window.plugins.insomnia.keepAwake();
+	    break;
+	    case "off":
+		    window.plugins.insomnia.allowSleepAgain()
+	    break;
+	    }
+    }
+    function savesetting(){
+	    var set={};
+	    set.insomnia=$("#insom").val();
+	    set.savetime=$("#savetime").val();
+	    set.svctype=$("#inSvctype").val();
+	    set.comp=$("#inComp").val();
+	    set.name=$("#inName").val();
+	    set.id=$("#inId").val();
+	    set.pass=$("#inPass").val();
+	    set.email=$("#inEmail").val();
+	    localStorage.setItem("imcsetting",JSON.stringify(set));
+	    //loadsetting();
+    }
+    function LoginAjax1() {
+	    //localstorage check
 	
-	var username = document.getElementById("username").value;
-	var password = document.getElementById("password").value;
-	if(username =="" || password ==""){
-		alert("needs username,password !");
-	}
-	else{
-		$.mobile.loading( 'show', {
-			text: 'Login ....',
-			textVisible: true,
-			theme: 'b',
-			html: ""
-		});
-		$.ajax({
+	    var username = document.getElementById("username").value;
+	    var password = document.getElementById("password").value;
+	    if(username =="" || password ==""){
+		    alert("needs username,password !");
+	    }
+	    else{
+		    $.mobile.loading( 'show', {
+			    text: 'Login ....',
+			    textVisible: true,
+			    theme: 'b',
+			    html: ""
+		    });
+		    $.ajax({
 			
-			url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Login",
-			data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
-			contentType: "application/json; charset=utf-8",
-			dataType: "JSON",
-			success: function (data, status) {
-				if(JSON.stringify(data)!="{\"d\":\"login fail\"}"){
-					var rtn=data.d;
-					var obj = eval("(" + rtn + ")");
+			    url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Login",
+			    data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
+			    contentType: "application/json; charset=utf-8",
+			    dataType: "JSON",
+			    success: function (data, status) {
+				    if(JSON.stringify(data)!="{\"d\":\"login fail\"}"){
+					    var rtn=data.d;
+					    var obj = eval("(" + rtn + ")");
 					
-					var login={};
-					login.id=username;
-					login.pass=password;
-					login.name=obj.name;
-					login.comp=obj.comp;
-					login.boss=obj.boss;
-					//savelocal("login","{ id:"+ username+", pass:"+password+"}" );
-					savelocal("login",JSON.stringify(login) );
-					//document.location.href="menu.html";
-					//navigator.app.loadUrl("file:///android_asset/www/menu.html");
-					$.mobile.changePage("#dvMenubar","flip",true,false);
-					msgshow('login success');
-				}
-				else
-					alert("Login Failed!");
-			},
-			error: function (response) {
-            var r = jQuery.parseJSON(response.responseText);
+					    var login={};
+					    login.id=username;
+					    login.pass=password;
+					    login.name=obj.name;
+					    login.comp=obj.comp;
+					    login.boss=obj.boss;
+					    //savelocal("login","{ id:"+ username+", pass:"+password+"}" );
+					    savelocal("login",JSON.stringify(login) );
+					    //document.location.href="menu.html";
+					    //navigator.app.loadUrl("file:///android_asset/www/menu.html");
+					    $.mobile.changePage("#dvMenubar","flip",true,false);
+					    msgshow('login success');
+				    }
+				    else
+					    alert("Login Failed!");
+			    },
+			    error: function (response) {
+                var r = jQuery.parseJSON(response.responseText);
 		
-				$.mobile.loading('hide');
-				msgshow(r.Messae);
-			}
-		});
-	}
-}
-function RegisterAjax() {
-	//comp code
-	var comp = $("#inComp").val();
-	if(comp=="")comp="CO"+idMake();
-	//promo & comp info
-	var promo=$("#inPromo").val();
-	var compname=$("#inCompname").val();
-	var comptel=$("#inComptel").val();
-	var compzip=$("#inCompzip").val();
-	var compaddr=$("#inCompaddr").val();
-	//user info
-	var name = $("#inName").val();
-	var id = $("#inId").val();
-	var pass = $("#inPass").val();
-	var email= $("#inEmail").val();
-	var hp=detectNumber();
-	/*
-	if(name =="" || pass ==""){
-	alert("needs username,password !");
-	}
-	else{*/
-	$.mobile.loading( 'show', {
-		text: 'Saving ....',
-		textVisible: true,
-		theme: 'b',
-		html: ""
-	});
-	$.ajax({
-		url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Register",
-		data: { comp:JSON.stringify(comp)
-		,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
-		,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
-		,name:JSON.stringify(name),id: JSON.stringify(id)
-		, pass: JSON.stringify(pass),email:JSON.stringify(email),hp:JSON.stringify(hp) },
-		contentType: "application/json; charset=utf-8",
-		dataType: "JSON",
-		success: function (data, status) {
-			if(JSON.stringify(data.d) !="compuser"){
-			var login={};
-			login.id=id;
-			login.pass=pass;
-			login.name=name;
-			login.comp=comp;
-			savelocal("login",JSON.stringify(login) );
+				    $.mobile.loading('hide');
+				    msgshow(r.Messae);
+			    }
+		    });
+	    }
+    }
+    function RegisterAjax() {
+	    //comp code
+	    var comp = $("#inComp").val();
+	    if(comp=="")comp="CO"+idMake();
+	    //promo & comp info
+	    var promo=$("#inPromo").val();
+	    var compname=$("#inCompname").val();
+	    var comptel=$("#inComptel").val();
+	    var compzip=$("#inCompzip").val();
+	    var compaddr=$("#inCompaddr").val();
+	    //user info
+	    var name = $("#inName").val();
+	    var id = $("#inId").val();
+	    var pass = $("#inPass").val();
+	    var email= $("#inEmail").val();
+	    var hp=detectNumber();
+	    /*
+	    if(name =="" || pass ==""){
+	    alert("needs username,password !");
+	    }
+	    else{*/
+	    $.mobile.loading( 'show', {
+		    text: 'Saving ....',
+		    textVisible: true,
+		    theme: 'b',
+		    html: ""
+	    });
+	    $.ajax({
+		    url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Register",
+		    data: { comp:JSON.stringify(comp)
+		    ,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
+		    ,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
+		    ,name:JSON.stringify(name),id: JSON.stringify(id)
+		    , pass: JSON.stringify(pass),email:JSON.stringify(email),hp:JSON.stringify(hp) },
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "JSON",
+		    success: function (data, status) {
+			    if(JSON.stringify(data.d) !="compuser"){
+			    var login={};
+			    login.id=id;
+			    login.pass=pass;
+			    login.name=name;
+			    login.comp=comp;
+			    savelocal("login",JSON.stringify(login) );
 
-			//setting update
-			$("#inSvctype").val("online");
-			$("#lbSvctype").html("Online");
-			//savesetting();
-			$.mobile.changePage("#dvMenubar","flip",true,false);
-			msgshow('save success');
-			$.mobile.loading('hide');
-		}
-		else
-			msgshow(JSON.stringify(data.d));
-		},
-		error: function () { 
-			$.mobile.loading('hide');
-			msgshow('saving error');
-		}
-	});
-}
-function checklocal(){
-alert(localStorage.getItem("login"));
-}
-function clearmarketsave(){
-localStorage.removeItem("marketsave");
-}
-function codeInput(){
-console.log('hi')
-switch($("#svcType").val()){
+			    //setting update
+			    $("#inSvctype").val("online");
+			    $("#lbSvctype").html("Online");
+			    //savesetting();
+			    $.mobile.changePage("#dvMenubar","flip",true,false);
+			    msgshow('save success');
+			    $.mobile.loading('hide');
+		    }
+		    else
+			    msgshow(JSON.stringify(data.d));
+		    },
+		    error: function () { 
+			    $.mobile.loading('hide');
+			    msgshow('saving error');
+		    }
+	    });
+    }
+    function checklocal(){
+    alert(localStorage.getItem("login"));
+    }
+    function clearmarketsave(){
+    localStorage.removeItem("marketsave");
+    }
+    function codeInput(){
+    console.log('hi')
+    switch($("#svcType").val()){
 
-case "online":
-//$.mobile.changePage("#dvSvctype","flip",true,false);
+    case "online":
+    //$.mobile.changePage("#dvSvctype","flip",true,false);
 
-$( "body" ).pagecontainer( "change", "dvSvctype.html", { transition: "slide" });
+    $( "body" ).pagecontainer( "change", "dvSvctype.html", { transition: "slide" });
 
-//$('#svcType option[value=single]').attr('selected','selected');
-break;
-}
-}
-function checkEmail(val){
-/*
-var email = $(val).val();
-var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
-if(!re.rest(email)){
-alert("tet");
-}
-return re.rest(email);*/
+    //$('#svcType option[value=single]').attr('selected','selected');
+    break;
+    }
+    }
+    function checkEmail(val){
+    /*
+    var email = $(val).val();
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
+    if(!re.rest(email)){
+    alert("tet");
+    }
+    return re.rest(email);*/
 
-}
-function chkSvttype(){
-	var svc=$("inSvctype").val();
-	$("#selSvc").val(svc);
-	switch(svc){
-		case "single":
-			$("dvComp").css("display","none");
-		break;
-		case "online":
-			$("dvComp").css("display","block");
-			var setting=localStorage.getItem("setting");
-			if(setting!==null)setting=JSON.parse(setting);
+    }
+    function chkSvttype(){
+	    var svc=$("inSvctype").val();
+	    $("#selSvc").val(svc);
+	    switch(svc){
+		    case "single":
+			    $("dvComp").css("display","none");
+		    break;
+		    case "online":
+			    $("dvComp").css("display","block");
+			    var setting=localStorage.getItem("setting");
+			    if(setting!==null)setting=JSON.parse(setting);
 			
-		break;	
-	}
-}
-/*
+		    break;	
+	    }
+    }
+    /*
 	// orientation change-->> label hide
 	$( window ).on( "orientationchange","[id^=dv]", function( event ) {  
 	  	$('[id^=dv] label').show();
-	  if(event.orientation=="portrait") {
+	    if(event.orientation=="portrait") {
 	  	$('[id^=dv] label').hide();
-	  }
+	    }
 	});
-	 $(document).on("pageshow",function(){
+	    $(document).on("pageshow",function(){
 	 	$('[id^=dv] label').show();
-	  if (screen.height > screen.width){
+	    if (screen.height > screen.width){
 	  	$('[id^=dv] label').hide();
-	  }
+	    }
 	});*/
-function insertmenu(){
-$("#nav-panel>ul").append($("<li><a href='#'>test</a></li>"));
-$("#nav-panel").listview("refresh");
-}
-	
 	</script>
+
 	<span id="fastclick" >
 		<div data-role="page" data-theme="a" id="dvMenubar"  >
+		    <div data-role="panel" data-display="overlay" data-theme="b" id="nav-panel">
+                <style>
+                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading {
+                        margin: 0;
+                    }
+                    #nav-panel .ui-li-static.ui-collapsible {
+                        padding: 0;
+                    }
+                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+                        border-top-width: 0;
+                    }
+                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-content {
+                        border-bottom-width: 0;
+                    }
+                </style>
+			    <ul data-role="listview">
+				    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+				    <li data-role="collapsible" data-iconpos="right" data-inset="true">
+					    <h2>Birds</h2>
+					    <ul data-role="listview" data-theme="b">
+						    <li><a href="#">Condor</a></li>
+						    <li><a href="#">Eagle</a></li>
+						    <li><a href="#">Sparrow</a></li>
+					    </ul>
+					    </li>
+				    <li><a href="#">Humans</a></li>
+				    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+				    <h2>Fish</h2>
+				    <ul data-role="listview" data-theme="b">
+					    <li><a href="#">Salmon</a></li>
+					    <li><a href="#">Pollock</a></li>
+					    <li><a href="#">Trout</a></li>
+				    </ul>
+				    </li>
+			    </ul>
+		    </div><!-- /panel -->
 			<div data-role="header" data-theme="b">
 				<h3> IMCMaster Menu </h3>
 				<a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
@@ -519,16 +537,6 @@ $("#nav-panel").listview("refresh");
 				<div id="imgcontain" ></div>
 			</div>
 		</div>
- <div data-role="panel" data-display="push" data-theme="b" id="nav-panel">
-        <ul data-role="listview">
-            <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
-			<li><a href="#panel-responsive-page2">Accordion</a></li>
-			<li><a href="#panel-responsive-page2">Ajax Navigation</a></li>
-        </ul>
-    </div><!-- /panel -->
-
-
-
 		<div data-role="page" data-theme="a" id="setting" >
 			<div data-role="header" data-theme="b">
 				<h1>Setting</h1>
@@ -642,7 +650,6 @@ $("#nav-panel").listview("refresh");
 				</div>
 			</div>
 		</div>
-		
 		<div data-role="page" data-theme="a" id="dvSvctype"  >
 			<div data-theme="b" data-role="header">
 				<h3> Service µî·Ï </h3>
@@ -1261,25 +1268,22 @@ $("#nav-panel").listview("refresh");
 			</div>
 			
 		</div>
-	</div>  </span>
+	</div>  
+    </span>
 	<script>
 		function saveCategory() {
 			localStorage.setItem("category", $("#txCategory").val());
 		}
-
 		function showCategory() {
 			var clist = localStorage.getItem("category");
 			$("#txCategory").val(clist);
 		}
-
 		function showSvc() {
 			var dvcomp = document.getElementById("dvComp");
 			dvcomp.style.display = "none";
 			if ($("#selSvc").val() == "online")
 				dvcomp.style.display = "block";
 		}
-
-
 		$("#btn2").click(function() {
 			$.mobile.utils.showWaitBox("a", "loading...");
 			makeProd();
@@ -1311,8 +1315,6 @@ $("#nav-panel").listview("refresh");
 			$(id).css("data-native-menu", "false");
 			$(id).attr("selectedIndex", -1)
 		}
-
-
 		$(document).on('click', '#ulList li', function() {
 			//e.preventDefault();
 			var Id = $(this).attr('id');
@@ -1413,7 +1415,6 @@ $("#nav-panel").listview("refresh");
 				$('#ulList').listview('refresh');
 			}
 		}
-
 		function saveProd() {
 			var pd = $("#inList").val();
 			if (pd == "")
@@ -1444,7 +1445,6 @@ $("#nav-panel").listview("refresh");
 			localStorage.setItem("pd", JSON.stringify(pd));
 			makeUlList('pd');
 		}
-
 		function saveChan() {
 			var ch = $("#inList").val();
 			if (ch == "")
@@ -1482,7 +1482,6 @@ $("#nav-panel").listview("refresh");
 			localStorage.setItem("ch", JSON.stringify(ch));
 			makeUlList('ch');
 		}
-
 		function clearDetail() {
 			var list = $("#inList").val()
 			var type = "";
@@ -1537,7 +1536,6 @@ $("#nav-panel").listview("refresh");
 			}
 
 		}
-
 		function delOk(code) {
 			var sales = localStorage.getItem("sales");
 			var mkt = localStorage.getItem("marketinfo");
@@ -1554,7 +1552,6 @@ $("#nav-panel").listview("refresh");
 			}
 			return unuse;
 		}
-
 		function chkUnuse(data, code) {
 			$.each(data, function(key, value) {
 				if (value == code) {
@@ -1563,7 +1560,6 @@ $("#nav-panel").listview("refresh");
 					return true;
 			})
 		}
-
 		function delList(type, code) {
 			switch(type) {
 			case "pd":
@@ -1588,12 +1584,9 @@ $("#nav-panel").listview("refresh");
 				}
 				break;
 			}
-
 		}
-
 		function checkConnection() {
 			var networkState = navigator.connection.type;
-
 			var states = {};
 			states[Connection.UNKNOWN] = 'Unknown connection';
 			states[Connection.ETHERNET] = 'Ethernet connection';
@@ -1603,20 +1596,14 @@ $("#nav-panel").listview("refresh");
 			states[Connection.CELL_4G] = 'Cell 4G connection';
 			states[Connection.CELL] = 'Cell generic connection';
 			states[Connection.NONE] = 'No network connection';
-
 			alert('Connection type: ' + states[networkState]);
 		}
-
 		function onOnline() {
-
 			alert('its online!')
 		}
-
 		function onOffline() {
-
 			alert('its offline!')
 		}
-
 		function ContactInfo() {
 			// find all contacts
 			var options = new ContactFindOptions();
@@ -1624,7 +1611,6 @@ $("#nav-panel").listview("refresh");
 			var filter = ["displayName", "addresses"];
 			navigator.contacts.find(filter, onSuccess, onError, options);
 		}
-
 		// onSuccess: Get a snapshot of the current contacts
 		//
 		function onSuccess(contacts) {
@@ -1635,31 +1621,24 @@ $("#nav-panel").listview("refresh");
 				}
 			}
 		};
-
 		// onError: Failed to get the contacts
 		//
 		function onError(contactError) {
 			alert('onError!');
 		}
-
 		// onSuccess Geolocation
 		//
 		function chkloc() {
 			navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		}
-
 		function onSuccess(position) {
 			var element = document.getElementById('geolocation');
 			element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' + 'Longitude: ' + position.coords.longitude + '<br />' + 'Altitude: ' + position.coords.altitude + '<br />' + 'Accuracy: ' + position.coords.accuracy + '<br />' + 'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' + 'Heading: ' + position.coords.heading + '<br />' + 'Speed: ' + position.coords.speed + '<br />' + 'Timestamp: ' + new Date(position.timestamp) + '<br />';
 		}
-
 		function chkdevice() {
-
 			var element = document.getElementById('deviceProperties');
-
 			element.innerHTML = 'Device Name: ' + device.name + '<br />' + 'Device PhoneGap: ' + device.phonegap + '<br />' + 'Device Platform: ' + device.platform + '<br />' + 'Device UUID: ' + device.uuid + '<br />' + 'Device Version: ' + device.version + '<br />';
 		}
-
 		// onError Callback receives a PositionError object
 		//
 		function onError(error) {
@@ -1667,62 +1646,52 @@ $("#nav-panel").listview("refresh");
 		}
 
 	</script>
-
-	<!--<script src="http://debug3.build.phonegap.com/target/target-script-min.js#imcmobile"></script>-->
-	
 	<!--from imcmaster -->
-	 <link href="js2/redips/style.css" rel="stylesheet" type="text/css" />
-     <script type="text/javascript" src="js2/redips/redips-drag-source.js"></script>
+   
+	<link href="js2/redips/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js2/redips/redips-drag-source.js"></script>
     <script type="text/javascript" src="js2/redips/redips-table.js"></script>
     <script type="text/javascript" src="js2/redips/script.js"></script>
-   
     <script type="text/javascript" src="js2/CSSJSON-master/json2.js"></script>
     <script type="text/javascript" src="js2/CSSJSON-master/cssjson.js"></script>
     <script async src="//cdn.opencpu.org/opencpu-0.4.js"></script>
-
-<script type="text/javascript" async  src="js2/jqGrid3/js/i18n/grid.locale-en.js"></script>
-<script type="text/javascript" async  src="js2/jqGrid3/js/jquery.jqGrid.src.js"></script>
-       
-<script id="contextmenu-js" async  type="text/javascript" src="js2/jquery-contextmenu/jquery.contextmenu.js"></script>
-<link  rel="stylesheet" href="js2/jquery-contextmenu/jquery.contextmenu.css">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0"></script>
-<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<link rel="stylesheet" href="js2/liteAccordion/css/liteAccordion.css">
-<script  src="js2/liteAccordion/js/liteaccordion.jquery.min.js"></script>
-<script  async type="text/javascript" src="js2/jquery-paging/paging.js"></script> 
-<link  rel="stylesheet" href="js2/jquery-paging/paging.css">
-<script  async src="js2/jquery-lang-js-master/js/jquery-lang.js" charset="utf-8" type="text/javascript"></script>
-<script  async src="js2/jquery-lang-js-master/js/jquery-cookie.js" charset="utf-8" type="text/javascript"></script>
-<script  async src="js2/ddlslick/ddlslick.js" type="text/javascript"></script>
-<script  type="text/javascript" src="js2/gridstack/gridstack.js"></script>
-<script src="js2/jquery-cookie-master/src/jquery.cookie.js" type="text/javascript"></script>
-<script type="text/javascript" src="js2/Simple-Convenient-Pagination-Plugin-For-jQuery-Paginathing/paginathing.js"></script>
-<!-- SmartMenus jQuery plugin -->
-<script src="js2/smartmenus-1.0.1/jquery.smartmenus.js" type="text/javascript"></script>
-<!-- SmartMenus core CSS (required) -->
-
-<link rel="stylesheet" type="text/css" href="js2/c3/c3.min.css">
-<script  async type="text/javascript" src="js2/d3/d3.min.js"></script>
-<script  async type="text/javascript" src="js2/c3/c3.min.js"></script>
- 
-<script  async type="text/javascript" src="js2/fullcalendar/jquery-ui.js"></script>
-<script  async type="text/javascript" src="js2/fullcalendar/moment.min.js"></script>
-<script  async type="text/javascript" src="js2/fullcalendar/fullcalendar.min.js"></script>
-<link href='js2/fullcalendar/fullcalendar.css' rel='stylesheet' type='text/css' />
-<link href='js2/fullcalendar/fullcalendarwrap.css' rel='stylesheet' type='text/css' />
-
-<link href="js2/gridstack/gridstack.css" rel="stylesheet">
-<script  type="text/javascript" src="js2/context/demo2.js"></script>
-<script  type="text/javascript" src="js2/context/context.js"></script>
-<link href="js2/context/context.css" rel="stylesheet" type="text/css" />
-<link href="/App_Themes/Default/Stylesheet.css" rel="stylesheet" type="text/css" />
-    
-<link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css">
-<script id="themeroller-js" type="text/javascript" src="js2/jquery-themeroller/jquery.themeswitcher.min.js"></script>
-<script type="text/javascript" src="js2/Common_misc.js"></script>
-<script type="text/javascript" src="js2/Controls.js"></script>
-<script type="text/javascript" src="js2/Controls1.js"></script>
+    <script type="text/javascript" async  src="js2/jqGrid3/js/i18n/grid.locale-en.js"></script>
+    <script type="text/javascript" async  src="js2/jqGrid3/js/jquery.jqGrid.src.js"></script>
+    <script id="contextmenu-js" async  type="text/javascript" src="js2/jquery-contextmenu/jquery.contextmenu.js"></script>
+    <link  rel="stylesheet" href="js2/jquery-contextmenu/jquery.contextmenu.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0"></script>
+    <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <link rel="stylesheet" href="js2/liteAccordion/css/liteAccordion.css">
+    <script  src="js2/liteAccordion/js/liteaccordion.jquery.min.js"></script>
+    <script  async type="text/javascript" src="js2/jquery-paging/paging.js"></script> 
+    <link  rel="stylesheet" href="js2/jquery-paging/paging.css">
+    <script  async src="js2/jquery-lang-js-master/js/jquery-lang.js" charset="utf-8" type="text/javascript"></script>
+    <script  async src="js2/jquery-lang-js-master/js/jquery-cookie.js" charset="utf-8" type="text/javascript"></script>
+    <script  async src="js2/ddlslick/ddlslick.js" type="text/javascript"></script>
+    <script  type="text/javascript" src="js2/gridstack/gridstack.js"></script>
+    <script src="js2/jquery-cookie-master/src/jquery.cookie.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js2/Simple-Convenient-Pagination-Plugin-For-jQuery-Paginathing/paginathing.js"></script>
+    <!-- SmartMenus jQuery plugin -->
+    <script src="js2/smartmenus-1.0.1/jquery.smartmenus.js" type="text/javascript"></script>
+    <!-- SmartMenus core CSS (required) -->
+    <link rel="stylesheet" type="text/css" href="js2/c3/c3.min.css">
+    <script  async type="text/javascript" src="js2/d3/d3.min.js"></script>
+    <script  async type="text/javascript" src="js2/c3/c3.min.js"></script>
+    <script  async type="text/javascript" src="js2/fullcalendar/jquery-ui.js"></script>
+    <script  async type="text/javascript" src="js2/fullcalendar/moment.min.js"></script>
+    <script  async type="text/javascript" src="js2/fullcalendar/fullcalendar.min.js"></script>
+    <link href='js2/fullcalendar/fullcalendar.css' rel='stylesheet' type='text/css' />
+    <link href='js2/fullcalendar/fullcalendarwrap.css' rel='stylesheet' type='text/css' />
+    <link href="js2/gridstack/gridstack.css" rel="stylesheet">
+    <script  type="text/javascript" src="js2/context/demo2.js"></script>
+    <script  type="text/javascript" src="js2/context/context.js"></script>
+    <link href="js2/context/context.css" rel="stylesheet" type="text/css" />
+    <link href="/App_Themes/Default/Stylesheet.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css">
+    <script id="themeroller-js" type="text/javascript" src="js2/jquery-themeroller/jquery.themeswitcher.min.js"></script>
+    <script type="text/javascript" src="js2/Common_misc.js"></script>
+    <script type="text/javascript" src="js2/Controls.js"></script>
+    <script type="text/javascript" src="js2/Controls1.js"></script>
     <link type="text/css" href="js2/multiple-themes/theme_interiorNavigation/ui.all.css" rel="Stylesheet" />
-
 </body>
 </html>
