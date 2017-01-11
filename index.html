@@ -821,6 +821,7 @@ function chkSvttype(){
                    <option value="" >-- Select -- </option>
                    <option value="login" >Login</option>
                    <option value="imcsetting" >Setting</option>
+                   <option value="imctable" >Table</option>
                    <option value="sales">Sales</option>
                    <option value="marketinfo" >Marketinfo</option>
                    <option value="googlechart" >ChartSetting</option>
@@ -839,12 +840,16 @@ function chkSvttype(){
                 	function chkLocaldb(){
                 		$("#txLocaldb").val("");
                 		var va=localStorage.getItem($("#selLocaldb").val());
+						if(va==null)
+                		va=sessionStorage.getItem($("#selLocaldb").val());
                 		$("#txLocaldb").val(va);
                 	$("#txLocaldb").css({'min-height':'250px'});
                 	}
                 	function chkLocaldb1(){
                 		$("#txLocaldb").val("");
                 		var va=localStorage.getItem($("#inLocaldb").val());
+						if(va==null)
+                		va=sessionStorage.getItem($("#inLocaldb").val());
                 		$("#txLocaldb").val(va);
                 	}		
                 	function updateDB(){
