@@ -445,14 +445,17 @@ function chkSvttype(){
 	  	$('[id^=dv] label').hide();
 	  }
 	});*/
-
+function insertmenu(){
+$("#nav-panel>ul").append($("<li><a href='#'>test</a></li>"));
+$("#nav-panel").listview("refresh");
+}
 	
 	</script>
 	<span id="fastclick" >
 		<div data-role="page" data-theme="a" id="dvMenubar"  >
 			<div data-role="header" data-theme="b">
 				<h3> IMCMaster Menu </h3>
-				
+				<a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
 				<div class="ui-btn-left" style="color:white;"><label id="lbUsername"/>
 				</div>
 			</div>
@@ -516,6 +519,16 @@ function chkSvttype(){
 				<div id="imgcontain" ></div>
 			</div>
 		</div>
+ <div data-role="panel" data-display="push" data-theme="b" id="nav-panel">
+        <ul data-role="listview">
+            <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+			<li><a href="#panel-responsive-page2">Accordion</a></li>
+			<li><a href="#panel-responsive-page2">Ajax Navigation</a></li>
+        </ul>
+    </div><!-- /panel -->
+
+
+
 		<div data-role="page" data-theme="a" id="setting" >
 			<div data-role="header" data-theme="b">
 				<h1>Setting</h1>
