@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget  xmlns       = "http://www.w3.org/ns/widgets"
-    xmlns:gap       = "http://phonegap.com/ns/1.0"
-    id          = "kr.co.imcmaster.mobile"
-    xmlns:android   = "http://schemas.android.com/apk/res/android">
+<widget 
+	xmlns="http://www.w3.org/ns/widgets" 
+	xmlns:gap="http://phonegap.com/ns/1.0" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="kr.co.imcmaster.www"
+	version="1.0.0">
     
     <name>IMC Go Mobile</name>
     <description>
@@ -88,10 +90,12 @@
     </platform>
 
     
-    
-    <gap:config-file platform="android" parent="/manifest/application">
-	    <activity android:launchMode="singleTask" />
+    <gap:config-file platform="android" parent="/manifest">
+     <application android:debuggable="true" />
 	</gap:config-file>
+    <!--<gap:config-file platform="android" parent="/manifest/application">
+	    <activity android:launchMode="singleTask" />
+	</gap:config-file>-->
 	<feature name="Camera">
 	    <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
 	</feature>
@@ -105,8 +109,6 @@
 	</feature>
 <!--<plugin name="com.phonegap.plugins.childbrowser" spec="5.0.0" source="pgb" />-->
     <feature name="http://api.phonegap.com/1.0/file"/>
-
-
 
     <content src="index.html" />
     <access origin="*" />
