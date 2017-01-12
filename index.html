@@ -291,7 +291,7 @@
 					    login.name=obj.name;
 					    login.comp=obj.comp;
 					    login.boss=obj.boss;
-					    //savelocal("login","{ id:"+ username+", pass:"+password+"}" );
+					    savelocal("imcsetting", JSON.stringify(login));
 					    savelocal("login",JSON.stringify(login) );
 					    //document.location.href="menu.html";
 					    //navigator.app.loadUrl("file:///android_asset/www/menu.html");
@@ -352,7 +352,8 @@
 			    login.id=id;
 			    login.pass=pass;
 			    login.name=name;
-			    login.comp=comp;
+			    login.comp = comp;
+			    savelocal("imcsetting", JSON.stringify(login));
 			    savelocal("login",JSON.stringify(login) );
 
 			    //setting update
