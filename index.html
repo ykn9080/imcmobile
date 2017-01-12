@@ -148,7 +148,7 @@
 		    showmsg("error = " + error.code);
 	    });
     }
-    var backcnt=0,webserviceprefix="http://www.imcmaster.co.kr";
+    var backcnt = 0;
     function ShowExitDialog() {
 
 	     // Call my back key code here.
@@ -276,7 +276,7 @@
 		    });
 		    $.ajax({
 			
-			    url: webserviceprefix+"/WebService.asmx/Login",
+		        url: "http://www.imcmaster.co.kr/WebService.asmx/Login",
 			    data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "JSON",
@@ -338,7 +338,7 @@
 		    html: ""
 	    });
 	    $.ajax({
-		    url: webserviceprefix+"/WebService.asmx/Register",
+	        url: "http://www.imcmaster.co.kr/WebService.asmx/Register",
 		    data: { comp:JSON.stringify(comp)
 		    ,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
 		    ,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
@@ -1664,7 +1664,7 @@
     <script type="text/javascript" src="js2/redips/script.js"></script>
     <script type="text/javascript" src="js2/CSSJSON-master/json2.js"></script>
     <script type="text/javascript" src="js2/CSSJSON-master/cssjson.js"></script>
-    <script async src="//cdn.opencpu.org/opencpu-0.4.js"></script>
+    <script async src="http://cdn.opencpu.org/opencpu-0.4.js"></script>
     <script type="text/javascript" async  src="js2/jqGrid3/js/i18n/grid.locale-en.js"></script>
     <script type="text/javascript" async  src="js2/jqGrid3/js/jquery.jqGrid.src.js"></script>
     <script id="contextmenu-js" async  type="text/javascript" src="js2/jquery-contextmenu/jquery.contextmenu.js"></script>

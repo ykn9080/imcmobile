@@ -154,7 +154,7 @@ function jscssload(list, callback) {
 
 var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = location.hostname;
 function pageInit() {
-    if (webserviceprefix = "") webserviceprefix = "www.imcmaster.co.kr";
+    if (webserviceprefix = "") webserviceprefix = "http://www.imcmaster.co.kr";
     defconnect = "DBtype=mssql;" + $("#ctl00_hidConnect").val();
     window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
