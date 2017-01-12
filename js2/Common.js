@@ -152,8 +152,10 @@ function jscssload(list, callback) {
         callback();
 }
 
-var menuid = "1", subid = "", contType = "afterlogin";
+var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = location.hostname;
 function pageInit() {
+    if (webserviceprefix = "") webserviceprefix = "www.imcmaster.co.kr";
+    defconnect = "DBtype=mssql;" + $("#ctl00_hidConnect").val();
     window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
     if (getlogin() == "") {
@@ -185,7 +187,6 @@ function pageInit() {
         $("#menu").css("height", $(document).height() + "px");
         multilangReadAjax('kr');
         setTimeout(function () {
-            
             menuselected(); menuInit(); menuInit(); initDisplay(); var Lang = new Lang('en');
         }, 500);
 
@@ -282,7 +283,7 @@ function Login(id, pass) {
     if (typeof (pass) == "undefined") pass = '';
 
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/Login",
+        url: webserviceprefix+"/WebService.asmx/Login",
         data: { id: JSON.stringify(id), pass: JSON.stringify(pass) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -3917,7 +3918,7 @@ function jsonSaveAjax(type, data) {
     var path = "/data/json/";
     path += type + ".json";
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/SaveDataPost",
+        url: webserviceprefix+"/WebService.asmx/SaveDataPost",
         type:"post",
         data: JSON.stringify({ "path": path, "str": JSON.stringify(jdata) }),
         contentType: "application/json; charset=utf-8",
@@ -3938,7 +3939,7 @@ function jsonReadallAjax(type, callback, optionarray) {
     var path = "/data/json/";
     path += type + ".json";
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/ReadData",
+        url: webserviceprefix+"/WebService.asmx/ReadData",
         data: { path: JSON.stringify(path) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -3976,7 +3977,7 @@ function jsonReadAjax(storename, dataname, keycode, keyvalue, callback, optionar
     path += storename + ".json";
 
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/ReadDataSingle",
+        url: webserviceprefix+"/WebService.asmx/ReadDataSingle",
         data: { "path": JSON.stringify(path), "dataname": JSON.stringify(dataname), "keycode": JSON.stringify(keycode), "keyvalue": JSON.stringify(keyvalue) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -3998,7 +3999,7 @@ function jsonDelAjax(storename, dataname, keycode, keyvalue, callback, optionarr
     funLoading(true);
   
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/DelDataPost",
+        url: webserviceprefix+"/WebService.asmx/DelDataPost",
         type: "post",
         data: JSON.stringify({ "path": path, "dataname": dataname, "keycode": keycode, "keyvalue": keyvalue }),
         contentType: "application/json; charset=utf-8",
@@ -4024,7 +4025,7 @@ function jsonUpdateAjax(storename, dataname, data, keycode, keyvalue, callback, 
     var path = "/data/json/";
     path += storename + ".json";
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/UpdateDataPost",
+        url: webserviceprefix+"/WebService.asmx/UpdateDataPost",
         type: "post",
         data: JSON.stringify({ "path": path, "udata": JSON.stringify(jdata),"dataname":dataname,"keycode":keycode,"keyvalue":keyvalue }),
         contentType: "application/json; charset=utf-8",
@@ -4041,11 +4042,23 @@ function jsonUpdateAjax(storename, dataname, data, keycode, keyvalue, callback, 
         }
     });
 }
-
+var defconnect;//access web.config connectionstr and fectch in pageInit()
+function defconnectset(data) {
+    //default connectionstring
+    if (!data.hasOwnProperty("connection"))
+        data.connection = defconnect;
+    if (!data.hasOwnProperty("connectname"))
+        data.connection = defconnect;
+    else if (dat.connectname == "Default" && defconnect != dt.connection)
+        data.connection = defconnect;
+    return data;
+}
 function jsonDatabaseAjax(data, callback, callparam) {
     //exec database query return datalist
     //data:data.connection, data.querylist(sqlcommand,dtype,query,param)
     //callparam:param array for callback
+    data = defconnectset(data);
+    console.log(data)
     var con = data.connection, dbtype = "", cstr = "",spname="",dtype,sqlcommand,ajaxname;
     if (typeof con != "undefined" && con != "" && con != "undefined") {
         var conn = con.split(";");
@@ -4096,11 +4109,10 @@ function jsonDatabaseAjax(data, callback, callparam) {
             break;
     }
     funLoading(true)
-    console.log(paramlist)
     $.ajax({
         type: "get",
         contentType: "application/json; charset=utf-8",
-        url: "http://www.imcmaster.co.kr/WebService.asmx/" + ajaxname,
+        url: webserviceprefix+"/WebService.asmx/" + ajaxname,
         data: paramlist,
         dataType: "json",
         success: function (dt, status) {
@@ -4206,22 +4218,20 @@ function callbackexewithparam(callback, opt) {
 function callbackreturn(dt, callbackname,options) {
     //after callback returned post process with it
     //insert callbackname into array ex(jsonUpdateAjax(preceding parameters......, callbackreturn, ["derivedparameter"]))
-    console.log(dt)
     switch (callbackname) {
         case "connectstringmake":
             //funcfrom:databaseLoad
             //callback from imcsetting>preference
-            var def;
             switch(window.location.hostname){
-                case "localhost":
-                    def="Data Source=User-PC;Initial Catalog=Coredb;User ID=sa;Password=note9080()*)";
-                    break;
-                case "www.imcmaster.co.kr": case "www.imcmaster.me":
-                    def = "DBtype=mssql;Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User ID=DB_9D66CD_imcmaster_admin;Password =ykn90809080";
+                //case "localhost":
+                //    defconnect="Data Source=User-PC;Initial Catalog=Coredb;User ID=sa;Password=note9080()*)";
+                //    break;
+                //case "www.imcmaster.co.kr": 
+                default:
                         break;
             }
             
-            var imcstr = { code: '1', data: 'Code=1;Title=Default;'+def };
+            var imcstr = { code: '1', data: 'Code=1;Title=Default;' + defconnect };
             var list = [imcstr];
             if (dt != "" && dt.hasOwnProperty("connectstring")) {
                 list = dt.connectstring;
@@ -4311,7 +4321,7 @@ function checklastupdate(storename) {
     var id = "";
     if(getlogin()!="")
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/sessionStorageFindLastupdate",
+        url: webserviceprefix+"/WebService.asmx/sessionStorageFindLastupdate",
         data: { id: JSON.stringify(getlogin().id),type: JSON.stringify(storename) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -4356,7 +4366,7 @@ function sessionStorageFindAjax(comp,staff,storename) {
     //var login = selectimc("imcsetting", "login");
     //var comp = comp, staff = staff, stype = storename;
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/sessionStorageFind",
+        url: webserviceprefix+"/WebService.asmx/sessionStorageFind",
         data: { comp: JSON.stringify(comp), staff: JSON.stringify(staff), stype: JSON.stringify(storename) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -4387,7 +4397,7 @@ function sessionStorageUpAjax(comp, staff, storename,datastr) {
 //    var login=selectimc("imcsetting", "login");
 //    var comp = login.comp, staff = login.staff, stype = 'imctable',data=sessionStorage.getItem("imctable")
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/sessionStorageUpdate",
+        url: webserviceprefix+"/WebService.asmx/sessionStorageUpdate",
         type:"post",
         data: JSON.stringify({ comp: comp, staff: staff, stype: storename ,data:datastr}),
         contentType: "application/json; charset=utf-8",
@@ -4759,7 +4769,7 @@ function AjaxAdd(storename,dataname, url, parameter, upinterval, callback) {
     }
 }
 function ajaxGen(url, parameter, callback, optionarray) {
-    //ex:ajaxGen("http://www.imcmaster.co.kr/WebService.asmx/DeriveParam",{ dbtype: '', connect: '', spname: JSON.stringify("gauge1") })
+    //ex:ajaxGen(webserviceprefix+"/WebService.asmx/DeriveParam",{ dbtype: '', connect: '', spname: JSON.stringify("gauge1") })
     //parameter:{ dbtype: '', connect: '', spname: JSON.stringify("gauge1") }
     //optionarray:additional parameters for callback in order ['opt1','opt2'....]
     console.log(parameter)
@@ -4811,7 +4821,7 @@ function remoteUpdate(controlid, processcode, postdata) {
     data.postdata = JSON.stringify(JSON.stringify(postdata));
     console.log(JSON.stringify(data))
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/ProcessData",
+        url: webserviceprefix+"/WebService.asmx/ProcessData",
         data: data,
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -5934,7 +5944,7 @@ function dataListOnlyAjax(listupdate) {
 
     var comp = login.comp;//+",1";// obj.comp;
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/DataListOnly",
+        url: webserviceprefix+"/WebService.asmx/DataListOnly",
         data: { comp: JSON.stringify(comp) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -5956,7 +5966,7 @@ function dataListAjax(datacode,reload) {
     var login = selectimc("imcsetting", "login");
     var comp = login.comp;//+",1"; // obj.comp;
     $.ajax({
-        url: "http://www.imcmaster.co.kr/WebService.asmx/DataList",
+        url: webserviceprefix+"/WebService.asmx/DataList",
         data: { comp: JSON.stringify(comp), datacode: JSON.stringify(datacode) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -6863,13 +6873,14 @@ function databaseLoad(dt) {
             $("#lbId").text(dt.code);
             $("#inpTitle").val(dt.title);
             $("#inpDesc").val(dt.descript);
-            if (dt.hasOwnProperty("connection")) {
+            dt = defconnectset(dt);//revise connectstr with current one;
+             
                 $("#selconn").val(dt.connection);
                 $("#lbconnect").text(dt.connection);
                 $("#lbconnect").attr("title", dt.connection);
                 if (typeof $("#selconn option:selected").html() == "undefined")
                     $("#selconn").val("");
-            }
+            
         }
         else {
             $("#lbId").text("dt" + idMake());
@@ -6980,7 +6991,7 @@ function databaseLoad(dt) {
                     break;
                 case "procedure":
                     var param = { dbtype: JSON.stringify(dbtype), connect: JSON.stringify(cstr), spname: JSON.stringify($(this).val()) };
-                    ajaxGen("http://www.imcmaster.co.kr/WebService.asmx/DeriveParam", param, callbackreturn, ["derivedparameter"]);
+                    ajaxGen(webserviceprefix+"/WebService.asmx/DeriveParam", param, callbackreturn, ["derivedparameter"]);
                     break;
             }
 
@@ -7089,6 +7100,7 @@ function databaseLoad(dt) {
         setting.comp = getlogin().comp;
         setting.dtype = "database";
         setting.connection = $("#lbconnect").text();
+        setting.connectname = $("#selconn :selected").text();
         var qlist = [];
         $("#dvdatabase").find(".dndli").each(function (i, k) {
             var val = $(k).attr("val");
@@ -8610,7 +8622,7 @@ function editDatacodecallback(dt, filterdata) {
 function dataajaxinsert(dt, dlist,editcase,param) {
     //insert datasrc 
     //jsonReadAjax("imcdata", "", "code", datacode, dataajaxinsert)
-  
+  console.log(dt,editcase,param)
     var datacode="";
     dataajaxinsert.datasrc = datasrc;
     //if (dt == "") {

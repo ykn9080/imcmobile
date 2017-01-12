@@ -276,7 +276,7 @@
 		    });
 		    $.ajax({
 			
-			    url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Login",
+			    url: webserviceprefix+"/WebService.asmx/Login",
 			    data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "JSON",
@@ -338,7 +338,7 @@
 		    html: ""
 	    });
 	    $.ajax({
-		    url: "http://www.imcmaster.co.krhttp://www.imcmaster.co.kr/WebService.asmx/Register",
+		    url: webserviceprefix+"/WebService.asmx/Register",
 		    data: { comp:JSON.stringify(comp)
 		    ,promo:JSON.stringify(promo),compname:JSON.stringify(compname)
 		    ,comptel:JSON.stringify(comptel),compzip:JSON.stringify(compzip),compaddr:JSON.stringify(compaddr)
@@ -434,7 +434,7 @@
 
 	<span id="fastclick" >
 		<div data-role="page" data-theme="a" id="dvMenubar"  >
-		    <div data-role="panel" data-display="overlay" data-theme="b" id="nav-panel">
+		    <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
                 <style>
                     #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading {
                         margin: 0;
@@ -451,7 +451,7 @@
                     }
                 </style>
 			    <ul data-role="listview">
-				    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+				    <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
 				    <li data-role="collapsible" data-iconpos="right" data-inset="true">
 					    <h2>Birds</h2>
 					    <ul data-role="listview" data-theme="b">
@@ -470,6 +470,7 @@
 				    </ul>
 				    </li>
 			    </ul>
+                <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-mini ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-right">Close</a>
 		    </div><!-- /panel -->
 			<div data-role="header" data-theme="b" style="min-height:50px">
 				<h1> IMCMaster Menu </h1>
