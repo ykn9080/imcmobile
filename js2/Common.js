@@ -166,7 +166,7 @@ function pageInit() {
     }
     else if (localStorage.getItem("imcsetting") == null) {
         if(!isApp())
-        Login(getuserid());
+        Login(getuserid1());
     }
     var imc = localStorage.getItem("imctable")
 
@@ -174,7 +174,7 @@ function pageInit() {
         jsonReadallAjax("imctable");
     }
     else {
-        if (!isApp() && getuserid() != "") menutoggle = "";
+        if (!isApp() && getuserid1() != "") menutoggle = "";
         if (isApp() && localStorage.getItem("imcsetting") != null) menutoggle = "";
         findsubid(JSON.parse(imc));
         init();
