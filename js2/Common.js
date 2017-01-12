@@ -155,13 +155,17 @@ function jscssload(list, callback) {
 var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = location.hostname;
 function pageInit() {
     if (webserviceprefix = "") webserviceprefix = "www.imcmaster.co.kr";
-    defconnect = "DBtype=mssql;" + $("#ctl00_hidConnect").val();
+    var constr = $("#ctl00_hidConnect").val();
+    if (typeof constr == "undefined")
+        constr = "Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User Id=DB_9D66CD_imcmaster_admin;Password=ykn90809080;";
+    defconnect = "DBtype=mssql;" + constr;
     window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
     if (getlogin() == "") {
         menutoggle = "open";
     }
     else if (localStorage.getItem("imcsetting") == null) {
+        if(!isApp())
         Login(getuserid());
     }
     var imc = localStorage.getItem("imctable")
@@ -170,7 +174,8 @@ function pageInit() {
         jsonReadallAjax("imctable");
     }
     else {
-        if (getuserid() != "") menutoggle = "";
+        if (!isApp() && getuserid() != "") menutoggle = "";
+        if (isApp() && localStorage.getItem("imcsetting") != null) menutoggle = "";
         findsubid(JSON.parse(imc));
         init();
     }
@@ -316,6 +321,7 @@ function menuInit(extlink) {
     //dvwrap.appendTo($("form")[0]);
    
     menuMain(extlink);
+    if(!isApp())
     menuHead(extlink);
     menuSide(extlink);
     cssInsert("menu-css", "/js2/menu_slide/menu.css");
