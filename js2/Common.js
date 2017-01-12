@@ -154,17 +154,17 @@ function jscssload(list, callback) {
 
 var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = location.hostname;
 function pageInit() {
-    if (webserviceprefix = "") webserviceprefix = "http://www.imcmaster.co.kr";
+    if (webserviceprefix = "") webserviceprefix = "www.imcmaster.co.kr";
     defconnect = "DBtype=mssql;" + $("#ctl00_hidConnect").val();
     window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
     if (getlogin() == "") {
         menutoggle = "open";
     }
-    else if (sessionStorage.getItem("imcsetting") == null) {
+    else if (localStorage.getItem("imcsetting") == null) {
         Login(getuserid());
     }
-    var imc = sessionStorage.getItem("imctable")
+    var imc = localStorage.getItem("imctable")
 
     if (imc == null | imc == "") {
         jsonReadallAjax("imctable");
@@ -227,7 +227,7 @@ function chkwin() {
 }
 function imcload(imc) {
     /*
-    retrieve data & update sessionStorage data by user status as below
+    retrieve data & update localStorage data by user status as below
     before login/
     after login
         -free user
@@ -238,7 +238,7 @@ function imcload(imc) {
     */
     //menutoggle = "";
     if (typeof imc == "undefined")
-        imc = sessionStorage.getItem("imctable");
+        imc = localStorage.getItem("imctable");
     var pimc, imckey;
 
     if (imc != null && imc != "") {
@@ -246,7 +246,7 @@ function imcload(imc) {
         imckey = Object.keys(pimc);
     }
     checklastupdate("imcsetting");
-    //if (sessionStorage.getItem("imcdata") == null) jsonReadallAjax("imcdata");
+    //if (localStorage.getItem("imcdata") == null) jsonReadallAjax("imcdata");
     //else { checklastupdate("imcdata"); sec += 300;}
    // if ($.inArray("adminmenu", imckey) == -1) jsonReadallAjax("imctable_admin");
     if ($.inArray("menu", imckey) == -1) {
@@ -259,12 +259,10 @@ function imcload(imc) {
 }
 function imcloadchk(sname) {
     var rtn = false;
-    if (sessionStorage.getItem(sname) != "" && sname in sessionStorage) rtn = true;
+    if (localStorage.getItem(sname) != "" && sname in localStorage) rtn = true;
     return rtn;
 }
-function getuserid() {
-    return '<%= System.Web.HttpContext.Current.User.Identity.Name %>';
-}
+ 
 function getlogin() {
     if (getuserid() == "") login = "";
     else {
@@ -323,7 +321,7 @@ function menuInit(extlink) {
     cssInsert("menu-css", "/js2/menu_slide/menu.css");
     setTimeout(function () {
         $("#menu").find("ul").find("a").css("width", $("#menu").css("width"));
-        var imc=sessionStorage.getItem("imctable");
+        var imc=localStorage.getItem("imctable");
         findsubid(JSON.parse(imc));
         $("#main-menu>li>ul>li>a[subid='" + subid + "']").click();
         funStop();
@@ -470,12 +468,12 @@ function menuHead(extlink) {
             });
             $("#areload").click(function () {
                 //menutoggle = "";
-                sessionStorage.removeItem("imctable");
-                sessionStorageinit({ reset:true },pageInit);
-               $("<div>" + JSON.stringify(JSON.parse(sessionStorage.getItem("imctable")).menu) + "</div>").dialog();
+                localStorage.removeItem("imctable");
+                localStorageinit({ reset:true },pageInit);
+               $("<div>" + JSON.stringify(JSON.parse(localStorage.getItem("imctable")).menu) + "</div>").dialog();
             });
             $("#ashowmenu").click(function () {
-                $("<div>" + JSON.stringify(JSON.parse(sessionStorage.getItem("imctable")).menu) + "</div>").dialog();
+                $("<div>" + JSON.stringify(JSON.parse(localStorage.getItem("imctable")).menu) + "</div>").dialog();
             });
         }
     });
@@ -783,12 +781,12 @@ function menuMain() {
                 , [{ "menuid": "admin1", "comp": comp, "subid": "j16011215331", "dvid": "fc0", "setting": { "gridstack": [{ "tabid": "001fc0", "id": "gs160114135720", "type": "text", "x": 0, "y": 0, "width": 12, "height": 2, "content": { "savetype": "html", "text": "<p>dsfadf</p>" } }], "tab": [{ "href": "001fc0", "html": "FirstTab" }] } }
                     , { "menuid": "admin1", "comp": comp, "subid": "j16011215331", "dvid": "jqac0", "datacode": "dt130614013757", "filter": [["name", "", [], "", "", false], ["code", "", [], "", "", false], ["parentcode", "", [], "", "", false], ["descript", "", [], "", "", false]], "field": [] }, "", "", "", "", "", ""]]
 
-            var ori = JSON.parse(sessionStorage.getItem("imctable"));
+            var ori = JSON.parse(localStorage.getItem("imctable"));
             $(tt).each(function (i, k) {
                 deleteimcsetting("imctable", k);
                 ori[k] = admin[i]
             });
-            sessionStorage.setItem("imctable", JSON.stringify(ori));
+            localStorage.setItem("imctable", JSON.stringify(ori));
             jsonSaveAjax("imctable", JSON.stringify(ori));
         }
     }
@@ -1291,11 +1289,11 @@ function menuTree(treediv,options) {
          //submenu order change하여 갈아끼기
          var sublist = menuMy("submenu");//selectimc("imctable", menutoggle+"submenu");
          sublist = jstreeOrder(sublist, odr, "subid");
-         var imctb = sessionStorage.getItem("imctable");
+         var imctb = localStorage.getItem("imctable");
          if (imctb != "") {
              imctb = JSON.parse(imctb);
              var imc = updateimcJson(imctb, menutoggle+"submenu", sublist);
-             sessionStorage.setItem("imctable", JSON.stringify(imc));
+             localStorage.setItem("imctable", JSON.stringify(imc));
          }
      });
         //newly create할 때만 생성, node create후 reload할 때는 중지
@@ -1500,8 +1498,8 @@ function menuData() {
 var menutoggle = "",templatetype = "common";
 function menuEditInit() {
     if (menutoggle == "template"){
-        if (sessionStorage.getItem("imctemplate") == null) {
-            sessionStorageinit({ include: ['imctemplate'] });
+        if (localStorage.getItem("imctemplate") == null) {
+            localStorageinit({ include: ['imctemplate'] });
         }
         
         setTimeout(function () { menuEdit(); }, 1000);
@@ -1836,8 +1834,8 @@ function menubatchinsert(arr,befinsert) {
     jsonReadallAjax("imctemplate", menubatchinsert.rtnfunc,[arr.join(","),befinsert]);
    
     function rtnfunc(dt,arrjoin,befinsert) {
-        var imctb = sessionStorage.getItem("imctable");
-        if (imctb == null) sessionStorage.setItem("imctable", "{}");
+        var imctb = localStorage.getItem("imctable");
+        if (imctb == null) localStorage.setItem("imctable", "{}");
         if (imctb != "")
             imc = JSON.parse(imctb);
 
@@ -1862,7 +1860,7 @@ function menubatchinsert(arr,befinsert) {
             });
            
         });
-        sessionStorage.setItem("imctable", JSON.stringify(imc));
+        localStorage.setItem("imctable", JSON.stringify(imc));
         jsonSaveAjax("imctable", JSON.stringify(imc));
         menuEdit();
     }
@@ -1908,7 +1906,7 @@ function resetTab() {
     });
     function execode() {
         var list = [menutoggle+"submenu", "control"];
-        var imctb = sessionStorage.getItem("imctable");
+        var imctb = localStorage.getItem("imctable");
         var imc = JSON.parse(imctb);
         $(list).each(function (i, k) {
             var sel = selectimc("imctable", k);
@@ -1921,7 +1919,7 @@ function resetTab() {
             });
             imc[k] = sel;
         });
-        sessionStorage.setItem("imctable", JSON.stringify(imc));
+        localStorage.setItem("imctable", JSON.stringify(imc));
         //menuid = 1;
         menuEdit();
     }
@@ -2189,7 +2187,7 @@ function menuPageinsert(that) {
     //delete group objects
     var storename = 'imctable';
     if (menutoggle == 'template') storename = 'imctemplate';
-    var imctb = sessionStorage.getItem(storename);
+    var imctb = localStorage.getItem(storename);
     var imc = JSON.parse(imctb);
     var sel = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
     var adjust = 0;
@@ -2202,7 +2200,7 @@ function menuPageinsert(that) {
         }
     });
     imc[menutoggle+"submenu"] = sel;
-    sessionStorage.setItem(storename, JSON.stringify(imc));
+    localStorage.setItem(storename, JSON.stringify(imc));
 
     //insert batch object
     var list = [];
@@ -2257,8 +2255,8 @@ function menuDialogSave() {
     var storename = 'imctable';
     if (menutoggle == "template") {
         storename = 'imctemplate';
-        var imctb = sessionStorage.getItem(storename);
-        if (imctb == null) sessionStorage.setItem(storename, "{}");
+        var imctb = localStorage.getItem(storename);
+        if (imctb == null) localStorage.setItem(storename, "{}");
         if (imctb != "")
              imc = JSON.parse(imctb);
         if (imc.hasOwnProperty(menutoggle + 'submenu')) {
@@ -2273,7 +2271,7 @@ function menuDialogSave() {
             if (!chkexist)
                 submenu.push(rdt);
         }
-        sessionStorage.setItem(storename, JSON.stringify(imc));
+        localStorage.setItem(storename, JSON.stringify(imc));
         jsonSaveAjax(storename, JSON.stringify(imc));
 
         //updateimc(storename, menutoggle + 'submenu', rdt, "subid", $("#spId").text());
@@ -2303,7 +2301,7 @@ function menuDialogSave() {
 }
 function iframeInsert(mid,sid) {
     var href="";
-    var imctb = sessionStorage.getItem("imctable");
+    var imctb = localStorage.getItem("imctable");
     imctb = JSON.parse(imctb);
 
     //submenu: add table
@@ -2320,10 +2318,10 @@ function iframeInsert(mid,sid) {
     var ctrlist = imctb.control;
     ctrlist.push({ "datacode": "", "menuid": mid, "subid": sid, "dvid": "hc0", "setting": { "src": href + "^", "width": "100^%", "height": "100^%", "scrolling": "no"} });
 
-    sessionStorage.setItem("imctable", JSON.stringify(imctb));
+    localStorage.setItem("imctable", JSON.stringify(imctb));
     ////remote upload
     //if (remote)
-    //    sessionStorageUpAjax(getlogin().comp, getlogin().id, "imctable", JSON.stringify(imctb));
+    //    localStorageUpAjax(getlogin().comp, getlogin().id, "imctable", JSON.stringify(imctb));
 }
 function clearDiv(id) {
     //before remove create another div and rename
@@ -2444,8 +2442,8 @@ function menuEditSave() {
     set.permissionname = $("#lbPermission1").text();
     set.permission = $("#inpPermission1").val();
 
-    var imctb = sessionStorage.getItem(storename);
-    if (imctb == null) sessionStorage.setItem(storename, "{}");
+    var imctb = localStorage.getItem(storename);
+    if (imctb == null) localStorage.setItem(storename, "{}");
     if (imctb != "")
         imc = JSON.parse(imctb);
       if (imc.hasOwnProperty(menutoggle + 'menu')) {
@@ -2482,7 +2480,7 @@ function menuEditSave() {
             });
         });
     }
-      sessionStorage.setItem(storename, JSON.stringify(imc));
+      localStorage.setItem(storename, JSON.stringify(imc));
       jsonSaveAjax(storename, JSON.stringify(imc));
     //dashed border remove
       var del = "";
@@ -2546,7 +2544,7 @@ function menuEditDel() {
         var storename = 'imctable';
         if (menutoggle == 'template') storename = 'imctemplate';
 
-        var imctb = sessionStorage.getItem(storename);
+        var imctb = localStorage.getItem(storename);
         var imc = JSON.parse(imctb);
         $(list).each(function (i, k) {
             var sel = selectimc(storename, k);
@@ -2559,7 +2557,7 @@ function menuEditDel() {
             });
             imc[k] = sel;
         });
-        sessionStorage.setItem(storename, JSON.stringify(imc));
+        localStorage.setItem(storename, JSON.stringify(imc));
         menuid = 1;
         menuEdit();
     }
@@ -3598,36 +3596,36 @@ jQuery.fn.comments = function (blnDeep) {
 //#endregion
 //#endregion
 
-//#region sessionStorage IN/OUT
+//#region localStorage IN/OUT
 function imcsetting(storename,dataname,data) {
     //storename:imcsetting,dataname:calendar,data:json data
 
     var json = "";
     if(storename=="") storename="imcsetting";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
 
         data = JSON.parse(data);
         var rtn = updateimcJson(json, dataname, data);
-        sessionStorage.setItem(storename, JSON.stringify(rtn));
+        localStorage.setItem(storename, JSON.stringify(rtn));
         updateimcsettingtime(storename, dataname);
     }
     else
-        sessionStorage.setItem(storename, "{\"" + dataname + "\":" + data + "}");
+        localStorage.setItem(storename, "{\"" + dataname + "\":" + data + "}");
 
-   // sessionStorageUpAjax(log.comp, log.id, storename, sessionStorage.getItem(storename));
+   // localStorageUpAjax(log.comp, log.id, storename, localStorage.getItem(storename));
 
 }
 function imcsettingAjax() {
     var log = getlogin();
-    return sessionStorageFindAjax(log.comp, log.staff, "imcsetting");
+    return localStorageFindAjax(log.comp, log.staff, "imcsetting");
 }
 function imcdatasetting(storename, code, data) {
     var json = "";
     if (storename == "") storename = "imcsetting";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
     }
     data = JSON.parse(data);
@@ -3638,7 +3636,7 @@ function imcdatasetting(storename, code, data) {
     })
 
     var rtn = updateimcJson(json, dataname, data);
-    sessionStorage.setItem(storename, JSON.stringify(rtn));
+    localStorage.setItem(storename, JSON.stringify(rtn));
     updateimcsettingtime(storename, dataname);
 
 }
@@ -3689,8 +3687,8 @@ function deleteimcdatalist(data, keycode, keyvalue) {
     return data;
 }
 function updateimcdata(data) {
-    var imcdata = sessionStorage.getItem("imcdata");
-    if (imcdata == null) sessionStorage.setItem("imcdata", "{}");
+    var imcdata = localStorage.getItem("imcdata");
+    if (imcdata == null) localStorage.setItem("imcdata", "{}");
         imcdata = JSON.parse(imcdata);
     var chkexist=false;
     $.each(imcdata,function (i, k) {
@@ -3701,12 +3699,12 @@ function updateimcdata(data) {
         }
     });
     if(!chkexist) imcdata.push(data);
-    sessionStorage.setItem("imcdata",JSON.stringify(imcdata));
+    localStorage.setItem("imcdata",JSON.stringify(imcdata));
 }
 function deleteimcdatavalue(datacode,idname,idcode) {
     //imcdata내의 dataset을 찾아 해당id값이 code인 element delete
     // ex: datacode:"dt150603073923",idname:"id",idcode:"c299"
-    var imcdata = sessionStorage.getItem("imcdata");
+    var imcdata = localStorage.getItem("imcdata");
     if (imcdata != null)
         imcdata = JSON.parse(imcdata);
     $.each(imcdata,function (i, k) {
@@ -3717,10 +3715,10 @@ function deleteimcdatavalue(datacode,idname,idcode) {
             });
         }
     });
-    sessionStorage.setItem("imcdata",JSON.stringify(imcdata));
+    localStorage.setItem("imcdata",JSON.stringify(imcdata));
 }
 function deleteimcdata(code) {
-    var imcdata = sessionStorage.getItem("imcdata");
+    var imcdata = localStorage.getItem("imcdata");
     if (imcdata != null)
         imcdata = JSON.parse(imcdata);
     $.each(imcdata, function (i, k) {
@@ -3729,13 +3727,13 @@ function deleteimcdata(code) {
             return false;
         }
     });
-    sessionStorage.setItem("imcdata", JSON.stringify(imcdata));
+    localStorage.setItem("imcdata", JSON.stringify(imcdata));
 }
 function selectimc1(storename, dataname,keycode,keyvalue) {
     var json = "",json1="";
     var rtn = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         if (json != "") {
             json1 = JSON.parse(json);
             $.each(json1, function (key, data) {
@@ -3776,8 +3774,8 @@ function selectimc1(storename, dataname,keycode,keyvalue) {
 function selectimc(storename, dataname, keycode, keyvalue) {
     var json = "", json1 = "";
     var rtn = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         if (json != "") {
             json1 = JSON.parse(json);
             if (dataname == "" | dataname == "*") {
@@ -3827,8 +3825,8 @@ function selectimc(storename, dataname, keycode, keyvalue) {
 function selectimcdata(storename, code) {
     var json = "";
     var rtn = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
         $.each(json, function (key, data) {
             if (data.code == code) {
@@ -3884,13 +3882,13 @@ function selectimctable(menuid, subid, dvid) {
     return rtn;
 }
 
-function sessionStorageinit(options,callback,optarr) {
-    //option:reset:reload all sessionStorage from server, include:anything in array load
+function localStorageinit(options,callback,optarr) {
+    //option:reset:reload all localStorage from server, include:anything in array load
     //options:{reset:true,include:['imctable','imcsetting','imctemplate']}
     if (typeof options != "undefined") {
         if (options.hasOwnProperty("reset") && options.reset) {
             $(["imctable", "imcsetting"]).each(function (i, k) {
-                sessionStorage.removeItem(k);
+                localStorage.removeItem(k);
                 jsonReadallAjax(k, callback, optarr);
             });
         }
@@ -3901,8 +3899,8 @@ function sessionStorageinit(options,callback,optarr) {
         }
     }
     else {
-        var imctb = sessionStorage.getItem("imctable");
-        var imcset = sessionStorage.getItem("imcsetting");
+        var imctb = localStorage.getItem("imctable");
+        var imcset = localStorage.getItem("imcsetting");
         var list = [[imctb, "imctable"], [imcset, "imcsetting"]];//,[imcdt,"imcdata"]];
         $(list).each(function (i, k) {
             if (k[0] == "null" | k[0] == "")
@@ -3963,8 +3961,8 @@ function jsonReadallAjax(type, callback, optionarray) {
         }
     });
     function defaultfunc(dt,type) {
-        if (type.indexOf("imctable") >= 0) sessionStorage.setItem("imctable", JSON.stringify(dt)); //jsonfileReplace(type, dt);
-        if (type.indexOf("imctemplate") >= 0) sessionStorage.setItem("imctemplate", JSON.stringify(dt));
+        if (type.indexOf("imctable") >= 0) localStorage.setItem("imctable", JSON.stringify(dt)); //jsonfileReplace(type, dt);
+        if (type.indexOf("imctemplate") >= 0) localStorage.setItem("imctemplate", JSON.stringify(dt));
         setTimeout(function () { pageInit(); }, 1000);
     }
 }
@@ -4282,7 +4280,7 @@ function jsonfileReplace(storename,data) {
     //update,insert imctable with data from json file or db file
     //storename:imctable
     var name = storename.split("_");
-    var imc = sessionStorage.getItem(name[0]);
+    var imc = localStorage.getItem(name[0]);
     if (imc != null) imc = JSON.parse(imc);
     else imc = {};
      //var dtt = $.grep(data, function (a) {
@@ -4295,40 +4293,40 @@ function jsonfileReplace(storename,data) {
              imc[k] = data[k];
          });
          console.log(imc, key,data, storename)
-         sessionStorage.setItem(name[0], JSON.stringify(imc));
+         localStorage.setItem(name[0], JSON.stringify(imc));
   //   }
 }
 function initimctable() {
     var storename = 'imctable';
     if (menutoggle == 'template') storename = 'imctemplate';
-    var imctb = sessionStorage.getItem(storename);
+    var imctb = localStorage.getItem(storename);
     if (imctb == "" | imctb == null) {
         set={};
         set[menutoggle+'menu']=[];
         set[menutoggle + 'submenu'] = [];
         set[menutoggle + 'control'] = [];
-        sessionStorage.setItem("imctable",JSON.stringify(set));
+        localStorage.setItem("imctable",JSON.stringify(set));
     }
     else{
         var imctb1=JSON.parse(imctb);
         if (!imctb1.hasOwnProperty(menutoggle + 'menu')) imctb1[menutoggle + 'menu'] = [];
         if (!imctb1.hasOwnProperty(menutoggle + 'submenu')) imctb1[menutoggle + 'submenu'] = [];
         if (!imctb1.hasOwnProperty(menutoggle + 'control')) imctb1[menutoggle + 'control'] = [];
-        sessionStorage.setItem(storename,JSON.stringify(imctb1));
+        localStorage.setItem(storename,JSON.stringify(imctb1));
     }
 }
 function checklastupdate(storename) {
     var id = "";
     if(getlogin()!="")
     $.ajax({
-        url: webserviceprefix+"/WebService.asmx/sessionStorageFindLastupdate",
+        url: webserviceprefix+"/WebService.asmx/localStorageFindLastupdate",
         data: { id: JSON.stringify(getlogin().id),type: JSON.stringify(storename) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
         success: function (data, status) {
             if (data.d != "") {
                 if (isNew(storename,data.d))
-                    sessionStorageFindAjax(getlogin().comp, getlogin().id, storename);
+                    localStorageFindAjax(getlogin().comp, getlogin().id, storename);
                 }
         },
         error: function (response) {
@@ -4362,11 +4360,11 @@ function selectimctablearray(menuid, subid, likedvid) {
     }
     return rtn;
 }
-function sessionStorageFindAjax(comp,staff,storename) {
+function localStorageFindAjax(comp,staff,storename) {
     //var login = selectimc("imcsetting", "login");
     //var comp = comp, staff = staff, stype = storename;
     $.ajax({
-        url: webserviceprefix+"/WebService.asmx/sessionStorageFind",
+        url: webserviceprefix+"/WebService.asmx/localStorageFind",
         data: { comp: JSON.stringify(comp), staff: JSON.stringify(staff), stype: JSON.stringify(storename) },
         contentType: "application/json; charset=utf-8",
         dataType: "JSON",
@@ -4376,7 +4374,7 @@ function sessionStorageFindAjax(comp,staff,storename) {
                 if (dt.hasOwnProperty("lastupdate")) {
                     if (isNew(storename,dt.lastupdate)) {
                         jsonfileReplace(storename, dt);
-                        sweetmsgautoclose("Success", "Updated data to sessionStorage")
+                        sweetmsgautoclose("Success", "Updated data to localStorage")
                     }
                     //else
                     //    sweetmsgautoclose("Success", "Current data is new, no need to update")
@@ -4393,11 +4391,11 @@ function sessionStorageFindAjax(comp,staff,storename) {
 
     });
 }
-function sessionStorageUpAjax(comp, staff, storename,datastr) {
+function localStorageUpAjax(comp, staff, storename,datastr) {
 //    var login=selectimc("imcsetting", "login");
-//    var comp = login.comp, staff = login.staff, stype = 'imctable',data=sessionStorage.getItem("imctable")
+//    var comp = login.comp, staff = login.staff, stype = 'imctable',data=localStorage.getItem("imctable")
     $.ajax({
-        url: webserviceprefix+"/WebService.asmx/sessionStorageUpdate",
+        url: webserviceprefix+"/WebService.asmx/localStorageUpdate",
         type:"post",
         data: JSON.stringify({ comp: comp, staff: staff, stype: storename ,data:datastr}),
         contentType: "application/json; charset=utf-8",
@@ -4419,7 +4417,7 @@ function updateimctable(menuid1, subid1, dvid, savedata) {
     var storename = 'imctable';
     if (menutoggle == "template")
         storename = "imctemplate";
-    var imctb = sessionStorage.getItem(storename);
+    var imctb = localStorage.getItem(storename);
     imctb = JSON.parse(imctb);
     var exist = false,list=[];
     if (dvid != "" && typeof dvid != "undefined") {
@@ -4487,14 +4485,14 @@ function updateimctable(menuid1, subid1, dvid, savedata) {
         }
         imctb[menutoggle+'menu'] = list;
     }
-    sessionStorage.setItem(storename, JSON.stringify(imctb));
+    localStorage.setItem(storename, JSON.stringify(imctb));
     jsonSaveAjax(storename, JSON.stringify(imctb));
 }
 function deleteimcsetting(storename, dataname) {
     var json = "";
     var rtn = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
         switch (typeof dataname) {
             case "object":
@@ -4526,17 +4524,17 @@ function deleteimcsetting(storename, dataname) {
 
         })
     }
-    sessionStorage.setItem(storename, JSON.stringify(json));
+    localStorage.setItem(storename, JSON.stringify(json));
 }
 function deleteimc(storename,dataname,keyname,keyvalue){
-    //storename:sessionStorage name(imclist)
+    //storename:localStorage name(imclist)
     //dataname:objectkey("form")
     //keyname:object array key code(code)
     //keyvalue:keycode value("fr00001")
      var json = "";
     var rtn = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
         if (dataname == "" | dataname == "*") {
             var list = Object.keys(json);
@@ -4556,7 +4554,7 @@ function deleteimc(storename,dataname,keyname,keyvalue){
 
             json[dataname] = nullarchiveremove(json[dataname]);
         }
-        sessionStorage.setItem(storename,JSON.stringify(json));
+        localStorage.setItem(storename,JSON.stringify(json));
     }
 }
 function findimcsettingvalue(keycode, keyvalue, fieldname, data) {
@@ -4571,7 +4569,7 @@ function findimcsettingvalue(keycode, keyvalue, fieldname, data) {
     return rtn;
 }
 function updateimcJson(json, dataname, updateingdata) {
-    //json:pased sessionStorage data
+    //json:pased localStorage data
     //dataname:objectname in json
     //updateingdata:parsed data of dataname
     if (json == "" | json == "undefined") {
@@ -4594,16 +4592,16 @@ function updateimc(storename, dataname, jsondt,keycode,keyvalue) {
     //jsondt:parsed data of dataname(all data uder form object or single data of form array)
     //keycode:if jsondt is array, keycode name(if form is array, array key code name)
     //keyvalue:keycode value 
-    var imc = sessionStorage.getItem(storename);
+    var imc = localStorage.getItem(storename);
     if (imc == null) {
-        sessionStorage.setItem(storename,'');
-        imc = sessionStorage.getItem(storename);
+        localStorage.setItem(storename,'');
+        imc = localStorage.getItem(storename);
         }
     if (imc == "" && dataname!="" && dataname!="*") {
         var set = {}, arr = [];
         arr.push(jsondt);
         set[dataname] = arr;
-        sessionStorage.setItem(storename, JSON.stringify(set));
+        localStorage.setItem(storename, JSON.stringify(set));
     }
     else {
         imc = JSON.parse(imc);
@@ -4623,7 +4621,7 @@ function updateimc(storename, dataname, jsondt,keycode,keyvalue) {
         }
     }
     
-   sessionStorage.setItem(storename, JSON.stringify(imc));
+   localStorage.setItem(storename, JSON.stringify(imc));
     console.log(storename,imc)
     function datainput(dt){
         var dtt = $.grep(dt, function (a) {
@@ -4645,8 +4643,8 @@ function updateimcsettingvalue(storename, dataname, keycode, keyvalue, updatedda
     //dataname:leadstatus, keycode:"progresscode",keyvalue:"LE0000001",updateddata:{"progresscode:"LE0000001",....}
 
     var json = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
     }
     var chk = false;
@@ -4674,16 +4672,16 @@ function updateimcsettingvalue(storename, dataname, keycode, keyvalue, updatedda
     if (!chk1) {
         json[dataname] = [updateddata];
     }
-    if (sessionStorage.getItem(storename) != null) {
-        sessionStorage.setItem(storename, JSON.stringify(json));
+    if (localStorage.getItem(storename) != null) {
+        localStorage.setItem(storename, JSON.stringify(json));
     }
 }
 function updateimcsettingtime(storename,dataname) {
     //갱신일을 data별로 attach
 
     var json = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
     }
     var exist = false;
@@ -4711,8 +4709,8 @@ function updateimcsettingtime(storename,dataname) {
         upd.push (set);
         json["updated"] = upd;
     }
-    if (sessionStorage.getItem(storename) != null) {
-        sessionStorage.setItem(storename, JSON.stringify(json));
+    if (localStorage.getItem(storename) != null) {
+        localStorage.setItem(storename, JSON.stringify(json));
     }
 }
 function findimcsettingtime(storename,dataname) {
@@ -4720,8 +4718,8 @@ function findimcsettingtime(storename,dataname) {
 
     var rtn = "";
     var json = "";
-    if (sessionStorage.getItem(storename) != null) {
-        json = sessionStorage.getItem(storename);
+    if (localStorage.getItem(storename) != null) {
+        json = localStorage.getItem(storename);
         json = JSON.parse(json);
         json=json["updated"];
     }
@@ -4803,10 +4801,10 @@ function remoteimctable() {
         id = login.id;
     }
     //개인별 imctable remote가져옴
-    //sessionStorageFindAjax(comp, id, "imctable");
-    //imc = sessionStorage.getItem("imctable")
+    //localStorageFindAjax(comp, id, "imctable");
+    //imc = localStorage.getItem("imctable")
     //if (imc == null | imc=="")
-        sessionStorageFindAjax(comp, id, "imctable");
+        localStorageFindAjax(comp, id, "imctable");
 }
 function remoteUpdate(controlid, processcode, postdata) {
     //imcdata에 있는 dataset의 process내역(
@@ -4839,14 +4837,14 @@ function remoteUpdate(controlid, processcode, postdata) {
 function remoteimcupdate(type) {
     //remote upload
     //type:imctable,imcsetting,imcdata
-    var imc = sessionStorage.getItem(type),list,newimc,msg;
+    var imc = localStorage.getItem(type),list,newimc,msg;
     if (imc != null) {
         imc = JSON.parse(imc);
         imc.lastupdate=new Date();
         var comp = "", staff = "";
         if (getuserid() != "" && menutoggle=="" && getuserid()!="ykn") {
             comp = getlogin().comp, staff = getuserid();
-            sessionStorageUpAjax(comp,staff, type, JSON.stringify(imc));
+            localStorageUpAjax(comp,staff, type, JSON.stringify(imc));
             msg = "server database " + type + " data";
         }
         else {
@@ -5191,7 +5189,7 @@ function connectstringSave() {
 function makeDatasrc() {
     var dtcode = "<label for='lbDatacode'>Datacode :</label><label id='lbDatacode'></label><button onclick='deldata()'>Delete</button>";
     var usecode = "<label for='lbCtrcode'>Data for :</label><label id='lbCtrcode'></label>";
-    var selsrc = "";//makeCtr(["select", "--select--,;sessionStorage,sessionStorage;Remote,remote;직접입력,input", "selSrc", "multiple", "onchange:showbysrc($(this))"]);
+    var selsrc = "";//makeCtr(["select", "--select--,;localStorage,localStorage;Remote,remote;직접입력,input", "selSrc", "multiple", "onchange:showbysrc($(this))"]);
     var view = "<div id='dvdataedit' style='padding:5px 0 5px 0;'></div>";
     var list = "<table id='tbDatalist'></table><div id='dvDatalistpager'></div>";
     //tab 사용시
@@ -5290,7 +5288,7 @@ function accordmake1(accord,head,content) {
     return accord;
 }
 function Locallist() {
-    //sessionStorage에 있는 storename/dataname을 select로 생성
+    //localStorage에 있는 storename/dataname을 select로 생성
     if ($("#selLocal")) {
         $("#selLocal").remove();
         $("label[for='selLocal']").remove();
@@ -5303,12 +5301,12 @@ function Locallist() {
     opt.appendChild(document.createTextNode("--select--"));
     sel.appendChild(opt);
     var locallist = ["imcsetting","googledata"];
-    $.each(sessionStorage, function (i, k) {
+    $.each(localStorage, function (i, k) {
         if ($.inArray(i,locallist)>-1) {
             optg = document.createElement('optgroup');
             optg.setAttribute("label", i);
             sel.appendChild(optg);
-            var json = sessionStorage.getItem(i);
+            var json = localStorage.getItem(i);
             json = JSON.parse(json);
             $.each(json, function (key, data) {
                 if (key != "updated") {
@@ -5931,7 +5929,7 @@ function ifApply(type) {
             jsonReadAjax('imcdata', '', '', '', dataList);
             $("#tab-Contain").tabs('enable', 0);
             $("#tab-Contain").tabs('enable', 1);
-            var datasrc = sessionStorage.getItem("imcdata");
+            var datasrc = localStorage.getItem("imcdata");
             if (datasrc == '' | datasrc == null) {
                 dataListOnlyAjax(true);
             }
@@ -5994,7 +5992,7 @@ function dataListAjax(datacode,reload) {
 }
 var readydt = "";
 function imcdataupdate(storename, key, json, type) {
-     var datasrc = sessionStorage.getItem(storename);
+     var datasrc = localStorage.getItem(storename);
      if (datasrc != "" && datasrc != null) {
          datasrc = eval("(" + datasrc + ")");
 
@@ -6010,13 +6008,13 @@ function imcdataupdate(storename, key, json, type) {
          if (!chk)
              datasrc.push(json[0]);
      }
-sessionStorage.setItem(storename, JSON.stringify(datasrc));
+localStorage.setItem(storename, JSON.stringify(datasrc));
 }
 function imcdatalistupdate(storename, key, json,type) {
     Array.prototype.diff = function (a) {
         return this.filter(function (i) { return a.indexOf(i) < 0; });
     };
-    var datasrc = sessionStorage.getItem(storename);
+    var datasrc = localStorage.getItem(storename);
     if (datasrc != "" && datasrc != null) {
         datasrc = eval("(" + datasrc + ")");
         var oldarr = [],newarr=[];
@@ -6040,7 +6038,7 @@ function imcdatalistupdate(storename, key, json,type) {
     else {
         datasrc = json;
     }
-    sessionStorage.setItem(storename, JSON.stringify(datasrc));
+    localStorage.setItem(storename, JSON.stringify(datasrc));
 }
 function dataList(datasrc) {
     //gridid:another datalist grid , rtnctr: parent page control that receive selected dataset
@@ -8319,7 +8317,7 @@ function dtable2Make(data) {
     dataInputInject("dtable2", "pgdtable2", colname, colmodel, data);
 }
 function dataGrid(gridid,pagerid) {
-    var datasrc = sessionStorage.getItem("imcdata");
+    var datasrc = localStorage.getItem("imcdata");
     if (datasrc == '' | datasrc == null) {
         dataListOnlyAjax(true);
     }
@@ -8475,7 +8473,7 @@ function editDatacode(datacode, filterdata) {
     var dt = "";
     if (datacode != "") {
         var exist = false;
-        var data = JSON.parse(sessionStorage.getItem("imcdata"));
+        var data = JSON.parse(localStorage.getItem("imcdata"));
         var type = "";
         $.each(data, function (i, k) {
             if (k.code == datacode) {
