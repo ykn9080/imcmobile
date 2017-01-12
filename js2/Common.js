@@ -1,6 +1,13 @@
 ﻿//#region login
 var googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
 var extlink = [];
+function declareglobal() {
+    googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
+    extlink = [];
+    menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "http://www.imcmaster.co.kr";
+    umenuid = "", usubid = "", omenuid = "", osubid = "", mtogg = "", hpcd = "";
+    tt, cnt = 0;
+}
 function jscssload(list, callback) {
     var cnt = 0;
     $.each(list, function (i, k) {
@@ -152,9 +159,9 @@ function jscssload(list, callback) {
         callback();
 }
 
-var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = location.hostname;
+var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "http://www.imcmaster.co.kr"; 
 function pageInit() {
-    if (webserviceprefix = "") webserviceprefix = "www.imcmaster.co.kr";
+    if (location.hostname!="") webserviceprefix = location.hostname; 
     var constr = $("#ctl00_hidConnect").val();
     if (typeof constr == "undefined")
         constr = "Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User Id=DB_9D66CD_imcmaster_admin;Password=ykn90809080;";

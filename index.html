@@ -113,7 +113,8 @@
     function onDeviceReady() {
 	    //navigator.splashscreen.hide();
 	    document.addEventListener("backbutton", ShowExitDialog, false);
-	    var log=localStorage.getItem("login");
+	    var log = localStorage.getItem("login");
+	    declareglobal();
         pageInit();	
         /*
 	    if(localStorage.getItem("resume")===null){
