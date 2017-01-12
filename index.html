@@ -471,9 +471,9 @@
 				    </li>
 			    </ul>
 		    </div><!-- /panel -->
-			<div data-role="header" data-theme="b">
-				<h3> IMCMaster Menu </h3>
-				<a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
+			<div data-role="header" data-theme="b" style="min-height:50px">
+				<h1> IMCMaster Menu </h1>
+				<a href="#nav-panel" data-icon="bars" data-iconshadow="true" data-iconpos="notext" >Menu</a>
 				<div class="ui-btn-left" style="color:white;"><label id="lbUsername"/>
 				</div>
 			</div>
@@ -523,15 +523,24 @@
 						 	$('#username').val(login.id);
 						 	$('#password').val(login.pass);
 					 	}
-					});
+					 });
+					 $(document).on("pagecreate", "#dvMenubar", function () {
+					     $(document).on("swiperight", "#dvMenubar", function (e) {
+					         if ($(".ui-page-active").jqmData("panel") !== "open") {
+					             if (e.type === "swiperight") {
+					                 $("#nav-panel").panel("open");
+					             }
+					         }
+					     });
+					 });
 					/*
 					$(document).on("click","set",function(){
-											$.mobile.changePage("#setting");
-											loadsetting();
-										}
-										$(document).on("click","back",function(){
-											ShowExitDialog();
-										}*/
+						$.mobile.changePage("#setting");
+						loadsetting();
+					}
+					$(document).on("click","back",function(){
+						ShowExitDialog();
+					}*/
 					
 				</script>
 				<div id="imgcontain" ></div>
