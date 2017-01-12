@@ -267,16 +267,25 @@ function imcloadchk(sname) {
     if (localStorage.getItem(sname) != "" && sname in localStorage) rtn = true;
     return rtn;
 }
- 
+function getuserid1() {
+    var id = "";
+    if (isApp()) {
+        var sett = localStorage.getItem("imcsetting");
+        if (sett != null) id = JSON.parse(sett).id;
+    }
+    else
+        id = getuserid();
+    return id
+}
 function getlogin() {
-    if (getuserid() == "") login = "";
+    if (getuserid1() == "") login = "";
     else {
         var login = selectimc("imcsetting", "login");
 
         //login정보가 없으면 가져옴
         if (typeof (login) == "undefined" | login == "" ) {
-            Login(getuserid());
-            //function getuserid() {return '<%= System.Web.HttpContext.Current.User.Identity.Name %>';}//각 페이별로 삽입
+            Login(getuserid1());
+            //function getuserid1() {return '<%= System.Web.HttpContext.Current.User.Identity.Name %>';}//각 페이별로 삽입
             login = "";
         }
     }
@@ -367,7 +376,7 @@ function menuHead(extlink) {
         var ulc = $("<ul>"), str = "";
         switch (k) {
             case "user":
-                var id = getuserid();
+                var id = getuserid1();
                 if (id != "") {
                     ahr.append($("<span lang='en' onclick=\"editUser('"+id+"')\">" + id + "</span>"));
                     str = "<li><a lang='en'  onclick=\"toggleLogin()\" >Log Out</a><li>";
@@ -650,7 +659,7 @@ function menuMain() {
             ll.append(menuSub(dt));
         }
     });
-    if (getuserid() == "")  menutoggle = "open";
+    if (getuserid1() == "")  menutoggle = "open";
     var smenu = menuMy("submenu");//selectimc("imctable", menutoggle+"submenu");
     if (smenu.length > 0) {var menuid1 = smenu[0].menuid, subid1 = smenu[0].subid; }
     function menuSub(dt) {
@@ -799,7 +808,7 @@ function menuMain() {
 }
 function menuHome() {
     //return to user menu
-    if (getuserid() == "") menutoggle = "open";
+    if (getuserid1() == "") menutoggle = "open";
    if (menutoggle == 'admin') menutoggle='';
     var sm = menuMy("submenu");//selectimc("imctable", menutoggle+"submenu");
     if (sm != "") {
@@ -4848,13 +4857,13 @@ function remoteimcupdate(type) {
         imc = JSON.parse(imc);
         imc.lastupdate=new Date();
         var comp = "", staff = "";
-        if (getuserid() != "" && menutoggle=="" && getuserid()!="ykn") {
-            comp = getlogin().comp, staff = getuserid();
+        if (getuserid1() != "" && menutoggle=="" && getuserid1()!="ykn") {
+            comp = getlogin().comp, staff = getuserid1();
             localStorageUpAjax(comp,staff, type, JSON.stringify(imc));
             msg = "server database " + type + " data";
         }
         else {
-            if (getuserid() == "ykn" && type == "imctable" && menutoggle !="open") type += "_login";
+            if (getuserid1() == "ykn" && type == "imctable" && menutoggle !="open") type += "_login";
             switch (type) {
                 case "imcsetting":
                     list=["csslist","preference"];
