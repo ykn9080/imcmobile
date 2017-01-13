@@ -884,7 +884,7 @@ function menuMainApp() {
         return ulc;
     }
     $("#main-menu a").click(function (event) {
-        if ($(this).attr("class") != "has-submenu") {
+        if ($(this).attr("data-role") != "collapsible") {
             menuid = $(this).attr("menuid");
             subid = $(this).attr("subid");
             //menuBreadcrumbs($($(this)[0]));
