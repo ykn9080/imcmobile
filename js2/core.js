@@ -183,7 +183,13 @@ function pageInit() {
         if (!isApp() && getuserid1() != "") menutoggle = "";
         if (isApp() && localStorage.getItem("imcsetting") != null) menutoggle = "";
         findsubid(JSON.parse(imc));
+        if (isApp())
+            initApp();
+        else
         init();
+    }
+    function initApp() {
+        menuMainApp(); initDisplay();
     }
     function init() {
         var theme = "cupertino", csshref, menu = selectimctable(menutoggle + menuid);
@@ -811,6 +817,92 @@ function menuMain() {
             jsonSaveAjax("imctable", JSON.stringify(ori));
         }
     }
+}
+function menuMainApp() {
+    jscriptInsert("breadcrumb", "/js2/jquery-rcrumbs/src/jquery.rcrumbs.js");
+    cssInsert("breadcrumb", "/js2/jquery-rcrumbs/dist/jquery.rcrumbs.min.css");
+ 
+    var topm = menuMy("menu");//selectimc("imctable", menutoggle + "menu");
+    topm.sort(function (a, b) {
+        return parseFloat(a.odr) - parseFloat(b.odr);
+    });
+    var subm = menuMy("submenu");
+    var nav = $("#nav-panel");
+    var cururl = window.location.pathname;// /android_asset/www/index.html
+    $("#main-menu").remove(); $("#dvTitle").remove();
+    var shead = "clean";
+    if (typeof topm != "undefined" && topm.hasOwnProperty("topmenu")) shead = topm[0].topmenu;
+    //if(ul.length==0){
+    var ul = $('<ul id="main-menu" data-role="listview"/>').appendTo(nav);
+    $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").appendTo($("#dvContent123"));
+    //}
+    $("<div id='dvName' style='float:left;margin:0 0 0 10px'/>").appendTo($("#dvTitle"));
+
+    var hr = "#", defarr = ["/"];
+    $(topm).each(function (i, k) {
+            hr = "/?menuid=" + k.menuid;
+        var ahr = $("<a  lang='en' menuid='" + k.menuid + "'>" + k.title + "</a>");
+        var ll = $("<li/>");
+        var dt = $.grep(subm, function (a) {
+            return a.parent == k.menuid;
+        });
+        if (dt.length > 0) {
+            ll.attr("data-role", "collapsible");
+            ll.attr("data-iconpos", "right");
+            ll.attr("data-inset", "true");
+            ll.append($("<h2>"+k.title+"</h2>"));
+            ll.append(menuSub(dt));
+        }
+        else
+            ll.append(ahr).appendTo(ul);
+    });
+    if (getuserid1() == "") menutoggle = "open";
+    var smenu = menuMy("submenu");
+    if (smenu.length > 0) { var menuid1 = smenu[0].menuid, subid1 = smenu[0].subid; }
+    function menuSub(dt) {
+        var ulc = $("<ul data-role='listview' data-theme='b'>");
+        $(dt).each(function (i, k) {
+            hr = "#";
+             hr = "/?menuid=" + k.menuid + "&subid=" + k.subid;
+            var ahr = $("<a  lang='en'   href='" + hr + "' menuid='" + k.menuid + "'  subid='" + k.subid + "' >" + k.text + "</a>");
+            var ls = $("<li/>");
+            var dt1 = $.grep(subm, function (a) {
+                return a.parent == k.subid;
+            });
+            if (dt1.length > 0) {
+                ll.attr("data-role", "collapsible");
+                ll.attr("data-iconpos", "right");
+                ll.attr("data-inset", "true");
+                ll.append($("<h2>" + k.title + "</h2>"));
+                ls.append(menuSub(dt1));
+            }
+            else
+                ls.append(ahr).appendTo(ulc);
+        });
+        return ulc;
+    }
+    $("#main-menu a").click(function (event) {
+        if ($(this).attr("class") != "has-submenu") {
+            menuid = $(this).attr("menuid");
+            subid = $(this).attr("subid");
+            menuBreadcrumbs($($(this)[0]));
+            $("#dvName").empty();
+            var title = $(this).text().replace("+", "");
+            $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
+            var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
+            var href;
+            if ($(this).attr("menutype") != "admin")
+                setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
+
+            $("#menu a").each(function (i, k) {
+                if ($(k).attr("id") == subid)
+                    $(k).addClass("active");
+                else
+                    $(k).removeClass("active");
+            });
+            return false;
+        }
+    });
 }
 function menuHome() {
     //return to user menu
