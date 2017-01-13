@@ -7242,6 +7242,28 @@ function resizeIframe($contain) {
                 .width(parseInt(parseFloat(newHeight) * rratio));
     }).resize();
 }
+var pinstatus = false;
+function refreshLayout() {
+    var mstyle = selectimctable(menuid, '', '');
+    if (typeof (mstyle) == "undefined" | mstyle == "") {
+        mstyle = {};
+        mstyle.width = 250;
+        mstyle.backcolor = "#4A6184";
+    }
+    if (mstyle.width == "") mstyle.width = 250;
+    if (pinstatus) {
+        $("#dvMenu1").attr("style", "float:left;position:absolute;width:" + mstyle.width + ";height:" + $(window).height() + "px");
+        var w = $(window).width() - parseInt(mstyle.width) - 5;
+        console.log(w, mstyle.width)
+        $('#tableinsert').attr("style", "clear:both;padding:5px 0 0 5px;float:right;width:" + w + "px");
+    }
+    else {
+        $("#dvMenu1").removeAttr("style");
+        $('#tableinsert').removeAttr("style");
+    }
+    //initDisplay('', '');
+
+}
 //#region drag & drop box
 function reloadexe(ctrid, codearr, btntype, btnobj) {
     console.log(ctrid, codearr, btnobj)
