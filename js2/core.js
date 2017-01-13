@@ -883,28 +883,28 @@ function menuMainApp() {
         });
         return ulc;
     }
-    $("#main-menu a").click(function (event) {
-        if ($(this).attr("data-role") != "collapsible") {
-            menuid = $(this).attr("menuid");
-            subid = $(this).attr("subid");
-            //menuBreadcrumbs($($(this)[0]));
-            $("#dvName").empty();
-            var title = $(this).text().replace("+", "");
-            $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
-            var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
-            var href;
-            initDisplay();
-            //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
+    //$("#main-menu a").click(function (event) {
+    //    if ($(this).attr("data-role") != "collapsible") {
+    //        menuid = $(this).attr("menuid");
+    //        subid = $(this).attr("subid");
+    //        //menuBreadcrumbs($($(this)[0]));
+    //        $("#dvName").empty();
+    //        var title = $(this).text().replace("+", "");
+    //        $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
+    //        var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
+    //        var href;
+    //        initDisplay();
+    //        //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
 
-            $("#menu a").each(function (i, k) {
-                if ($(k).attr("id") == subid)
-                    $(k).addClass("active");
-                else
-                    $(k).removeClass("active");
-            });
-            return false;
-        }
-    });
+    //        $("#menu a").each(function (i, k) {
+    //            if ($(k).attr("id") == subid)
+    //                $(k).addClass("active");
+    //            else
+    //                $(k).removeClass("active");
+    //        });
+    //        return false;
+    //    }
+    //});
 }
 function menuHome() {
     //return to user menu
