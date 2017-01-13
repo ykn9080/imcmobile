@@ -918,6 +918,7 @@ function clickmenu(md,sd,title) {
             var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
             var href;
             initDisplay();
+            $("[data-role=panel]").panel("close");
             //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
 }
 function menuHome() {
