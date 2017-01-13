@@ -865,8 +865,8 @@ function menuMainApp() {
         var ulc = $("<ul data-role='listview' data-theme='b'>");
         $(dt).each(function (i, k) {
             hr = "#";
-             hr = "/?menuid=" + k.menuid + "&subid=" + k.subid;
-            var ahr = $("<a  lang='en'   href='" + hr + "' menuid='" + k.menuid + "'  subid='" + k.subid + "' >" + k.text + "</a>");
+            // hr = "/?menuid=" + k.menuid + "&subid=" + k.subid;
+            var ahr = $("<a  lang='en'   href='" + hr + "' menuid='" + k.menuid + "'  subid='" + k.subid + "' onclick=\"clickmenu('"+k.menuid+"','"+k.subid+"','"+k.text+"')\" >" + k.text + "</a>");
             var ls = $("<li/>");
             var dt1 = $.grep(subm, function (a) {
                 return a.parent == k.subid;
@@ -905,6 +905,20 @@ function menuMainApp() {
     //        return false;
     //    }
     //});
+}
+function clickmenu(md,sd,title) {
+            //menuid = $(this).attr("menuid");
+            //subid = $(this).attr("subid");
+    //menuBreadcrumbs($($(this)[0]));
+    menuid = md;
+    subid = sd;
+            $("#dvName").empty();
+            title = title.replace("+", "");
+            $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
+            var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
+            var href;
+            initDisplay();
+            //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
 }
 function menuHome() {
     //return to user menu
