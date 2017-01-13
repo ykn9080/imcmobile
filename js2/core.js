@@ -854,6 +854,8 @@ function menuMainApp() {
         }
         else
             ll.append(ahr).appendTo(ul);
+        ul.append(ll).trigger('create');
+        ul.listview('refresh');
     });
     $('#main-menu').listview("refresh");
     if (getuserid1() == "") menutoggle = "open";
@@ -891,8 +893,8 @@ function menuMainApp() {
             $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
             var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
             var href;
-            if ($(this).attr("menutype") != "admin")
-                setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
+            initDisplay();
+            //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
 
             $("#menu a").each(function (i, k) {
                 if ($(k).attr("id") == subid)
