@@ -829,7 +829,7 @@ function menuMainApp() {
     var subm = menuMy("submenu");
     var nav = $("#nav-panel");
     var cururl = window.location.pathname;// /android_asset/www/index.html
-    $("#main-menu").remove(); $("#dvTitle").remove();
+    $("#main-menu").empty(); $("#dvTitle").remove();
   
     var ul = $('#main-menu');//<ul id="main-menu" data-role="listview"/>').appendTo(nav);
     $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").appendTo($("#dvContent123"));
