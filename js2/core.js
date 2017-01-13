@@ -849,7 +849,7 @@ function menuMainApp() {
             ll.attr("data-iconpos", "right");
             ll.attr("data-inset", "true");
             ll.append($("<h2>"+k.title+"</h2>"));
-            ll.append(menuSub(dt));
+            ll.append(menuSub(dt)).appendTo(ul);;
         }
         else
             ll.append(ahr).appendTo(ul);
@@ -872,7 +872,7 @@ function menuMainApp() {
                 ll.attr("data-iconpos", "right");
                 ll.attr("data-inset", "true");
                 ll.append($("<h2>" + k.title + "</h2>"));
-                ls.append(menuSub(dt1));
+                ls.append(menuSub(dt1)).appendTo(ulc);;
             }
             else
                 ls.append(ahr).appendTo(ulc);
