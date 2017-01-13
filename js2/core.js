@@ -857,7 +857,7 @@ function menuMainApp() {
         ul.append(ll).trigger('create');
         ul.listview('refresh');
     });
-    $('#main-menu').listview("refresh");
+    
     if (getuserid1() == "") menutoggle = "open";
     var smenu = menuMy("submenu");
     if (smenu.length > 0) { var menuid1 = smenu[0].menuid, subid1 = smenu[0].subid; }
@@ -887,7 +887,7 @@ function menuMainApp() {
         if ($(this).attr("class") != "has-submenu") {
             menuid = $(this).attr("menuid");
             subid = $(this).attr("subid");
-            menuBreadcrumbs($($(this)[0]));
+            //menuBreadcrumbs($($(this)[0]));
             $("#dvName").empty();
             var title = $(this).text().replace("+", "");
             $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
