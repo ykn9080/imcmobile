@@ -830,10 +830,8 @@ function menuMainApp() {
     var nav = $("#nav-panel");
     var cururl = window.location.pathname;// /android_asset/www/index.html
     $("#main-menu").remove(); $("#dvTitle").remove();
-    var shead = "clean";
-    if (typeof topm != "undefined" && topm.hasOwnProperty("topmenu")) shead = topm[0].topmenu;
-    //if(ul.length==0){
-    var ul = $('<ul id="main-menu" data-role="listview"/>').appendTo(nav);
+  
+    var ul = $('#main-menu');//<ul id="main-menu" data-role="listview"/>').appendTo(nav);
     $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").appendTo($("#dvContent123"));
     //}
     $("<div id='dvName' style='float:left;margin:0 0 0 10px'/>").appendTo($("#dvTitle"));
