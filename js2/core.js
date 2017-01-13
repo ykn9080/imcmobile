@@ -175,8 +175,7 @@ function pageInit() {
             Login(getuserid1());
     }
     var imc = localStorage.getItem("imctable")
-
-    if (imc == null | imc == "") {
+     if (imc == null | imc == "") {
         jsonReadallAjax("imctable");
     }
     else {
@@ -281,12 +280,13 @@ function imcloadchk(sname) {
 }
 function getuserid1() {
     var id = "";
+    var sett = localStorage.getItem("imcsetting");
     if (isApp()) {
-        var sett = localStorage.getItem("imcsetting");
         if (sett != null) id = JSON.parse(sett).id;
     }
-    else
-        id = getuserid();
+    else {
+            id = getuserid();
+    }
     return id
 }
 function getlogin() {
@@ -819,8 +819,8 @@ function menuMain() {
     }
 }
 function menuMainApp() {
-    jscriptInsert("breadcrumb", "/js2/jquery-rcrumbs/src/jquery.rcrumbs.js");
-    cssInsert("breadcrumb", "/js2/jquery-rcrumbs/dist/jquery.rcrumbs.min.css");
+    //jscriptInsert("breadcrumb", "/js2/jquery-rcrumbs/src/jquery.rcrumbs.js");
+    //cssInsert("breadcrumb", "/js2/jquery-rcrumbs/dist/jquery.rcrumbs.min.css");
  
     var topm = menuMy("menu");//selectimc("imctable", menutoggle + "menu");
     topm.sort(function (a, b) {
@@ -853,8 +853,8 @@ function menuMainApp() {
         }
         else
             ll.append(ahr).appendTo(ul);
-        ul.listview("refresh");
     });
+    ul.listview("refresh");
     if (getuserid1() == "") menutoggle = "open";
     var smenu = menuMy("submenu");
     if (smenu.length > 0) { var menuid1 = smenu[0].menuid, subid1 = smenu[0].subid; }
@@ -877,7 +877,6 @@ function menuMainApp() {
             }
             else
                 ls.append(ahr).appendTo(ulc);
-            ulc.listview("refresh");
         });
         return ulc;
     }
