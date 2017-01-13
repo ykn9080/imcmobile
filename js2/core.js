@@ -853,6 +853,7 @@ function menuMainApp() {
         }
         else
             ll.append(ahr).appendTo(ul);
+        ul.listview("refresh");
     });
     if (getuserid1() == "") menutoggle = "open";
     var smenu = menuMy("submenu");
@@ -876,6 +877,7 @@ function menuMainApp() {
             }
             else
                 ls.append(ahr).appendTo(ulc);
+            ulc.listview("refresh");
         });
         return ulc;
     }
