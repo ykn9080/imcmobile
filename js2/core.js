@@ -6669,6 +6669,13 @@ function infowindowView(marker, content, latlng, locid1, name1, locid, id, map) 
 //#endregion
 
 //#region misc
+function clearinserted() {
+    //remove all the inserted
+    $("#spdlist").remove();
+    $("#archivegdt").remove();
+    $("#spdataajax").remove();
+
+}
 function sweetmsg(title, body) {
     //swal({
     //    title: "<span style='color:#F8BB86'>Filtering Method<span>"
