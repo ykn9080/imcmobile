@@ -450,30 +450,34 @@
                         border-bottom-width: 0;
                     }
                 </style>
-			    <ul id="main-menu" data-role="listview" >
-				    <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
-				    <li data-role="collapsible" data-iconpos="right" data-inset="true">
-					    <h2>Birds</h2>
-					    <ul data-role="listview" data-theme="b">
-						    <li><a href="#">Condor</a></li>
-						    <li><a href="#">Eagle</a></li>
-						    <li><a href="#">Sparrow</a></li>
-					    </ul>
-					    </li>
-				    <li><a href="#">Humans</a></li>
-				    <li data-role="collapsible" data-iconpos="right" data-inset="false">
-				    <h2>Fish</h2>
-				    <ul data-role="listview" data-theme="b">
-					    <li><a href="#">Salmon</a></li>
-					    <li><a href="#">Pollock</a></li>
-					    <li><a href="#">Trout</a></li>
-				    </ul>
-				    </li>
-			    </ul>
-                <div style="padding:5px;margin:0">
-                    <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-mini ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-right">Close</a>
-                </div>
-                    </div><!-- /panel -->
+                <form class="userform">
+                    <div data-role="header">
+                        <h1>Menu</h1>
+                        <a data-rel="close" data-icon="gear" data-iconpos="notext">Add</a>
+                        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-mini ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-right">Close</a>
+                    </div><!-- /header -->
+                    <ul id="main-menu" data-role="listview">
+                        <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
+                        <li data-role="collapsible" data-iconpos="right" data-inset="true">
+                            <h2>Birds</h2>
+                            <ul data-role="listview" data-theme="b">
+                                <li><a href="#">Condor</a></li>
+                                <li><a href="#">Eagle</a></li>
+                                <li><a href="#">Sparrow</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Humans</a></li>
+                        <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                            <h2>Fish</h2>
+                            <ul data-role="listview" data-theme="b">
+                                <li><a href="#">Salmon</a></li>
+                                <li><a href="#">Pollock</a></li>
+                                <li><a href="#">Trout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </form>
+            </div><!-- /panel -->
 			<div data-role="header" data-theme="b" style="min-height:50px">
 				<h1> IMCMaster Menu </h1>
 				<a href="#nav-panel" data-icon="bars" data-iconshadow="true" data-iconpos="notext" >Menu</a>
