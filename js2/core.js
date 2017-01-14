@@ -830,15 +830,13 @@ function menuMainApp() {
     var cururl = window.location.pathname;// /android_asset/www/index.html
     //$("#main-menu").empty();
     $("#dvTitle").remove();
-  
+    $("#main-menu>li:not(:eq(0))").remove();
     var ul = $('#main-menu');//<ul id="main-menu" data-role="listview"/>').appendTo(nav);
-    ul.empty();
     $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").prependTo($("#dvContent123"));
     //}
     $("<div id='dvName' style='float:left;margin:0 0 0 10px'/>").appendTo($("#dvTitle"));
     var hr = "#", defarr = ["/"];
-    $('<li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>').appendTo(ul).trigger('create');
-    ul.listview('refresh');
+   // $('<li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>').appendTo(ul).trigger('create');    ul.listview('refresh');
     $(topm).each(function (i, k) {
             hr = "/?menuid=" + k.menuid;
         var ahr = $("<a lang='en' menuid='" + k.menuid + "'>" + k.title + "</a>");
