@@ -567,30 +567,29 @@ function menuMy(menu, menutype) {
             return a.templatetype == templatetype;
         });
 
-        return mm;
+     
     }
     else {
         var my = getlogin();
-        if (menutoggle != "open" | my != "") {
+        if (my != "" && menutoggle != "open") {
+            sl = permissionarray(my.slevel);
+            grp = permissionarray(my.group);
+
+            $(mm).each(function (i, k) {
+                var chk = false;
+                if (k.hasOwnProperty("permission") && k.permission != "") {
+                    var list = k.permission.split(",");
+                    $(list).each(function (a, b) {
+                        if ($.inArray(b, sl) == -1) chk = true;
+                        if ($.inArray(b, grp) == -1) chk = true;
+                    });
+                    if (chk) mm.splice(i, 1);
+                }
+            });
             mm = $.grep(mm, function (a) {
                 return a.comp == my.comp;
             });
         }
-        if (my != "") {
-            sl = permissionarray(my.slevel);
-            grp = permissionarray(my.group);
-        }
-        $(mm).each(function (i, k) {
-            var chk = false;
-            if (k.hasOwnProperty("permission") && k.permission != "") {
-                var list = k.permission.split(",");
-                $(list).each(function (a, b) {
-                    if ($.inArray(b, sl) == -1) chk = true;
-                    if ($.inArray(b, grp) == -1) chk = true;
-                });
-                if (chk) mm.splice(i, 1);
-            }
-        });
     }
     function permissionarray(my) {
         var myarr = [];
@@ -833,14 +832,14 @@ function menuMainApp() {
     $("#dvTitle").remove();
   
     var ul = $('#main-menu');//<ul id="main-menu" data-role="listview"/>').appendTo(nav);
-    $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").appendTo($("#dvContent123"));
+    ul.empty();
+    $("<div id='dvTitle' style='padding:10px 0 10px 0;margin-bottom:30px;clear:both;border-bottom:solid 0px #DFDFDF'/>").prependTo($("#dvContent123"));
     //}
     $("<div id='dvName' style='float:left;margin:0 0 0 10px'/>").appendTo($("#dvTitle"));
-
     var hr = "#", defarr = ["/"];
     $(topm).each(function (i, k) {
             hr = "/?menuid=" + k.menuid;
-        var ahr = $("<a  lang='en' menuid='" + k.menuid + "'>" + k.title + "</a>");
+        var ahr = $("<a lang='en' menuid='" + k.menuid + "'>" + k.title + "</a>");
         var ll = $("<li/>");
         var dt = $.grep(subm, function (a) {
             return a.parent == k.menuid;
@@ -3026,7 +3025,7 @@ function updateimctable(menuid1, subid1, dvid, savedata) {
         if (list == "") list = [];
         //control save
         $.each(list, function (i, k) {
-            if (k != null && k.menuid == menuid1 && k.subid == subid1 && k.dvid == dvid) {
+            if (k != null &&  k.dvid == dvid) {
                 if (savedata == '')
                     list.splice(i, 1);
                 else {
