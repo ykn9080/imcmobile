@@ -434,6 +434,11 @@
 
 	<span id="fastclick" >
 		<div data-role="page" data-theme="a" id="dvMenubar"  >
+            <h2>Panel Header</h2>
+            <p>You can close the panel by clicking outside the panel, pressing the Esc key, by swiping, or by clicking the button below:</p>
+            <a href="#pageone" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close panel</a>
+
+
 		    <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
                 <style>
                     #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading {
@@ -450,10 +455,10 @@
                         border-bottom-width: 0;
                     }
                 </style>
-                <div data-role="header">
-                    <h1>Menu</h1>
-                    <a data-rel="close" data-icon="delete" data-iconpos="right" data-inset="true"></a>
-                </div><!-- /header -->
+                    <h2>Menu</h2>
+                <p>You can close the panel by clicking outside the panel, pressing the Esc key, by swiping, or by clicking the button below:</p>
+                <a href="#nav-panel" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close</a>
+               
                 <ul id="main-menu" data-role="listview">
                     <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
                     <li data-role="collapsible" data-iconpos="right" data-inset="true">
