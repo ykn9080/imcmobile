@@ -837,6 +837,8 @@ function menuMainApp() {
     //}
     $("<div id='dvName' style='float:left;margin:0 0 0 10px'/>").appendTo($("#dvTitle"));
     var hr = "#", defarr = ["/"];
+    $('<li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>').appendTo(ul).trigger('create');
+    ul.listview('refresh');
     $(topm).each(function (i, k) {
             hr = "/?menuid=" + k.menuid;
         var ahr = $("<a lang='en' menuid='" + k.menuid + "'>" + k.title + "</a>");
@@ -882,28 +884,7 @@ function menuMainApp() {
         });
         return ulc;
     }
-    //$("#main-menu a").click(function (event) {
-    //    if ($(this).attr("data-role") != "collapsible") {
-    //        menuid = $(this).attr("menuid");
-    //        subid = $(this).attr("subid");
-    //        //menuBreadcrumbs($($(this)[0]));
-    //        $("#dvName").empty();
-    //        var title = $(this).text().replace("+", "");
-    //        $("#dvName").append($("<label style='font-size:2em;padding-top:10px;'>" + title + "</label>"));
-    //        var dtt = menuMy("submenu");//selectimc("imctable", menutoggle + "submenu");
-    //        var href;
-    //        initDisplay();
-    //        //    setTimeout(function () { initDisplay(); setTimeout(function () { multilangInject(); funStop(); }, 1000) }, 100);
-
-    //        $("#menu a").each(function (i, k) {
-    //            if ($(k).attr("id") == subid)
-    //                $(k).addClass("active");
-    //            else
-    //                $(k).removeClass("active");
-    //        });
-    //        return false;
-    //    }
-    //});
+   
 }
 function clickmenu(md,sd,title) {
             //menuid = $(this).attr("menuid");
