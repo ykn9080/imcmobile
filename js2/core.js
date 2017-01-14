@@ -189,6 +189,8 @@ function pageInit() {
     }
     function initApp() {
         menuMainApp(); initDisplay();
+        jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
+       , "fancybox", "quickPagination", "colorpicker", "datatables", "pivottable", "ddslick"]);
     }
     function init() {
         var theme = "cupertino", csshref, menu = selectimctable(menutoggle + menuid);
