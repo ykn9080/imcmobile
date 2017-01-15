@@ -187,8 +187,15 @@ function pageInit() {
         else
         init();
     }
-    function initApp() {
-        menuMainApp(); initDisplay();
+     function initApp() {
+         google.load('visualization', '1', {
+             packages: ['controls', 'charteditor'],
+             callback: function () {
+                 console.log('page inited....');
+                 menuMainApp(); initDisplay();
+             }
+         });
+        
       
     }
     function init() {
