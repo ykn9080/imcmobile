@@ -9421,7 +9421,7 @@ function jqgridInit(id, options, callback, param) {
         }
         if (options.hasOwnProperty("gdt")) gdt = options.gdt;
     }
-    contain.append(tb).append(tb.next());
+    contain.append(tb).append(pg);//.append(tb.next());
     if (typeof gdt == "undefined") {
         if ($("#archivegdt").text() != "")
             gdt = JSON.parse($("#archivegdt").text());
@@ -9451,6 +9451,7 @@ function jqgridInit(id, options, callback, param) {
     else
         RenderGridBlank(gridid, pagerid);
     function creategrid(data, tb, ctr, callback, param, filter) {
+        console.log(data, tb, ctr, callback, param, filter);
         var dt = datalistreturn(data);
         if (ctr.hasOwnProperty('data'))
             dt = applyFilter(dt, ctr.data.filter);
