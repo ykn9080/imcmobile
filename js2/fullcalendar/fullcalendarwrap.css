@@ -1,0 +1,59 @@
+    .divround {
+	    border:solid 1px #97BCE1;
+	    -moz-box-shadow:0 3 3px #000000;
+	    -webkit-box-shadow:0 3 3px #000000;
+	    -moz-border-radius:5px;
+	    -webkit-border-radius:5px;
+	    background-color:white;
+	    height:auto;
+	    position:absolute;
+	    top:50px;
+	    left:200px;
+	    z-index:1001;
+    }   
+	.wrap {
+		margin: 0 auto;
+	}
+	.devider_old {
+		float: left;
+		width: 10px;
+		margin-top:38px;
+	}	
+	.devider {
+		float: left;
+		
+	}	
+	.external-events {
+		float: left;
+		width: 220px;
+		text-align: left;
+		display:none;
+	}
+	.external-events h4 {
+		font-size: 16px;
+		margin-top: 0;
+		padding-top: 1em;
+	}
+	.external-events .fc-event {
+		margin: 10px 0;
+		cursor: pointer;
+	}
+	.external-events p {
+		margin: 1.5em 0;
+		font-size: 11px;
+		color: #666;
+	}
+	.external-events p input {
+		margin: 0;
+		vertical-align: middle;
+	}
+    .fullcalendar1{
+    	float:left;
+    }
+    .extdrag
+    {
+    	text-align:center;
+    	margin:5px 0;
+    	
+    	}
+    
