@@ -9451,7 +9451,7 @@ function jqgridInit(id, options, callback, param) {
     else
         RenderGridBlank(gridid, pagerid);
     function creategrid(data, tb, ctr, callback, param, filter) {
-        console.log(data, tb, ctr, callback, param, filter))
+        console.log(data, tb, ctr, callback, param, filter);
         var dt = datalistreturn(data);
         if (ctr.hasOwnProperty('data'))
             dt = applyFilter(dt, ctr.data.filter);
