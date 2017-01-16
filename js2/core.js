@@ -188,14 +188,15 @@ function pageInit() {
         init();
     }
      function initApp() {
-         google.load('visualization', '1', {
-             packages: ['controls', 'charteditor'],
-             callback: function () {
-                 console.log('page inited....');
-                 menuMainApp(); initDisplay();
-             }
-         });
-        
+         google.charts.load('current', { packages: ['corechart'] });
+         //google.load('visualization', '1', {
+         //    packages: ['controls', 'charteditor'],
+         //    callback: function () {
+         //        console.log('page inited....');
+         //        menuMainApp(); initDisplay();
+         //    }
+         //});
+         setTimeout(function () { menuMainApp(); initDisplay(); }, 2000);
       
     }
     function init() {
