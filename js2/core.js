@@ -3691,6 +3691,43 @@ function applyFilter(src, filter) {
         fieldlist = src;
     return fieldlist;
 }
+function fieldTypeFind(data, field) {
+    //field별 data type: string,number,datetime return
+    var valuelist11 = [];
+    //unique value insert
+    $.each(data, function (index, dt) {
+        if (dt[field] != null && dt[field] != "undefined" && dt[field] != "")
+            if (!arraycheckexist(valuelist11, dt[field]))
+                valuelist11.push(dt[field]);
+    });
+    if (isColumntype(valuelist11, "bool")) {
+        var type1 = "boolean";
+    }
+    else if (isColumntype(valuelist11, "number")) {
+        type1 = "number";
+        formatchg(type1);
+    }
+    else if (isColumntype(valuelist11, "datetime")) {
+        type1 = "datetime";
+        formatchg(type1)
+    }
+    else type1 = "string";
+    function formatchg(format) {
+        var newvlist = [];
+        $(valuelist11).each(function (i, k) {
+            switch (format) {
+                case "datetime":
+                    newvlist.push(moment(k).toDate());
+                    break;
+                case "number":
+                    newvlist.push(parseFloat(k));
+                    break;
+            }
+        });
+        return newvlist;
+    }
+    return { type: type1, valuelist: valuelist11 };
+}
 function findfilter(data) {
     //find filter by datatype
     var rtn = "";
