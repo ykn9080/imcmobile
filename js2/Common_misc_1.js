@@ -41,62 +41,7 @@ function multilangParser(data) {
 
     return removeblankarr(rtn);
 }
-function multilangInject() {
-    // var el = $(data).find('[lang]')
-    var langlist = [],exlist=[];
-    if (jsonlang == "") multilangReadAjax();
-    if(jsonlang !=""){
-        var lang1=JSON.parse(jsonlang);
-        langlist=(Object.keys(lang1.token))
-    }
-    //add lang="en"
-    var data = (document.documentElement.innerHTML);
-    var exclude = $(data).find("[lang='en']");
-    if (exclude.length > 0) {
-        $(exclude).each(function (i, k) {
-            $.merge(exlist, $(k).find("*"));
-        });
-    }
-    var domlist = ['label', 'input', 'button', 'option', 'textarea', 'img', 'a', 'i', 'p', 'span'];
-    $(domlist).each(function (a, b) {
-        var el = $(data).find(b)
-        $(el).each(function (i, k) {
-            var txt = "";
-            if ($(k).css("display") != "none") {
-                if ($(k).attr("title")) {
-                    txt = $(k).attr("title");
-                    if ($.inArray(txt, langlist) > -1)
-                        $(k).attr("lang", "en");
-                }
-                switch ($(k).get(0).tagName.toLowerCase()) {
-                    case "span": case "button": case "option": case "a":case "p":
-                        txt = $(k).text();
-                        break;
-                    case "input":
-                    case "textarea":
-                        txt = $(k).val();
-                        break;
-                    case "img":
-                        if (typeof $(k).attr("alt") != "undefined")
-                            txt = $(k).attr("alt");
-                        break;
 
-                }
-
-                if ($.inArray(txt, langlist) > -1 && $.inArray(k,exlist)==-1) {
-                    var target=$($('body').find(b)[i]);
-                    //var wrap=$("<div/>");
-                    //wrap.insertAfter(target);
-                    //var cl = target.clone().attr('lang', 'en');
-                    //wrap.append(cl);
-                    //cl.unwrap();
-                    // target.remove();
-                    target.attr('lang','en')
-                }
-            }
-        });
-    });
-}
 function multilangBuild(list) {
     var popup = [], url = "default.aspx", s = 0, langlist = [], donelist = [];
     $("body").append($("<div id='dvIfdata' style='z-index:104;'></div>"));
@@ -164,7 +109,7 @@ function multilangBuild(list) {
 
     }
 }
-var jsonlist = "";
+
 function multilangList1() {
     multilangReadAjax();
     var country = $("#selCountry").val();
@@ -1052,7 +997,7 @@ function launchEditor(id, src) {
     return false;
 }
 function editImage(imgsrc) {
-    //imgsrc="http://www.imcmaster.xyz/data/document/acuvue/file.png";
+    //imgsrc="http://www.imcmaster.co.kr/data/document/acuvue/file.png";
     var img = $("<img id='image1'/>");
     img.attr("src", imgsrc);
     $("document").append(img);
@@ -1119,8 +1064,6 @@ function nationalFlag(option) {
         if (typeof option != "undefined" && option.hasOwnProperty("text"))
             $(ct).each(function (i, k) {
                 if (k.Code.toLowerCase() == countrycode) {
-
-
                     switch (option.text) {
                         case "short":
                             rtn = countrycode.toUpperCase();
@@ -1129,14 +1072,12 @@ function nationalFlag(option) {
                             rtn = k.Name;
                             break;
                     }
-
                     if (countrycode == "en") rtn = "English";
 
                     if (countrycode != langcode)
                         rtn += "(" + langcode + ")";
                 }
             });
-
             return rtn;
     }
 }

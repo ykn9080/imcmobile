@@ -3847,7 +3847,6 @@ function googlechartInit(id, options) {
     var gdt = "";
     if (typeof options != "undefined") gdt = options.gdt
     drawChart1(chartdiv, gdt);
-    console.log('hhhh',chartdiv,gdt)
 }
 var wrapper, cht, data = "";
 function drawChart1(mode, opt) {
@@ -3885,7 +3884,6 @@ function drawChart2(data, mode, cht, opt) {
     //cht: same with gdt(chart info)
     //mode: div id to insert chart(''= chartid)
     var rtn = googlechartdt(cht, data);
-    console.log(rtn)
     var options = {}, ctype = "ColumnChart", layout, flist = "", slist = "", val = "", ser = "", ax = "", json;
     json = rtn.json, options = rtn.options, ctype = rtn.ctype, flist = rtn.flist, slist = rtn.slist;
     switch (mode) {
@@ -3950,7 +3948,6 @@ function googlechartdt(cht, data) {
             flist = layout.filterlist;
             slist = layout.sortlist;
         }
-        console.log(data,JSON.stringify(data))
         //var filter = '', dlist;
         //if (data.hasOwnProperty('filter')) filter = data.filter;
         //if (data.hasOwnProperty('datalist')) dlist = data.datalist;
@@ -4105,7 +4102,6 @@ function axismake(layout) {
 var paramshow = "none";
 var tb = "", drawcht;
 function drawDashboard(dvcht, cht, json, data) {
-    console.log(dvcht,cht,json,data)
     if (dvcht == "") dvcht = chartdiv;
     if (typeof dvcht == "object") var gchart = dvcht;
     else

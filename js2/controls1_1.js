@@ -98,7 +98,6 @@ function attachSecretMessage(marker, secretMessage) {
 //    attachSecretMessage(marker, secretMessages[i]);
   }
 function mapEdit(id, options) {
-
         pos = [];
         var src = '', type, gdt, code = '', rtnid = '';
         if (typeof options != "undefined" && options != "") {
@@ -186,7 +185,7 @@ function mapEdit(id, options) {
             var setting;
             if (gdt.hasOwnProperty('setting')) setting = gdt.setting;
             tb1 = mapFieldTable(id, dt, setting);
-            console.log(imcdata)
+            console.log(dt,imcdata)
         }
         else
          tb1 = mapFieldTable(id, "","");
