@@ -9,124 +9,126 @@ function declareglobal() {
 }
 function jscssload(list, callback) {
     var cnt = 0;
+    var pfx = "/js2/";
+    if(isApp())pfx="js2/"
     $.each(list, function (i, k) {
         switch (k) {
             case "font-awesome":
-                cssInsert("font-awesome-css", "/js2/font-awesome/css/font-awesome.min.css");
+                cssInsert("font-awesome-css", pfx+"font-awesome/css/font-awesome.min.css");
                 break;
             case "switchButton":
-                cssInsert("switchButton-css", "/js2/switchButton/jquery.switchButton.css");
-                jscriptInsert("switchButton-js", "/js2/switchButton/jquery.switchButton.js");
+                cssInsert("switchButton-css", pfx+"switchButton/jquery.switchButton.css");
+                jscriptInsert("switchButton-js", pfx+"switchButton/jquery.switchButton.js");
                 break;
             case "themeroller":
-                jscriptInsert("themeroller-js", "/js2/jquery-themeroller/jquery.themeswitcher.min.js");
+                jscriptInsert("themeroller-js", pfx+"jquery-themeroller/jquery.themeswitcher.min.js");
                 break;
             case "colresizable":
-                cssInsert("colresizable-css", "/js2/colResizable/samples/colResizable.Demo/css/main.css");
-                jscriptInsert("colresizable-js", "/js2/colResizable/colResizable-1.6.min.js");
+                cssInsert("colresizable-css", pfx+"colResizable/samples/colResizable.Demo/css/main.css");
+                jscriptInsert("colresizable-js", pfx+"colResizable/colResizable-1.6.min.js");
                 break;
             case "sweetalert":
-                cssInsert("sweetalert-css", "/js2/sweetalert/sweetalert.css");
-                jscriptInsert("sweetalert-js", "/js2/sweetalert/sweetalert.min.js");
+                cssInsert("sweetalert-css", pfx+"sweetalert/sweetalert.css");
+                jscriptInsert("sweetalert-js", pfx+"sweetalert/sweetalert.min.js");
                 break;
             case "jqgrid":
-                cssInsert("jqgrid-css", "/js2/jqGrid3/css/ui.jqgrid.css");
+                cssInsert("jqgrid-css", pfx+"jqGrid3/css/ui.jqgrid.css");
                 if ($("#jqgrid-js2").length > 0) {
                     $("#jqgrid-js2").remove();
                     $("#jqgrid-js1").remove();
                 }
-                jscriptInsert("jqgrid-js2", "/js2/jqGrid3/js/i18n/grid.locale-en.js");
-                jscriptInsert("jqgrid-js1", "/js2/jqGrid3/js/jquery.jqGrid.src.js");
+                jscriptInsert("jqgrid-js2", pfx+"jqGrid3/js/i18n/grid.locale-en.js");
+                jscriptInsert("jqgrid-js1", pfx+"jqGrid3/js/jquery.jqGrid.src.js");
                 break;
             case "fullcalendar":
-                cssInsert("fullcalendar-css", "/js2/fullcalendar/fullcalendar.css");
-                cssInsert("fullcalendar-wrap-css", "/js2/fullcalendar/fullcalendarwrap.css");
-                //cssInsert("fullcalendar-printer-css", "/js2/fullcalendar/fullcalendar.printer.css");
-                //jscriptInsert("fullcalendar-jquery-js1", "/js2/fullcalendarjquery.min.js");
-                jscriptInsert("fullcalendar-jquery-ui-js1", "/js2/fullcalendar/jquery-ui.js");
-                jscriptInsert("fullcalendar-moment-js1", "/js2/fullcalendar/moment.min.js");
-                jscriptInsert("fullcalendar-js1", "/js2/fullcalendar/fullcalendar.min.js");
+                cssInsert("fullcalendar-css", pfx+"fullcalendar/fullcalendar.css");
+                cssInsert("fullcalendar-wrap-css", pfx+"fullcalendar/fullcalendarwrap.css");
+                //cssInsert("fullcalendar-printer-css", pfx+"fullcalendar/fullcalendar.printer.css");
+                //jscriptInsert("fullcalendar-jquery-js1", pfx+"fullcalendarjquery.min.js");
+                jscriptInsert("fullcalendar-jquery-ui-js1", pfx+"fullcalendar/jquery-ui.js");
+                jscriptInsert("fullcalendar-moment-js1", pfx+"fullcalendar/moment.min.js");
+                jscriptInsert("fullcalendar-js1", pfx+"fullcalendar/fullcalendar.min.js");
                 break;
             case "datepicker": case "datetimepicker":
-                cssInsert("datetimepicker-css", "/js2/datetimepicker/jquery.datetimepicker.css");
-                jscriptInsert("datetimepicker-js1", "/js2/datetimepicker/jquery.datetimepicker.js");
+                cssInsert("datetimepicker-css", pfx+"datetimepicker/jquery.datetimepicker.css");
+                jscriptInsert("datetimepicker-js1", pfx+"datetimepicker/jquery.datetimepicker.js");
                 break;
             case "multipleselect":
-                cssInsert("multiple-select-css", "/js2/jquery-multiple-select/multiple-select.css");
-                jscriptInsert("multiple-select-js", "/js2/jquery-multiple-select/jquery.multiple.select.js");
+                cssInsert("multiple-select-css", pfx+"jquery-multiple-select/multiple-select.css");
+                jscriptInsert("multiple-select-js", pfx+"jquery-multiple-select/jquery.multiple.select.js");
                 break;
             case "jstree":
-                cssInsert("jstree-css", "/js2/jstree/default/style.min.css");
-                jscriptInsert("jstree-js", "/js2/jstree/jstree.js");
+                cssInsert("jstree-css", pfx+"jstree/default/style.min.css");
+                jscriptInsert("jstree-js", pfx+"jstree/jstree.js");
                 styleInsert("jstree-style", ".vakata-context { z-index: 10000001 !important; }.vakata_context { z-index: 10000001 !important; }");
                 break;
             case "jqmodal":
-                cssInsert("jqmodal-css", "/js2/jqmodal/jqmodal.css");
-                jscriptInsert("jqmodal-js", "/js2/jqmodal/jqmodal.js");
+                cssInsert("jqmodal-css", pfx+"jqmodal/jqmodal.css");
+                jscriptInsert("jqmodal-js", pfx+"jqmodal/jqmodal.js");
                 break;
             case "googlechart":
-                jscriptInsert("jsapi-js", "/js2/googlechart/jsapi.js");
+                jscriptInsert("jsapi-js", pfx+"googlechart/jsapi.js");
                 break;
             case "footable": //for table pagination/sorting
-                cssInsert("footable-css", "/js2/footable/css/footable.core.css");
-                cssInsert("footable-css1", "/js2/footable/css/footable-demos.css");
-                jscriptInsert("footable-js1", "/js2/footable/js/footable.js");
-                jscriptInsert("footable-js2", "/js2/footable/js/footable.paginate.js");
-                jscriptInsert("footable-js3", "/js2/footable/js/demos.js");
+                cssInsert("footable-css", pfx+"footable/css/footable.core.css");
+                cssInsert("footable-css1", pfx+"footable/css/footable-demos.css");
+                jscriptInsert("footable-js1", pfx+"footable/js/footable.js");
+                jscriptInsert("footable-js2", pfx+"footable/js/footable.paginate.js");
+                jscriptInsert("footable-js3", pfx+"footable/js/demos.js");
                 break;
             case "qtip2":
-                cssInsert("qtip2-css", "/js2/qtip2/qtip2.css");
-                jscriptInsert("qtip2-js", "/js2/qtip2/qtip2.js");
+                cssInsert("qtip2-css", pfx+"qtip2/qtip2.css");
+                jscriptInsert("qtip2-js", pfx+"qtip2/qtip2.js");
                 break;
             case "simplePagination":
-                cssInsert("simplePagination-css", "/js2/simplePagination/simplePagination.css");
-                jscriptInsert("simplePagination-js", "/js2/simplePagination/jquery.simplePagination.js");
+                cssInsert("simplePagination-css", pfx+"simplePagination/simplePagination.css");
+                jscriptInsert("simplePagination-js", pfx+"simplePagination/jquery.simplePagination.js");
                 break;
                 //case "quickPagination":
-                //    jscriptInsert("quickpagination_js", "/js2/jquery-quick-pagination-master/js/jquery.quick.pagination.js");
-                //    cssInsert("quickpagination-css", "/js2/jquery-quick-pagination-master/css/style.css");
+                //    jscriptInsert("quickpagination_js", pfx+"jquery-quick-pagination-master/js/jquery.quick.pagination.js");
+                //    cssInsert("quickpagination-css", pfx+"jquery-quick-pagination-master/css/style.css");
                 //    break;
             case "tinymce":
-                jscriptInsert("tinymce-js", "/js2/tinymce/tinymce.min.js");
+                jscriptInsert("tinymce-js", pfx+"tinymce/tinymce.min.js");
                 break;
             case "fancybox":
-                cssInsert("fancybox-css", "/js2/fancybox/jquery.fancybox.css");
-                jscriptInsert("fancybox-js", "/js2/fancybox/jquery.fancybox.js");
+                cssInsert("fancybox-css", pfx+"fancybox/jquery.fancybox.css");
+                jscriptInsert("fancybox-js", pfx+"fancybox/jquery.fancybox.js");
                 break;
             case "ddlslick"://dropdown with images
-                jscriptInsert("ddlslick-js", "/js2/ddlslick/ddlslick.js");
+                jscriptInsert("ddlslick-js", pfx+"ddlslick/ddlslick.js");
                 break;
             case "colorpicker":
-                cssInsert("colorpicker-css", "/js2/colorpicker/css/colorpicker.css");
-                jscriptInsert("colorpicker-js", "/js2/colorpicker/js/colorpicker.js");
+                cssInsert("colorpicker-css", pfx+"colorpicker/css/colorpicker.css");
+                jscriptInsert("colorpicker-js", pfx+"colorpicker/js/colorpicker.js");
                 break;
             case "lang":
-                jscriptInsert("lang-js1", "/js2/jquery-lang-js-master/js/jquery-lang.js");
-                jscriptInsert("lang-js2", "/js2/jquery-lang-js-master/js/jquery-cookie.js");
+                jscriptInsert("lang-js1", pfx+"jquery-lang-js-master/js/jquery-lang.js");
+                jscriptInsert("lang-js2", pfx+"jquery-lang-js-master/js/jquery-cookie.js");
                 break;
 
             case "datatables":
-                cssInsert("dataTables-css", "/js2/jquery-dataTables/media/css/jquery.dataTables.css");
-                jscriptInsert("dataTables-js", "/js2/jquery-dataTables/media/js/jquery.dataTables.js");
+                cssInsert("dataTables-css", pfx+"jquery-dataTables/media/css/jquery.dataTables.css");
+                jscriptInsert("dataTables-js", pfx+"jquery-dataTables/media/js/jquery.dataTables.js");
                 break;
             case "smartmenus":
-                cssInsert("smartmenus-css1", "/js2/smartmenus/css/sm-core-css.css");
-                cssInsert("smartmenus-css2", "/js2/smartmenus/css/sm-clean/sm-clean.css");
-                cssInsert("smartmenus-css3", "/js2/smartmenus/css/sm-simple/sm-simple.css");
-                cssInsert("smartmenus-css4", "/js2/smartmenus/css/sm-mint/sm-mint.css");
-                cssInsert("smartmenus-css5", "/js2/smartmenus/css/sm-blue/sm-blue.css");
-                jscriptInsert("smartmenus-js", "/js2/smartmenus/jquery.smartmenus.js");
+                cssInsert("smartmenus-css1", pfx+"smartmenus/css/sm-core-css.css");
+                cssInsert("smartmenus-css2", pfx+"smartmenus/css/sm-clean/sm-clean.css");
+                cssInsert("smartmenus-css3", pfx+"smartmenus/css/sm-simple/sm-simple.css");
+                cssInsert("smartmenus-css4", pfx+"smartmenus/css/sm-mint/sm-mint.css");
+                cssInsert("smartmenus-css5", pfx+"smartmenus/css/sm-blue/sm-blue.css");
+                jscriptInsert("smartmenus-js", pfx+"smartmenus/jquery.smartmenus.js");
 
                 break;
                 //case "googlemap":
                 //    jscriptInsert("googlemap-js", "https://maps.googleapis.com/maps/api/js?key="+googlekey);
                 //    break;
             case "pivottable":
-                cssInsert("pivot-css1", "/js2/pivottable-master/dist/pivot.css");
-                jscriptInsert("pivot-js1", "/js2/pivottable-master/dist/pivot.js");
-                jscriptInsert("pivot-js2", "/js2/pivottable-master/dist/c3_renderers.js");
-                jscriptInsert("pivot-js2", "/js2/pivottable-master/dist/d3_renderers.js");
-                jscriptInsert("pivot-js2", "/js2/pivottable-master/dist/gchart_renderers.js");
+                cssInsert("pivot-css1", pfx+"pivottable-master/dist/pivot.css");
+                jscriptInsert("pivot-js1", pfx+"pivottable-master/dist/pivot.js");
+                jscriptInsert("pivot-js2", pfx+"pivottable-master/dist/c3_renderers.js");
+                jscriptInsert("pivot-js2", pfx+"pivottable-master/dist/d3_renderers.js");
+                jscriptInsert("pivot-js2", pfx+"pivottable-master/dist/gchart_renderers.js");
                 break;
         }
     });
@@ -188,7 +190,10 @@ function pageInit() {
         init();
     }
      function initApp() {
-         google.charts.load('current', { packages: ['corechart'] });
+         jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
+            , "fancybox", "quickPagination", "colorpicker", "datatables", "pivottable", "ddlslick"]);
+
+         google.charts.load('visualization','1', { packages: ['corechart'] });
          //google.load('visualization', '1', {
          //    packages: ['controls', 'charteditor'],
          //    callback: function () {
