@@ -1,7 +1,8 @@
 ﻿var googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
 var extlink = [];
 function declareglobal() {
-    googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
+    googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0", output=0;
+    jsonlang = "", jsonlist = "";
     extlink = [];
     menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "http://www.imcmaster.co.kr";
     umenuid = "", usubid = "", omenuid = "", osubid = "", mtogg = "", hpcd = "";
@@ -413,21 +414,21 @@ function menuHead(extlink) {
                     multilangReadListAjax();
                     if (jsonlist != "") obj = jsonlist.split(';');
                     var set = $.merge(['en', 'us'], obj);
-                    var flaglist = nationalFlag({ text: "long", size: 16 }).flaglist;
-                    ahr.append($("<span id='splang'></span>"));
-                    $(flaglist).each(function (j, pp) {
-                        var p = pp.split(",");
-                        var langcode = p[0];
-                        var cname = p[1];
-                        var imgsrc = p[2];
-                        if ($.inArray(langcode, set) > -1) {
-                            //if (ll[0] == "us") { ll[0] = "en"; ll[1] = "English" }
+                    //var flaglist = nationalFlag({ text: "long", size: 16 }).flaglist;
+                    //ahr.append($("<span id='splang'></span>"));
+                    //$(flaglist).each(function (j, pp) {
+                    //    var p = pp.split(",");
+                    //    var langcode = p[0];
+                    //    var cname = p[1];
+                    //    var imgsrc = p[2];
+                    //    if ($.inArray(langcode, set) > -1) {
+                    //        //if (ll[0] == "us") { ll[0] = "en"; ll[1] = "English" }
 
-                            // if (ll[0] != b) countryname += "(" + b+")";
-                            str += "<li><a  lang='en' onclick=\"langload( '" + langcode + "');\"> <img src='" + imgsrc + "'/>" + cname + "</a></li>";
-                        }
+                    //        // if (ll[0] != b) countryname += "(" + b+")";
+                    //        str += "<li><a  lang='en' onclick=\"langload( '" + langcode + "');\"> <img src='" + imgsrc + "'/>" + cname + "</a></li>";
+                    //    }
 
-                    });
+                    //});
                 }
                 break;
             case "cog":
@@ -3846,7 +3847,7 @@ function googlechartInit(id, options) {
     var gdt = "";
     if (typeof options != "undefined") gdt = options.gdt
     drawChart1(chartdiv, gdt);
-
+    console.log('hhhh',chartdiv,gdt)
 }
 var wrapper, cht, data = "";
 function drawChart1(mode, opt) {
@@ -3884,6 +3885,7 @@ function drawChart2(data, mode, cht, opt) {
     //cht: same with gdt(chart info)
     //mode: div id to insert chart(''= chartid)
     var rtn = googlechartdt(cht, data);
+    console.log(rtn)
     var options = {}, ctype = "ColumnChart", layout, flist = "", slist = "", val = "", ser = "", ax = "", json;
     json = rtn.json, options = rtn.options, ctype = rtn.ctype, flist = rtn.flist, slist = rtn.slist;
     switch (mode) {
@@ -3948,7 +3950,7 @@ function googlechartdt(cht, data) {
             flist = layout.filterlist;
             slist = layout.sortlist;
         }
-
+        console.log(data,JSON.stringify(data))
         //var filter = '', dlist;
         //if (data.hasOwnProperty('filter')) filter = data.filter;
         //if (data.hasOwnProperty('datalist')) dlist = data.datalist;
@@ -4434,7 +4436,107 @@ function googlechartList() {
     else
         RenderGridBlank(gridid, pagerid);
 }
+function googleSortArray(sortlist, json) {
+    //SORTING: data=googledata,sortlist=column Index+","+sort order;(comma & semicolon)
+
+    var sortout = [];
+    var srt = sortlist.split(';');
+    for (i in srt) {
+        var st = {};
+        var srtt = srt[i].split(',');
+        //st.column = parseInt(srtt[0]);
+        var index = colindex(srtt[0], json);
+        if (typeof (index) != "undefined") {
+            st.column = index;
+            switch (srtt[1]) {
+                case "desc":
+                    st.desc = true;
+                    break;
+                case "asc":
+                    st.desc = false;
+                    break;
+            }
+            sortout.push(st);
+        }
+    }
+
+    function colindex(sr, json) {
+        output = json;
+        json = JSON.parse(JSON.parse(JSON.stringify(json))).cols;
+
+        var out;
+        $.each(json, function (i, k) {
+            if (sr == k.label)
+                out = i;
+        });
+
+        return out
+    }
+    return sortout;
+}
+var output;
+function googleFilterArray(filterlist) {
+    var srt = filterlist.split(';');
+    var filterout = [];
+
+    for (i in srt) {
+        var st = {};
+        var srtt = srt[i].split(',');
+        st = {};
+        st.column = parseInt(srtt[0]);
+        var d = new Date(srtt[1]);
+        if (srtt[2] == "") {
+            st.value = srtt[1];
+        }
+
+        else {
+
+            if ($.isNumeric(srtt[1])) {
+                st.minValue = parseFloat(srtt[1]);
+                st.maxValue = parseFloat(srtt[2]);
+            }
+            else if (d instanceof Date && d != "Invalid Date") {
+                st.minValue = new Date(srtt[1]);
+                st.maxValue = new Date(srtt[2]);
+            }
+        }
+
+
+        filterout.push(st);
+    }
+
+
+
+    return filterout;
+}
+function googleGroupbyValueArray(axislist, valuelist) {
+
+    var val = [];
+    var vset = {};
+    var vl = valuelist.split(';');
+    for (var t in vl) {
+        var tt = vl[t];
+        if (typeof tt == "string") {
+            tt = tt.split(',');
+            var index = axislist.split(',').length + parseInt(t);
+            var aggregate = tt[1];
+            var labelname = tt[0];
+
+            switch (aggregate) {
+                case "sum":
+                    val.push({ 'column': index, 'type': 'number', 'label': labelname, 'aggregation': google.visualization.data.sum });
+                    break;
+                case "avg":
+                    val.push({ 'column': index, 'type': 'number', 'label': labelname, 'aggregation': google.visualization.data.avg });
+                    break;
+            }
+        }
+    }
+
+    return val;
+}
 //#endregion
+
 //#region jstree exe
 function jstreeInit(id, options) {
     var gdt, editmode, contain = $("#" + id);
@@ -7596,6 +7698,119 @@ function reloadview(ctype, id, options) {
             break;
 
     }
+}
+var jsonlang = "", jsonlist = "";
+function multilangReadAjax(language) {
+    var pfx = "js2/";
+    if (isApp()) pfx = "/js2/";
+    if (typeof language == "undefined")
+        language = $("#selCountry").val();
+    if (typeof language == "undefined") language = 'kr';
+    var path = pfx+"jquery-lang-js-master/js/langpack/";
+    path += language + ".json";
+    $.ajax({
+        url: webserviceprefix + "/WebService.asmx/ReadData",
+        data: { path: JSON.stringify(path) },
+        contentType: "application/json; charset=utf-8",
+        dataType: "JSON",
+        success: function (data, status) {
+            jsonlang = data.d;
+            //var Lang = new Lang('en')
+        },
+        error: function (response) {
+            var r = jQuery.parseJSON(response.responseText);
+            console.log("Message: " + r.Message);
+            console.log("StackTrace: " + r.StackTrace);
+            console.log("ExceptionType: " + r.ExceptionType);
+        }
+
+    });
+}
+
+function multilangReadListAjax(callback) {
+    var list, list1 = [];
+    var pfx = "js2/";
+    if (isApp()) pfx = "/js2/";
+    var path = pfx+"jquery-lang-js-master/js/langpack/";
+    $.ajax({
+        url: webserviceprefix + "/WebService.asmx/ReadDataList",
+        data: { path: JSON.stringify(path), filetype: JSON.stringify("json") },
+        contentType: "application/json; charset=utf-8",
+        dataType: "JSON",
+        success: function (data, status) {
+            if (data.d != "") {
+                list = data.d.split(',');
+            }
+
+            $(list).each(function (i, k) {
+                list1.push(k.replace(".json", ""));
+            });
+            jsonlist = list1.join(';');
+            if (typeof callback === "function") callback(jsonlist);
+        },
+        error: function (response) {
+            var r = jQuery.parseJSON(response.responseText);
+            console.log("Message: " + r.Message);
+            console.log("StackTrace: " + r.StackTrace);
+            console.log("ExceptionType: " + r.ExceptionType);
+        }
+    });
+}
+function multilangInject() {
+    // var el = $(data).find('[lang]')
+    var langlist = [], exlist = [];
+    if (jsonlang == "") multilangReadAjax();
+    if (jsonlang != "") {
+        var lang1 = JSON.parse(jsonlang);
+        langlist = (Object.keys(lang1.token))
+    }
+    //add lang="en"
+    var data = (document.documentElement.innerHTML);
+    var exclude = $(data).find("[lang='en']");
+    if (exclude.length > 0) {
+        $(exclude).each(function (i, k) {
+            $.merge(exlist, $(k).find("*"));
+        });
+    }
+    var domlist = ['label', 'input', 'button', 'option', 'textarea', 'img', 'a', 'i', 'p', 'span'];
+    $(domlist).each(function (a, b) {
+        var el = $(data).find(b)
+        $(el).each(function (i, k) {
+            var txt = "";
+            if ($(k).css("display") != "none") {
+                if ($(k).attr("title")) {
+                    txt = $(k).attr("title");
+                    if ($.inArray(txt, langlist) > -1)
+                        $(k).attr("lang", "en");
+                }
+                switch ($(k).get(0).tagName.toLowerCase()) {
+                    case "span": case "button": case "option": case "a": case "p":
+                        txt = $(k).text();
+                        break;
+                    case "input":
+                    case "textarea":
+                        txt = $(k).val();
+                        break;
+                    case "img":
+                        if (typeof $(k).attr("alt") != "undefined")
+                            txt = $(k).attr("alt");
+                        break;
+
+                }
+
+                if ($.inArray(txt, langlist) > -1 && $.inArray(k, exlist) == -1) {
+                    var target = $($('body').find(b)[i]);
+                    //var wrap=$("<div/>");
+                    //wrap.insertAfter(target);
+                    //var cl = target.clone().attr('lang', 'en');
+                    //wrap.append(cl);
+                    //cl.unwrap();
+                    // target.remove();
+                    target.attr('lang', 'en')
+                }
+            }
+        });
+    });
 }
 //#endregion
 
