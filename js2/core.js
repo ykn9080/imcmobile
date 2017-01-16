@@ -3989,6 +3989,7 @@ function axismake(layout) {
 var paramshow = "none";
 var tb = "", drawcht;
 function drawDashboard(dvcht, cht, json, data) {
+    console.log(dvcht,cht,json,data)
     if (dvcht == "") dvcht = chartdiv;
     if (typeof dvcht == "object") var gchart = dvcht;
     else
