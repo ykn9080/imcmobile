@@ -9451,7 +9451,7 @@ function jqgridInit(id, options, callback, param) {
     else
         RenderGridBlank(gridid, pagerid);
     function creategrid(data, tb, ctr, callback, param, filter) {
-       
+        console.log(data, tb, ctr, callback, param, filter))
         var dt = datalistreturn(data);
         if (ctr.hasOwnProperty('data'))
             dt = applyFilter(dt, ctr.data.filter);
@@ -9462,7 +9462,7 @@ function jqgridInit(id, options, callback, param) {
             ctr.setting.data = JSON.stringify(dt);
         else
             ctr.setting = $.extend({ "data": JSON.stringify(dt) }, ctr.setting);
-
+        console.log(dt,ctr);
         var setting = ctr.setting;
         setting.colNames = ctr.colNames;
         setting.colModel = ctr.colModel;
