@@ -191,16 +191,9 @@ function pageInit() {
     }
      function initApp() {
          jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
-            , "fancybox", "quickPagination", "colorpicker", "datatables", "pivottable", "ddlslick"]);
+            , "datatables", "pivottable"]);
 
          google.charts.load('visualization','1', { packages: ['corechart'] });
-         //google.load('visualization', '1', {
-         //    packages: ['controls', 'charteditor'],
-         //    callback: function () {
-         //        console.log('page inited....');
-         //        menuMainApp(); initDisplay();
-         //    }
-         //});
          setTimeout(function () { menuMainApp(); initDisplay(); }, 2000);
       
     }
