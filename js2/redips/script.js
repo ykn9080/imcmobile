@@ -88,7 +88,7 @@ redips.init = function () {
         //move시에 적용안되게함
         var pos = rd.getPosition();
 
-        if (pos[3] == 0) {//신규로 추가되었을 경우만 적용
+        if (pos[3] == 0) {//apply only to new insert
 
             var cnt = 0;
             var maxcnt = 0;
@@ -101,7 +101,7 @@ redips.init = function () {
                 if (div.className.indexOf('drag') > -1) {
                     if (rd.obj.id.substring(0, 1) == div.id.substring(0, 1))
                         cnt++;
-                    //중간번호을 지웠을 경우버그방지
+                    //prevent error when delete rows in the middle
                     if (parseInt(div.id.substring(2)) > maxcnt)
                         maxcnt = parseInt(div.id.substring(2));
                 }
@@ -119,6 +119,7 @@ redips.init = function () {
             $(rd.obj).append("<div><img src='/images/editnote1.png' style='opacity:0.3' class='imdim' onclick=\'" + onclick + "\'/></div>");
 
         }
+        console.log('drop before')
     };
     // event handler invoked in a moment when DIV element is dropped to the table
     rd.event.dropped = function (targetCell) {
@@ -137,12 +138,14 @@ redips.init = function () {
             //			rd.obj.style.borderColor = 'white';
             // send request (input parameter is object reference)
             redips.getComponent(rd.obj, id);
+            console.log('dropped')
         }
     };
     // delete imctable after DIV element is deleted
     rd.event.deleted = function () {
         //deleteimcsetting("imctable", convertId(prefixFind1(rd.obj.id)));
         updateimctable(menuid, subid, rd.obj.id, "");
+        console.log('deleted')
     };
 };
 
@@ -179,6 +182,7 @@ initDisplay = function (id, data,insertdv) {
     tb.attr("style", "float:right;position:relative;width:" + w);
     tb.append(table);
     injectObject(tb);
+    if($("#resize1").length==0)
     documentreadyInsert("resize1", "$(window).resize(function () {refreshLayout();});");
     refreshLayout();
    tb.find("table").first().find("td").css({ padding: "0 3px 3px 0" });
@@ -301,7 +305,7 @@ injectObject = function (dvid) {
     if (typeof dvid == "undefined") dvid = $("#tableinsert");
     var list = ["jqgrid", "select", "jstree", "googlechart", "fullcalendar", "content", "map", "ifrm", "pivot", "form","rstat","otherpage","html"];
     //if imcdata not exists
-    if (sessionStorage.getItem("imcdata") == null && getlogin()!="")
+    if (localStorage.getItem("imcdata") == null && getlogin()!="")
         dataListOnlyAjax();
     $.each(list, function (i, k) {
         $.each(dvid.find("."+k), function (index, data) {
@@ -900,7 +904,7 @@ function editSave(remote) {
     initimctable();
     var storename = 'imctable';
     if (menutoggle == "template") storename = 'imctemplate';
-    var imctb = sessionStorage.getItem(storename);   
+    var imctb = localStorage.getItem(storename);   
     imctb = JSON.parse(imctb);
     var sublist = imctb[menutoggle+"submenu"];
     var text = $("#inNodename").val();
@@ -911,7 +915,7 @@ function editSave(remote) {
         width.push($(this).css("width"));
     });
     $.each(sublist, function (i, k) {
-        if (k.menuid == menuid && k.subid == subid) {
+        if (k.subid == subid) {
            
             sublist[i].table = scanTable();
             sublist[i].width = width.join(',');
@@ -934,14 +938,15 @@ function editSave(remote) {
     }
     if (menutoggle == "template") {
        // updateimc(storename, menutoggle + 'submenu', sublist, "subid", subid)
-        sessionStorage.setItem(storename, JSON.stringify(imctb));
+        localStorage.setItem(storename, JSON.stringify(imctb));
         jsonSaveAjax(storename, JSON.stringify(imctb));
         //jsonUpdateAjax(storename, menutoggle + 'submenu', JSON.stringify(set), "subid", subid);
         //console.log(storename, menutoggle + 'submenu', sublist,JSON.stringify(sublist), "subid", subid)
     }
     else {
-        updateimctable(menuid, "", "", set);
-        sessionStorage.setItem("imctable", JSON.stringify(imctb));
+        console.log(set)
+        //updateimctable(menuid, "", "", set);
+        localStorage.setItem("imctable", JSON.stringify(imctb));
         //remote upload
         if (remote)
             remoteimcupdate("imctable");
