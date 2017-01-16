@@ -3818,7 +3818,7 @@ function datalistreturn(data, datalist) {
     if (typeof datalist != "undefined") dtlist = datalist;
     if (!data.hasOwnProperty("dtype")) {
         if (data.hasOwnProperty("datacode") && data.datacode != "")
-            jsonReadAjax("imcdata", "", "code", "data.datacode", datalistreturn, [datalist]);
+            jsonReadAjax("imcdata", "", "code", data.datacode, datalistreturn, [datalist]);
     }
     else if (data.dtype == "database") {
         if (data.hasOwnProperty("querylist")) {
@@ -3958,6 +3958,120 @@ function googlechartdt(cht, data) {
         var json = makeGoogleDataTable(datalist, ax, ser, val, flist, slist);
     }
     return { json: json, options: options, ctype: ctype, flist: flist, slist: slist }
+}
+
+function makeGoogleDataTable(data, axislist, series, valuelist, filterlist, sortlist) {
+    //based on raw data create chart data for google
+    var grpby = [];
+    var val = [];
+    var row = [];
+    //create datatable
+    var googledt = new google.visualization.DataTable();
+    var al = axislist.split(',');
+    var sl = series;
+    var vl = valuelist.split(';');
+    var axistype = "";
+    //googledt column create:axis,value
+    for (var t in al) {
+        //add axis column
+        if (typeof data == "undefined")
+            googledt.addColumn('string', al[t]);
+        else {
+            var d = new Date(data[0][al[t]]);
+            if (d instanceof Date && d != "Invalid Date")
+                googledt.addColumn('date', al[t]);
+            else if (typeof al[t] != "function")
+                googledt.addColumn('string', al[t]);
+        }
+    }
+    //if series
+    var serieslist = "";
+    if (sl != "") {
+        //series value distict extract
+        ser = [];
+        for (i in data) {
+            ser.push(data[i][sl]);
+        }
+        ser = $.unique(ser); //refer common.js(uniques)
+        //series column
+        var tt = vl[0].split(',');
+        var aggregation = tt[1];
+        for (j in ser) {
+            //add axis column
+            googledt.addColumn('number', ser[j]);
+            serieslist += ser[j] + "," + aggregation + ";";
+        }
+        //add row
+        for (i in data) {
+            row = [];
+            //x axis row data insert
+            var d = new Date(data[i][al[0]]);
+            if (d instanceof Date && d != "Invalid Date") {
+                row.push(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
+            }
+            else
+                row.push(data[i][al[0]]);
+
+            for (j in ser) {
+                if (data[i][sl] == ser[j])
+                    row.push(parseFloat(data[i][tt[0]]));
+                else
+                    row.push(0);
+
+            }
+            googledt.addRow(row)
+        }
+
+        serieslist = serieslist.substring(0, serieslist.length - 1);
+    }
+    else {
+        //value column
+
+        for (var t in vl) {
+            //add value column
+            if (vl[t] != "" && typeof vl[t] != "function") {
+                var tt = vl[t].split(',');
+                googledt.addColumn('number', tt[0]);
+            }
+        }
+        //googledt row insert
+        for (i in data) {
+            row = [];
+            var d = new Date(data[i][al[0]]);
+            if (d instanceof Date && d != "Invalid Date") {
+                row.push(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
+                axistype = "date";
+            }
+            else
+                row.push(data[i][al[0]]);
+
+            for (var t in vl) {
+                if (vl[t] != "" && typeof vl[t] != "function") {
+                    var tt = vl[t].split(',');
+                    row.push(parseFloat(data[i][tt[0]]));
+                }
+            }
+            googledt.addRow(row)
+        }
+    }
+    //groupby
+    //axis field
+
+    var axisarray = [];
+    var axarr = axislist.split(',');
+    $(axarr).each(function (i, k) {
+        axisarray.push(parseInt(i));
+    });
+
+    //value field
+    if (sl != "") valuelist = serieslist;
+    var valarray = googleGroupbyValueArray(axislist, valuelist);
+
+
+    //google groupby
+    var result = google.visualization.data.group(googledt, axisarray, valarray);
+    return result;
+
 }
 function axismake(layout) {
     var rtn = {}, sort = [], sum, val = [], dir = false;
@@ -9489,7 +9603,6 @@ function jqgridInit(id, options, callback, param) {
     else
         RenderGridBlank(gridid, pagerid);
     function creategrid(data, tb, ctr, callback, param, filter) {
-        console.log(JSON.stringify(data), tb, JSON.stringify(ctr), callback, param, filter);
         var dt = datalistreturn(data);
         if (ctr.hasOwnProperty('data'))
             dt = applyFilter(dt, ctr.data.filter);
@@ -9500,7 +9613,6 @@ function jqgridInit(id, options, callback, param) {
             ctr.setting.data = JSON.stringify(dt);
         else
             ctr.setting = $.extend({ "data": JSON.stringify(dt) }, ctr.setting);
-        console.log("sss",dt,ctr);
         var setting = ctr.setting;
         setting.colNames = ctr.colNames;
         setting.colModel = ctr.colModel;
@@ -9515,7 +9627,6 @@ function jqgridInit(id, options, callback, param) {
                 delete setting[k];
         })
         tb.jqGrid(setting);
-        console.log("ttt",tb, setting,JSON.stringify(setting));
         var gridid = tb.attr("id");
         var pagerid = tb.next().attr("id");
         var wth = $('#gbox_' + gridid).parent().width();
