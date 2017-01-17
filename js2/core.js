@@ -11,6 +11,7 @@ function declareglobal() {
 }
 function jscssload(list, callback) {
     var cnt = 0;
+    if (location.hostname == "") webserviceprefix = "http://www.imcmaster.co.kr";
     $.each(list, function (i, k) {
         switch (k) {
             case "font-awesome":
@@ -162,7 +163,7 @@ function jscssload(list, callback) {
 
 var menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "";
 function pageInit() {
-    if (location.hostname == "") webserviceprefix = "http://www.imcmaster.co.kr";
+  
     var constr = $("#ctl00_hidConnect").val();
     if (typeof constr == "undefined")
         constr = "Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User Id=DB_9D66CD_imcmaster_admin;Password=ykn90809080;";
@@ -196,7 +197,7 @@ function pageInit() {
          jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "colresizable"
             , "datatables", "pivottable"]);
 
-         //google.charts.load('visualization','1', { packages: ['corechart'] });
+         google.charts.load('visualization','1', { packages: ['corechart'] });
          setTimeout(function () { menuMainApp(); initDisplay(); }, 2000);
       
     }
@@ -571,8 +572,6 @@ function menuMy(menu, menutype) {
         var mm = $.grep(mm, function (a) {
             return a.templatetype == templatetype;
         });
-
-     
     }
     else {
         var my = getlogin();
@@ -825,8 +824,7 @@ function menuMain() {
 function menuMainApp() {
     //jscriptInsert("breadcrumb", "/js2/jquery-rcrumbs/src/jquery.rcrumbs.js");
     //cssInsert("breadcrumb", "/js2/jquery-rcrumbs/dist/jquery.rcrumbs.min.css");
- 
-    var topm = menuMy("menu");//selectimc("imctable", menutoggle + "menu");
+    var topm = menuMy("menu");
     topm.sort(function (a, b) {
         return parseFloat(a.odr) - parseFloat(b.odr);
     });
