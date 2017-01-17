@@ -167,7 +167,7 @@ function pageInit() {
     if (typeof constr == "undefined")
         constr = "Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User Id=DB_9D66CD_imcmaster_admin;Password=ykn90809080;";
     defconnect = "DBtype=mssql;" + constr;
-    //window.alert = function (text) { console.log('alert message: ' + text); return true; };
+    window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
     if (getlogin() == "") {
         menutoggle = "open";
