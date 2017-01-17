@@ -2540,7 +2540,7 @@ function jsonReadallAjax(type, callback, optionarray) {
         },
         error: function (response) {
             var r = jQuery.parseJSON(response.responseText);
-            console.log("Message: " + r.Message);
+            console.log("prefix"+ webserviceprefix+"Message: " +r.Message);
             console.log("StackTrace: " + r.StackTrace);
             console.log("ExceptionType: " + r.ExceptionType);
         }

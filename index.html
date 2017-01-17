@@ -549,11 +549,20 @@
 
                 <script>
 					 $(document).on("click","login-button",function(){
-					 	var login=localStorage.getItem("login");
-					 	if(login!=""){
-					 		login=JSON.parse(login);
-						 	$('#username').val(login.id);
-						 	$('#password').val(login.pass);
+					 	var login=localStorage.getItem("imcsetting");
+					 	if (login != "" && login != null) {
+					 	    login = JSON.parse(login);
+					 	}
+                         if(login==null){
+					 	    $('#username').val(login.id);
+					 	    $('#password').val(login.pass);
+					 	    $("#dvloginview").hide();
+					 	    $("#dvloginedit").show();
+					 	}
+					 	else {
+					 	    $('#username1').text(login.id);
+					 	    $("#dvloginview").show();
+					 	    $("#dvloginedit").hide();
 					 	}
 					 });
 					 $(document).on("pagecreate", "#dvMenubar", function () {
@@ -1288,13 +1297,11 @@
             <div data-role="header" data-theme="b">
                 <h1>Log In</h1>
             </div>
-            <div class="ui-content" role="main">
+            <div id="dvloginedit"  class="ui-content" role="main">
                 <label for="username">ID:</label>
                 <input type="text" name="username" id="username" placeholder="Username">
                 <label for="password">Password:</label>
                 <input type="password" id="password" placeholder="Password">
-
-
 
                 <div class="ui-grid-b" style="margin-top:10px;">
                     <div class="ui-block-a">
@@ -1309,9 +1316,29 @@
                 </div>
 
             </div>
+            <div id="dvloginview" style="display:none" class="ui-content" role="main">
+                <label for="username1">ID:</label>
+                <label name="username1" id="username1"/>
+
+                <div class="ui-grid-b" style="margin-top:10px;">
+                    <div class="ui-block-a">
+                        <a href="#dvMenubar" data-role="button" data-theme="a">Cancel</a>
+                    </div>
+                    <div class="ui-block-b" style="padding-left:5px;">
+                        <a href="#dvMenubar" onclick="logout();" data-role="button" data-theme="a">Logout</a>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </span>
     <script>
+        function logout() {
+            localStorage.removeItem("imcsetting");
+            localStorage.removeItem("login");
+            $("#dvloginview").hide();
+            $("#dvloginedit").show();
+        }
 		function saveCategory() {
 			localStorage.setItem("category", $("#txCategory").val());
 		}
