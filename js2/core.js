@@ -1,14 +1,6 @@
 ﻿var googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
 var extlink = [],pfx="/js2/",imapp=false;
-function declareglobal() {
-    imapp = true;
-    googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0", output=0;
-    jsonlang = "", jsonlist = "";
-    extlink = [];
-    menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "http://www.imcmaster.co.kr";
-    umenuid = "", usubid = "", omenuid = "", osubid = "", mtogg = "", hpcd = "";
-    tt, cnt = 0,pfx="js2/";
-}
+
 function jscssload(list, callback) {
     var cnt = 0;
     if (location.hostname == "") {
