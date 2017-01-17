@@ -11,7 +11,10 @@ function declareglobal() {
 }
 function jscssload(list, callback) {
     var cnt = 0;
-    if (location.hostname == "") webserviceprefix = "http://www.imcmaster.co.kr";
+    if (location.hostname == "") {
+        webserviceprefix = "http://www.imcmaster.co.kr";
+        pfx = "js2/";
+    }
     $.each(list, function (i, k) {
         switch (k) {
             case "font-awesome":
