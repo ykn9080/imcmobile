@@ -2518,6 +2518,7 @@ function jsonSaveAjax(type, data) {
     });
 }
 function jsonReadallAjax(type, callback, optionarray) {
+    console.log(webserviceprefix)
     jsonReadallAjax.defaultfunc = defaultfunc;
     var path = "/data/json/";
     path += type + ".json";
