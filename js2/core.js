@@ -2518,7 +2518,6 @@ function jsonSaveAjax(type, data) {
     });
 }
 function jsonReadallAjax(type, callback, optionarray) {
-    console.log(webserviceprefix)
     jsonReadallAjax.defaultfunc = defaultfunc;
     var path = "/data/json/";
     path += type + ".json";
@@ -5524,9 +5523,10 @@ function fullCalendarInit(dvid, options) {
             calpop = $("<table/>");
             dv.append(calpop);
             calpop.append($(range));
-
+            var wth = 550;
+            if (isMobile()) wth = $("body").width() - 50;
             dvpop.dialog({
-                width: 550,
+                width:wth,
                 autoResize: true,
                 modal: false,
                 overlay: {
