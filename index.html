@@ -1,101 +1,132 @@
 <!DOCTYPE html>
 <head>
-	<title>Integrated with imcmaster</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="content-type" content="text/html; charset=EUC-KR" />
+    <title>Integrated with imcmaster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=EUC-KR" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="css/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
 
 
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>  
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <link id="jqtheme" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/theme.min.css" rel="stylesheet" type="text/css" />
-   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
-    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />	
-    <script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>  
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+    <script src="js/common.js"></script>
     <script src="js/jquery.mobile.utils-master/jquery.mobile.utils.js"></script>
-	<link rel="stylesheet" href="css/stylesheet.css" />
-	<link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css">
-	<script src="js/common.js"></script>
-	<script src="cordova.js"></script>
-		
-	<!--<script src="js/energize-min.js"></script>-->
-	<script src="js/archive.js"></script>
-	<script src="js/fastclick.js"></script>
-	<!--<script type="text/javascript" src="js/Insomnia.js"></script>-->
-	<script type="text/javascript" charset="utf-8" src="js/telephonenumber.js"></script>
-	<!--from imcmaster -->
-	 <link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css"/>
-   
+
+    <script src="cordova.js"></script>
+
+    <!--<script src="js/energize-min.js"></script>-->
+    <script src="js/archive.js"></script>
+    <script src="js/fastclick.js"></script>
+    <!--<script type="text/javascript" src="js/Insomnia.js"></script>-->
+    <script type="text/javascript" charset="utf-8" src="js/telephonenumber.js"></script>
+    <!--from imcmaster -->
+    <link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css" />
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link id="jqtheme" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/theme.min.css" rel="stylesheet" type="text/css" />-->
     <script type="text/javascript" src="js2/default.js"></script>
     <script type="text/javascript" src="js2/core.js"></script>
-    <link rel="stylesheet"  href="js2/bootstrapcdn/bootstrap.min.css"/>
-    <script type="text/javascript"   src="js2/bootstrapcdn/bootstrap.min.js"></script>
-    <script type="text/javascript"   src="js2/underscore/underscore-min.js"></script>
-    
+    <link rel="stylesheet" href="js2/bootstrapcdn/bootstrap.min.css" />
+    <script type="text/javascript" src="js2/bootstrapcdn/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js2/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link href="js2/jqGrid3/css/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" async src="js2/jqGrid3/js/i18n/grid.locale-en.js"></script>
+    <script type="text/javascript" async src="js2/jqGrid3/js/jquery.jqGrid.src.js"></script>
     <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/jqgrid/4.6.0/css/ui.jqgrid.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqgrid/4.6.0/js/i18n/grid.locale-en.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqgrid/4.6.0/js/jquery.jqGrid.min.js"></script>-->
 
-	<style>
-		.imbiga {
-			cursor: pointer;
-		}
-		.imbiga:active {
-			background-color: transparent;
-			width: 100px;
-		}
-		#ulSetting .compact {
-			margin: 0px !important;
-		}
-		.sp .ui-block-a {width: 25% !important;}
-     	.sp .ui-block-b {width: 75% !important;}
-     	.sp1 .ui-block-a {width: 35% !important;}
-     	.sp1 .ui-block-b {width: 65% !important;}
-     	input.ui-input-text, textarea.ui-input-text{
-     		margin:0 !important;
-     		ling-height:0 !important;
-     	}
-     	.sptitle {
-			padding-top:2em;
-		}
-		
-	   
-	    .wrap textarea {
-	      width: 100%;
-	      resize: none;
-	      overflow-y: hidden; /* prevents scroll bar flash */
-	      padding: 1.1em; /* prevents text jump on Enter keypress */
-	      padding-bottom: 0.2em;
-	      line-height: 1.6;
-	    }
-	    .ui-header .ui-title {
-		  overflow: visible !important;
-		  text-overflow: ellipsis !important;
-		}
-		.ui-title {
-		    margin: 0 !important;
-		}
-		.ui-input-text {margin:0 !important;}
-		.ui-select{margin:0 !important;}
-		.ui-checkbox{margin:0 !important;}
-		
-		.ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb{
-			min-height:2.3em !important;
-		}
-		.ui-listview>.ui-li-has-icon>img:first-child, .ui-listview>.ui-li-has-icon>.ui-btn>img:first-child{
-			max-height:1.4em !important;
-			max-width:2.2em !important;
-			top:10px !important
-		}
-		
-		.ui-listview>.ui-li-has-icon>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-icon{
-			padding-left:3em !important;
-			min-height:1.8em !important;
-		}
-	  </style>
+    <style>
+        .imbiga {
+            cursor: pointer;
+        }
+
+            .imbiga:active {
+                background-color: transparent;
+                width: 100px;
+            }
+
+        #ulSetting .compact {
+            margin: 0px !important;
+        }
+
+        .sp .ui-block-a {
+            width: 25% !important;
+        }
+
+        .sp .ui-block-b {
+            width: 75% !important;
+        }
+
+        .sp1 .ui-block-a {
+            width: 35% !important;
+        }
+
+        .sp1 .ui-block-b {
+            width: 65% !important;
+        }
+
+        input.ui-input-text, textarea.ui-input-text {
+            margin: 0 !important;
+            ling-height: 0 !important;
+        }
+
+        .sptitle {
+            padding-top: 2em;
+        }
+
+
+        .wrap textarea {
+            width: 100%;
+            resize: none;
+            overflow-y: hidden; /* prevents scroll bar flash */
+            padding: 1.1em; /* prevents text jump on Enter keypress */
+            padding-bottom: 0.2em;
+            line-height: 1.6;
+        }
+
+        .ui-header .ui-title {
+            overflow: visible !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .ui-title {
+            margin: 0 !important;
+        }
+
+        .ui-input-text {
+            margin: 0 !important;
+        }
+
+        .ui-select {
+            margin: 0 !important;
+        }
+
+        .ui-checkbox {
+            margin: 0 !important;
+        }
+
+        .ui-listview > .ui-li-has-thumb > .ui-btn, .ui-listview > .ui-li-static.ui-li-has-thumb {
+            min-height: 2.3em !important;
+        }
+
+        .ui-listview > .ui-li-has-icon > img:first-child, .ui-listview > .ui-li-has-icon > .ui-btn > img:first-child {
+            max-height: 1.4em !important;
+            max-width: 2.2em !important;
+            top: 10px !important;
+        }
+
+        .ui-listview > .ui-li-has-icon > .ui-btn, .ui-listview > .ui-li-static.ui-li-has-icon {
+            padding-left: 3em !important;
+            min-height: 1.8em !important;
+        }
+    </style>
 </head>
 <body>
-	<script>
+    <script>
 	$(document).bind('mobileinit', function () {
         $.mobile.activeBtnClass = 'unused';
         $.mobile.page.prototype.options.domCache = true;
@@ -113,7 +144,7 @@
 	    if (navigator.network.connection.type != Connection.NONE) {
 	        jsonReadallAjax("imctable");
 	    }
-        pageInit();	
+        pageInit();
         if (log != null) {
             var obj = eval("(" + log + ")");
             $("#lbUsername").val(obj.name);
@@ -141,7 +172,6 @@
     }
     var backcnt = 0;
     function ShowExitDialog() {
-
 	     // Call my back key code here.
          switch($.mobile.activePage.attr('id')){
 	         case "dvEdit": case "dvCategory": case "dvLocaldb": case "UlList": case "dvProddetail": case "dvChdetail": case "dvChstaff":
@@ -186,7 +216,6 @@
 	    theme: 'a',
 	    html: ""
     });
-
     if(LoginStatusCheck())
     switch(loc){
 	    case "sales":
@@ -207,8 +236,6 @@
     }
     else
     window.location.href="#Logindv";
-
-
     }
     function LoginStatusCheck(){
     var login=localStorage.getItem("login");
@@ -221,7 +248,6 @@
     //document.location.href="#Logindv";
     return false;
     }
-
     }
     function loadsetting(){
 	    var set=localStorage.getItem("imcsetting");
@@ -265,7 +291,7 @@
 			    html: ""
 		    });
 		    $.ajax({
-			
+
 		        url: "http://www.imcmaster.co.kr/WebService.asmx/Login",
 			    data: { id: JSON.stringify(username), pass: JSON.stringify(password) },
 			    contentType: "application/json; charset=utf-8",
@@ -274,7 +300,7 @@
 				    if(JSON.stringify(data)!="{\"d\":\"login fail\"}"){
 					    var rtn=data.d;
 					    var obj = eval("(" + rtn + ")");
-					
+
 					    var login={};
 					    login.id=username;
 					    login.pass=password;
@@ -293,7 +319,7 @@
 			    },
 			    error: function (response) {
                 var r = jQuery.parseJSON(response.responseText);
-		
+
 				    $.mobile.loading('hide');
 				    msgshow(r.Messae);
 			    }
@@ -345,7 +371,6 @@
 			    login.comp = comp;
 			    savelocal("imcsetting", JSON.stringify(login));
 			    savelocal("login",JSON.stringify(login) );
-
 			    //setting update
 			    $("#inSvctype").val("online");
 			    $("#lbSvctype").html("Online");
@@ -357,7 +382,7 @@
 		    else
 			    msgshow(JSON.stringify(data.d));
 		    },
-		    error: function () { 
+		    error: function () {
 			    $.mobile.loading('hide');
 			    msgshow('saving error');
 		    }
@@ -372,12 +397,9 @@
     function codeInput(){
     console.log('hi')
     switch($("#svcType").val()){
-
     case "online":
     //$.mobile.changePage("#dvSvctype","flip",true,false);
-
     $( "body" ).pagecontainer( "change", "dvSvctype.html", { transition: "slide" });
-
     //$('#svcType option[value=single]').attr('selected','selected');
     break;
     }
@@ -390,7 +412,6 @@
     alert("tet");
     }
     return re.rest(email);*/
-
     }
     function chkSvttype(){
 	    var svc=$("inSvctype").val();
@@ -403,8 +424,8 @@
 			    $("dvComp").css("display","block");
 			    var setting=localStorage.getItem("setting");
 			    if(setting!==null)setting=JSON.parse(setting);
-			
-		    break;	
+
+		    break;
 	    }
     }
     function getuserid() {
@@ -419,7 +440,7 @@
     }
     /*
 	// orientation change-->> label hide
-	$( window ).on( "orientationchange","[id^=dv]", function( event ) {  
+	$( window ).on( "orientationchange","[id^=dv]", function( event ) {
 	  	$('[id^=dv] label').show();
 	    if(event.orientation=="portrait") {
 	  	$('[id^=dv] label').hide();
@@ -431,96 +452,100 @@
 	  	$('[id^=dv] label').hide();
 	    }
 	});*/
-	</script>
+    </script>
 
-	<span id="fastclick" >
-		<div data-role="page" data-theme="a" id="dvMenubar"  >
-		    <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
+    <span id="fastclick">
+        <div data-role="page" data-theme="a" id="dvMenubar">
+            <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
                 <style>
                     #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading {
                         margin: 0;
                     }
+
                     #nav-panel .ui-li-static.ui-collapsible {
                         padding: 0;
                     }
-                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
-                        border-top-width: 0;
-                    }
-                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
-                    #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-content {
-                        border-bottom-width: 0;
-                    }
-                </style>
-                    <ul id="main-menu" data-role="listview">
-                        <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
-                        <li data-role="collapsible" data-iconpos="right" data-inset="true">
-                            <h2>Birds</h2>
-                            <ul data-role="listview" data-theme="b">
-                                <li><a href="#">Condor</a></li>
-                                <li><a href="#">Eagle</a></li>
-                                <li><a href="#">Sparrow</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Humans</a></li>
-                        <li data-role="collapsible" data-iconpos="right" data-inset="false">
-                            <h2>Fish</h2>
-                            <ul data-role="listview" data-theme="b">
-                                <li><a href="#">Salmon</a></li>
-                                <li><a href="#">Pollock</a></li>
-                                <li><a href="#">Trout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
 
-                </div><!-- /panel -->
-			<div data-role="header" data-theme="b" style="min-height:50px">
-				<h1> IMCMaster Menu </h1>
-				<a href="#nav-panel" data-icon="bars" data-iconshadow="true" data-iconpos="notext" >Menu</a>
-				<div class="ui-btn-left" style="color:white;"><label id="lbUsername"/>
-				</div>
-			</div>
+                        #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+                            border-top-width: 0;
+                        }
+
+                        #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+                        #nav-panel .ui-li-static.ui-collapsible > .ui-collapsible-content {
+                            border-bottom-width: 0;
+                        }
+                </style>
+                <ul id="main-menu" data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">MENU</a></li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="true">
+                        <h2>Birds</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li><a href="#">Condor</a></li>
+                            <li><a href="#">Eagle</a></li>
+                            <li><a href="#">Sparrow</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Humans</a></li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>Fish</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li><a href="#">Salmon</a></li>
+                            <li><a href="#">Pollock</a></li>
+                            <li><a href="#">Trout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div><!-- /panel -->
+            <div data-role="header" data-theme="b" style="min-height:50px">
+                <h1> IMCMaster Menu </h1>
+                <a href="#nav-panel" data-icon="bars" data-iconshadow="true" data-iconpos="notext">Menu</a>
+                <div class="ui-btn-left" style="color:white;">
+                    <label id="lbUsername" />
+                </div>
+            </div>
             <div id="dvContent123" class="ui-content" role="main">
 
             </div>
-			<!--<div  class="ui-content" role="main" >
-				<div class="ui-grid-a">
-					<div class="ui-block-a" style="text-align:center;padding-bottom:20px;">
-						<a href="#"    data-clickload="spin" > <img onclick="move('sales')" class="imbiga" src="images/top_sales.png" />
-						<div>
-							영업관리
-						</div> </a>
-					</div>
-					<div class="ui-block-b" style="text-align:center;padding-bottom:20px;">
-						<a href="#"  data-clickload="spin" > <img  onclick="move('market')" class="imbiga"  src="images/top_marketinfo.png" />
-						<div>
-							시장정보
-						</div> </a>
-					</div>
-					<div class="ui-block-a" style="text-align:center;">
-						<a href="#"  onclick="move('chart')" data-clickload="spin" > <img  onclick="move('chart')" class="imbiga"  src="images/top_chart.png" />
-						<div>
-							차트분석
-						</div> </a>
-					</div>
-					<div class="ui-block-b" style="text-align:center;">
-						<a href="#" > <img class="imbiga"  src="images/top_camera.png" onclick="move('schedule')":/>
-						<div>
-							schedule
-						</div> </a>
-					</div>
-				</div>
-				<img id="temp" />
-			</div>-->
-			<div data-role="footer" data-position="fixed" data-tap-toggle="false">
-				<div data-role="navbar" >
-					<ul style="height:50px;">
-						<li><a id="back"  href="#setting" class="ui-btn ui-icon-grid ui-btn-icon-top">Setting</a></li>
-						<li><a id="set"  onclick="ShowExitDialog()"  class="ui-btn ui-icon-arrow-l ui-btn-icon-top">Exit</a></li>
-						<li><a href="#Logindv" id="login-button" class="ui-btn ui-icon-user ui-btn-icon-top">Login</a></li>
-					</ul>
-				</div>
-				
-				<script>
+            <!--<div  class="ui-content" role="main" >
+                <div class="ui-grid-a">
+                    <div class="ui-block-a" style="text-align:center;padding-bottom:20px;">
+                        <a href="#"    data-clickload="spin" > <img onclick="move('sales')" class="imbiga" src="images/top_sales.png" />
+                        <div>
+                            영업관리
+                        </div> </a>
+                    </div>
+                    <div class="ui-block-b" style="text-align:center;padding-bottom:20px;">
+                        <a href="#"  data-clickload="spin" > <img  onclick="move('market')" class="imbiga"  src="images/top_marketinfo.png" />
+                        <div>
+                            시장정보
+                        </div> </a>
+                    </div>
+                    <div class="ui-block-a" style="text-align:center;">
+                        <a href="#"  onclick="move('chart')" data-clickload="spin" > <img  onclick="move('chart')" class="imbiga"  src="images/top_chart.png" />
+                        <div>
+                            차트분석
+                        </div> </a>
+                    </div>
+                    <div class="ui-block-b" style="text-align:center;">
+                        <a href="#" > <img class="imbiga"  src="images/top_camera.png" onclick="move('schedule')":/>
+                        <div>
+                            schedule
+                        </div> </a>
+                    </div>
+                </div>
+                <img id="temp" />
+            </div>-->
+            <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+                <div data-role="navbar">
+                    <ul style="height:50px;">
+                        <li><a id="back" href="#setting" class="ui-btn ui-icon-grid ui-btn-icon-top">Setting</a></li>
+                        <li><a id="set" onclick="ShowExitDialog()" class="ui-btn ui-icon-arrow-l ui-btn-icon-top">Exit</a></li>
+                        <li><a href="#Logindv" id="login-button" class="ui-btn ui-icon-user ui-btn-icon-top">Login</a></li>
+                    </ul>
+                </div>
+
+                <script>
 					 $(document).on("click","login-button",function(){
 					 	var login=localStorage.getItem("login");
 					 	if(login!=""){
@@ -546,29 +571,30 @@
 					$(document).on("click","back",function(){
 						ShowExitDialog();
 					}*/
-					
-				</script>
-				<div id="imgcontain" ></div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="setting" >
-			<div data-role="header" data-theme="b">
-				<h1>Setting</h1>
-			</div>
-			<div class="ui-content" role="main" >
-				<ul id="ulSetting2" data-role="listview" data-inset="false">
-					<li data-role="list-divider">
-						Register
-					</li>
-					<li class="sp" style="padding:0 0 10px 0;">
-						<a href="#dvSvctype" data-transition="none" data-ajax="false" onlick="chkSvctype()" ><label  for="lbSvctype" >서비스등록:</label> 
-                        <label id="lbSvctype" class="ui-li-aside">Single(free)</label>
-						<input id="inSvctype" type="hidden" value="single">
-						</a>
-					</li>
-					
-				</ul>
-				<script>
+
+                </script>
+                <div id="imgcontain"></div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="setting">
+            <div data-role="header" data-theme="b">
+                <h1>Setting</h1>
+            </div>
+            <div class="ui-content" role="main">
+                <ul id="ulSetting2" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">
+                        Register
+                    </li>
+                    <li class="sp" style="padding:0 0 10px 0;">
+                        <a href="#dvSvctype" data-transition="none" data-ajax="false" onlick="chkSvctype()">
+                            <label for="lbSvctype">서비스등록:</label>
+                            <label id="lbSvctype" class="ui-li-aside">Single(free)</label>
+                            <input id="inSvctype" type="hidden" value="single">
+                        </a>
+                    </li>
+
+                </ul>
+                <script>
 				/*
 					$( document ).on( 'click', '#ulSetting2 li', function(){
 						if ( typeof $("#selSvc" ).selectmenu() !== "undefined" ) {
@@ -578,126 +604,126 @@
 					  	}
 					});
 					*/
-				</script>
-				<ul id="ulSetting3" data-role="listview" data-inset="false">
-					<li data-role="list-divider">
-						Business Basic Information
-					</li>
-					<li class="sp">
-						<a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('pd');" ><label  for="lbProd" >Product:</label> <label class="ui-li-aside" id="lbProd" >100건</label></a>
-					</li>
-					<li class="sp">
-						<a href="#UlList" data-transition="none" data-ajax="false"  onclick="makeUlList('ch');"><label  for="lbChan" >Customer:</label> <label class="ui-li-aside" id="lbChan" ></label></a>
-					</li>
-					<li class="sp" style="padding:0 0 10px 0;">
-						<a href="#dvCategory" data-transition="none" data-ajax="false"  onclick="showCategory()"><label  for="lbCategory" >Product Category:</label> <label class="ui-li-aside" id="lbCategory" ></label></a>
-					</li>
-				</ul>
-				<ul id="ulSetting4" data-role="listview" data-inset="false">
-					<li data-role="list-divider">
-						Server
-					</li>
-					<li class="sp">
-						<a href="#dvSvctype" data-transition="none" data-ajax="false" ><label  for="inSvctype" >DBBackup:</label> <label id="lbBackup" class="ui-li-aside"></label> </a>
-					</li>
-					<li class="sp" style="padding:0 0 10px 0;">
-						<a href="#dvLocaldb"  data-transition="none" data-ajax="false" ><label  for="inLocaldb" >LocalDB:</label> <label id="lbLocaldb" class="ui-li-aside"></label> </a>
-					</li>
-				</ul>
-				<ul id="ulSetting1" data-role="listview" data-inset="false">
-					<li data-role="list-divider">
-						Hardware
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-								<label title="Do not turn off while using program" for="insom">Keep turn on:</label>
-							</div>
-							<div  class="ui-block-b" >
-								<select id="insom" name="switch" data-role="flipswitch">
-									<option value="off">Off</option>
-									<option  value="on">On</option>
-								</select>
-							</div>
-						</div>	 
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-								<label  class="select" for="savetime" title="Size Limit:50Kb">Upload Setting:</label>
-							</div>
-							<div  class="ui-block-b" >
-								<select name="savetime" id="savetime" data-native-menu="false" >
-									<option value="smart" title="50Kb">Small always, Big wifi</option>
-									<option value="data">Data always, image wifi</option>
-									<option value="wifi">Wifi Only</option>
-									<option value="always">Always</option>
-								</select>
-							</div>
-						</div>	 
-					</li>
-				</ul>			
-			</div>
-			<div data-role="footer" data-position="fixed">
-				<div data-role="navbar" >
-					<ul style="height:50px;">
-						<li><a href="#dvMenubar" onclick="savesetting()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
-						<li><a href="#dvMenubar" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="dvCategory" >
-			<div data-role="header">
-				<h3> Category </h3>
-			</div>
-			<div  class="ui-content" role="main">
-				상품분류기준: 항목별구분은 enter
-				<textarea id="txCategory" rows="20" cols="4"></textarea>
-			</div>
-			<div data-role="footer" data-position="fixed">
-				<div data-role="navbar" >
-					<ul style="height:50px;">
-						<li><a href="#setting" onclick="saveCategory()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
-						<li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="dvSvctype"  >
-			<div data-theme="b" data-role="header">
-				<h3> Service 등록 </h3>
-			</div>
-			<div class="ui-content" role="main" data-theme="b" >
-				<ul id="ulSvctype1" data-role="listview" style="margin-bottom:10px;">
-					<li class="sp1">
-						<div class="ui-grid-a" >
-							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-								<label for="inSvccode">서비스유형:</label>
-							</div>
-							<div  class="ui-block-b" >
-								<select id="selSvc" name="selSvc" onchange="showSvc()"  data-native-menu="false">
-									<option value="single">Single(free)</option>
-									<option value="online">Online</option>
-								</select>
-							</div>
-						</div>	 
-					</li>
-				</ul>
+                </script>
+                <ul id="ulSetting3" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">
+                        Business Basic Information
+                    </li>
+                    <li class="sp">
+                        <a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('pd');"><label for="lbProd">Product:</label> <label class="ui-li-aside" id="lbProd">100건</label></a>
+                    </li>
+                    <li class="sp">
+                        <a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('ch');"><label for="lbChan">Customer:</label> <label class="ui-li-aside" id="lbChan"></label></a>
+                    </li>
+                    <li class="sp" style="padding:0 0 10px 0;">
+                        <a href="#dvCategory" data-transition="none" data-ajax="false" onclick="showCategory()"><label for="lbCategory">Product Category:</label> <label class="ui-li-aside" id="lbCategory"></label></a>
+                    </li>
+                </ul>
+                <ul id="ulSetting4" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">
+                        Server
+                    </li>
+                    <li class="sp">
+                        <a href="#dvSvctype" data-transition="none" data-ajax="false"><label for="inSvctype">DBBackup:</label> <label id="lbBackup" class="ui-li-aside"></label> </a>
+                    </li>
+                    <li class="sp" style="padding:0 0 10px 0;">
+                        <a href="#dvLocaldb" data-transition="none" data-ajax="false"><label for="inLocaldb">LocalDB:</label> <label id="lbLocaldb" class="ui-li-aside"></label> </a>
+                    </li>
+                </ul>
+                <ul id="ulSetting1" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">
+                        Hardware
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                <label title="Do not turn off while using program" for="insom">Keep turn on:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <select id="insom" name="switch" data-role="flipswitch">
+                                    <option value="off">Off</option>
+                                    <option value="on">On</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                <label class="select" for="savetime" title="Size Limit:50Kb">Upload Setting:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <select name="savetime" id="savetime" data-native-menu="false">
+                                    <option value="smart" title="50Kb">Small always, Big wifi</option>
+                                    <option value="data">Data always, image wifi</option>
+                                    <option value="wifi">Wifi Only</option>
+                                    <option value="always">Always</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul style="height:50px;">
+                        <li><a href="#dvMenubar" onclick="savesetting()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+                        <li><a href="#dvMenubar" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="dvCategory">
+            <div data-role="header">
+                <h3> Category </h3>
+            </div>
+            <div class="ui-content" role="main">
+                상품분류기준: 항목별구분은 enter
+                <textarea id="txCategory" rows="20" cols="4"></textarea>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul style="height:50px;">
+                        <li><a href="#setting" onclick="saveCategory()" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+                        <li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="dvSvctype">
+            <div data-theme="b" data-role="header">
+                <h3> Service 등록 </h3>
+            </div>
+            <div class="ui-content" role="main" data-theme="b">
+                <ul id="ulSvctype1" data-role="listview" style="margin-bottom:10px;">
+                    <li class="sp1">
+                        <div class="ui-grid-a">
+                            <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                <label for="inSvccode">서비스유형:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <select id="selSvc" name="selSvc" onchange="showSvc()" data-native-menu="false">
+                                    <option value="single">Single(free)</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
 
-				<div id="dvComp" style="display:none;">
-					<ul id="ulSvctype" data-role="listview" data-inset="false">
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="onlinetype">Type :</label>
-								</div>
-								<div  class="ui-block-b" style="padding:0 0 10px 0;">
-									 <select id="onlinetype" onchange="togglePromo()" data-native-menu="false">
-										<option value="comp">Company Code</option>
-										<option value="promo">Promotion Code</option>
-									</select>
-									<script>
+                <div id="dvComp" style="display:none;">
+                    <ul id="ulSvctype" data-role="listview" data-inset="false">
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="onlinetype">Type :</label>
+                                </div>
+                                <div class="ui-block-b" style="padding:0 0 10px 0;">
+                                    <select id="onlinetype" onchange="togglePromo()" data-native-menu="false">
+                                        <option value="comp">Company Code</option>
+                                        <option value="promo">Promotion Code</option>
+                                    </select>
+                                    <script>
 										function togglePromo(){
 											switch($("#onlinetype").val()){
 												case "comp":
@@ -716,167 +742,167 @@
 												break;
 											}
 										}
-									</script>
-				                </div>
-			                </div>
-						</li>
-					</ul>
-					<ul id="dvCompinput" style="display:block;" data-role="listview" data-inset="false">
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label  for="inComp">CompCode:</label>
-								</div>
-								<div  class="ui-block-b" style="padding:0 0 10px 0;">
-									<input id="inComp"  placeholder="Company Code를 입력하세요" data-clear-btn="true">								
-				                </div>
-			                </div>
-						</li>
-					</ul>
-					<ul id="dvPromoinput" style="display:none;" data-role="listview" data-inset="false">
-						<li data-role="list-divider">
-							Company Information
-						</li>
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="inPromo">PromoCode:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inPromo"   placeholder="Pomotion code" >				
-				                </div>
-			                </div>
-						</li>	
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label  for="inCompname">Name:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inCompname"   placeholder="회사명" >		
-				                </div>
-			                </div>
-						</li>	
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label  for="inComptel">Phone:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inComptel"  placeholder="회사전화" >	
-				                </div>
-			                </div>
-						</li>
-						<li class="sp">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label  for="inCompzip">Zipcode:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inCompzip"   placeholder="우편번호" >	
-				                </div>
-			                </div>
-						</li>	
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label  for="inCompaddr">Address:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inCompaddr"  placeholder="주소" >	
-				                </div>
-			                </div>
-						</li>	
-					</ul>
-					<ul id="ulSvctype1" data-role="listview" data-inset="false">
-						<li data-role="list-divider">
-							User Information
-						</li>
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="inName">이름 :</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inName" name="inName"  placeholder="이름" >
-				                </div>
-			                </div>
-						</li>
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="inId">ID:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inId" name="inId"  placeholder="ID" >
-				                </div>
-			                </div>
-						</li>
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="inPass">Password:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input id="inPass" placeholder="Password" >
-				                </div>
-			                </div>
-						</li>
-						<li class="sp1">
-				   			<div class="ui-grid-a" >
-								<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-									<label for="inEmail">Email:</label>
-								</div>
-								<div  class="ui-block-b" >
-									<input type="email" id="inEmail" onblur="checkEmail(this);"  placeholder="Email" >
-				                </div>
-			                </div>
-						</li>
-					
-					</ul>
-				</div>
-				
-			</div>
-			<div data-role="footer" data-position="fixed">
-				<div data-role="navbar" >
-					<ul style="height:50px;">
-						<li><a href="javascript:void(0)" onclick="RegisterAjax();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Apply</a></li>
-						<li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="dvLocaldb"  >
-			<div data-theme="b" data-role="header">
-				<h3> Local Data Check </h3>
-			</div>
-			<div class="ui-content" role="main" data-theme="b" >
-				<select id="selLocaldb" onchange="chkLocaldb();" style="overflow:auto" data-native-menu="false">
-                   <option value="" >-- Select -- </option>
-                   <option value="login" >Login</option>
-                   <option value="imcsetting" >Setting</option>
-                   <option value="imctable" >Table</option>
-                   <option value="sales">Sales</option>
-                   <option value="marketinfo" >Marketinfo</option>
-                   <option value="googlechart" >ChartSetting</option>
-                   <option value="googledata" >ChartData</option>
+                                    </script>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul id="dvCompinput" style="display:block;" data-role="listview" data-inset="false">
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inComp">CompCode:</label>
+                                </div>
+                                <div class="ui-block-b" style="padding:0 0 10px 0;">
+                                    <input id="inComp" placeholder="Company Code를 입력하세요" data-clear-btn="true">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul id="dvPromoinput" style="display:none;" data-role="listview" data-inset="false">
+                        <li data-role="list-divider">
+                            Company Information
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inPromo">PromoCode:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inPromo" placeholder="Pomotion code">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inCompname">Name:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inCompname" placeholder="회사명">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inComptel">Phone:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inComptel" placeholder="회사전화">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inCompzip">Zipcode:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inCompzip" placeholder="우편번호">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inCompaddr">Address:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inCompaddr" placeholder="주소">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul id="ulSvctype1" data-role="listview" data-inset="false">
+                        <li data-role="list-divider">
+                            User Information
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inName">이름 :</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inName" name="inName" placeholder="이름">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inId">ID:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inId" name="inId" placeholder="ID">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inPass">Password:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="inPass" placeholder="Password">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="sp1">
+                            <div class="ui-grid-a">
+                                <div style="padding:10px 0 0 0px;" class="ui-block-a">
+                                    <label for="inEmail">Email:</label>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input type="email" id="inEmail" onblur="checkEmail(this);" placeholder="Email">
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul style="height:50px;">
+                        <li><a href="javascript:void(0)" onclick="RegisterAjax();" class="ui-btn ui-icon-plus ui-btn-icon-top">Apply</a></li>
+                        <li><a href="#setting" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="dvLocaldb">
+            <div data-theme="b" data-role="header">
+                <h3> Local Data Check </h3>
+            </div>
+            <div class="ui-content" role="main" data-theme="b">
+                <select id="selLocaldb" onchange="chkLocaldb();" style="overflow:auto" data-native-menu="false">
+                    <option value="">-- Select -- </option>
+                    <option value="login">Login</option>
+                    <option value="imcsetting">Setting</option>
+                    <option value="imctable">Table</option>
+                    <option value="sales">Sales</option>
+                    <option value="marketinfo">Marketinfo</option>
+                    <option value="googlechart">ChartSetting</option>
+                    <option value="googledata">ChartData</option>
                 </select>
-                <div  class="ui-grid-a"  >
-					<div class="ui-block-a">
-						<input id="inLocaldb" placeholder="LocalStorage ID">
-					</div>
-					<div class="ui-block-b">
-						<a data-role="button" onclick="chkLocaldb1();" >View</a>
-					</div>
-				</div>
-                 <div  class="ui-grid-a"  >
-					<div class="ui-block-a">
-						<input id="inFunc" placeholder="Function name">
-					</div>
-					<div class="ui-block-b">
-						<a data-role="button" onclick="runfunction();" >Run</a>
-					</div>
-				</div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <input id="inLocaldb" placeholder="LocalStorage ID">
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" onclick="chkLocaldb1();">View</a>
+                    </div>
+                </div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <input id="inFunc" placeholder="Function name">
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" onclick="runfunction();">Run</a>
+                    </div>
+                </div>
                 <script>
                 	function chkLocaldb(){
                 		$("#txLocaldb").val("");
@@ -892,399 +918,398 @@
 						if(va==null)
                 		va=sessionStorage.getItem($("#inLocaldb").val());
                 		$("#txLocaldb").val(va);
-                	}		
+                	}
                 	function updateDB(){
                 		var set=$("#txLocaldb").val();
                 		if(set !="")
                 		localStorage.setItem($("#selLocaldb").val(),set);
-                	}		
+                	}
                 </script>
                 <div class="wrap1">
-                	<textarea id="txLocaldb" rows="15" cols="10"></textarea>
+                    <textarea id="txLocaldb" rows="15" cols="10"></textarea>
                 </div>
-			</div>
-			 <div data-role="footer" data-position="fixed" data-theme="b">
-		      	<div data-role="navbar">
-		      		<ul>
-						<li><a href="#" onclick="updateDB();" class="ui-btn">Update</a></li>
-						<li><a href="#setting" class="ui-btn">Close</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="UlList" >
-			<div data-theme="b" data-role="header" >
+            </div>
+            <div data-role="footer" data-position="fixed" data-theme="b">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#" onclick="updateDB();" class="ui-btn">Update</a></li>
+                        <li><a href="#setting" class="ui-btn">Close</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="UlList">
+            <div data-theme="b" data-role="header">
 
-				<h3><label style="font-weight:bold;" id="lbList" /></h3>
+                <h3><label style="font-weight:bold;" id="lbList" /></h3>
 
-				<a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
-			</div>
-			<div class="ui-content" role="main" >
-				<ul id="ulList" data-role="listview" >
-					<li>
-						<a href="#"><img src="images/search-icon.png" alt="France" class="ui-li-icon">France
-						<p class="ui-li-aside">
-							<strong>6:24</strong>PM
-						</p></a>
-					</li>
-					<li>
-						<a href="#"><img src="images/search-icon1.png" alt="Germany" class="ui-li-icon">Germany</a>
-					</li>
-					<li>
-						<a href="#"><img src="images/map-icon.png" alt="Great Britain" class="ui-li-icon">Great Britain</a>
-					</li>
-					<li>
-						<a href="#"><img src="images/search-red.png" alt="Finland" class="ui-li-icon">Finland</a>
-					</li>
-					<li>
-						<a href="#"><img src="images/comment.png" alt="United States" class="ui-li-icon">United States</a>
-					</li>
-				</ul>
-				<input id="inList" type="hidden"/>
-				<div style="margin-top:20px;" >
-					<a id="cancel1" href="#setting" data-transition="none" data-ajax="false" data-role="button" data-inline="false" data-theme="a" >Cancel</a>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="dvProddetail" >
-			<div data-role="header" data-theme="b">
-				<h3> Product Detail </h3>
-				<a href="#" onclick="if(confirm('상품을 삭제하시겠습니까?'))delList('pd',$('#inProdcode').val());"  data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
-			</div>
-			<div class="ui-content" role="main" >
-				<ul id="ulProdDetail" data-role="listview" data-inset="false" >
-					<li data-role="list-divider">일반</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inProdname">상품명:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input id="inProdname" name="inProdname" value="" placeholder="상품명" data-clear-btn="false" >
-							</div>
-						</div>
-					</li>
-					
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label class="select" for="selCat">분류:</label>
-							</div>
-							<div class="ui-block-b" >
-								<select id="selCat"  >
-								</select>
-							</div>
-						</div>
-					</li>
-				</ul>
-				<ul id="ulProdDetail1" data-role="listview" data-inset="false" >
-					<li data-role="list-divider">
-						가격
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inStd">평균:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="number" style="margin:0" id="inStd"  value="" placeholder="상품의 평균값" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inA">A:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="number" id="inA"  value="" placeholder="A등급 가격" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inB">B:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="number" id="inB"  value="" placeholder="B등급 가격" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inC">C:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="number" id="inC"  value="" placeholder="C등급 가격" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li data-role="list-divider">
-						Images
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inC">Attach</label>
-							</div>
-							<div class="ui-block-b" >
-								
-							</div>
-						</div>
-					</li>
-				</ul>
-				<input id="inProdcode" type="hidden">
-				<ul id="ulProdDetail2" data-role="listview" data-inset="false">
-					<li class="ui-field-contain">
-						<label for="txNote">Notes:</label>
-						<input id="txNote" value="" placeholder="" data-clear-btn="true">
-					</li>
-				</ul>
+                <a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
+            </div>
+            <div class="ui-content" role="main">
+                <ul id="ulList" data-role="listview">
+                    <li>
+                        <a href="#">
+                            <img src="images/search-icon.png" alt="France" class="ui-li-icon">France
+                            <p class="ui-li-aside">
+                                <strong>6:24</strong>PM
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/search-icon1.png" alt="Germany" class="ui-li-icon">Germany</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/map-icon.png" alt="Great Britain" class="ui-li-icon">Great Britain</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/search-red.png" alt="Finland" class="ui-li-icon">Finland</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/comment.png" alt="United States" class="ui-li-icon">United States</a>
+                    </li>
+                </ul>
+                <input id="inList" type="hidden" />
+                <div style="margin-top:20px;">
+                    <a id="cancel1" href="#setting" data-transition="none" data-ajax="false" data-role="button" data-inline="false" data-theme="a">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="dvProddetail">
+            <div data-role="header" data-theme="b">
+                <h3> Product Detail </h3>
+                <a href="#" onclick="if(confirm('상품을 삭제하시겠습니까?'))delList('pd',$('#inProdcode').val());" data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
+            </div>
+            <div class="ui-content" role="main">
+                <ul id="ulProdDetail" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">일반</li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inProdname">상품명:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input id="inProdname" name="inProdname" value="" placeholder="상품명" data-clear-btn="false">
+                            </div>
+                        </div>
+                    </li>
 
-			</div>
-			<div data-role="footer" data-position="fixed">
-				<div data-role="navbar" >
-					<ul>
-						<li><a href="#UlList" onclick="saveProd();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
-						<li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="dvChdetail"  >
-			<div data-role="header" data-theme="b">
-				<h3> 거래선 Detail </h3>
-				<a href="#" onclick="if(confirm('거래선을 삭제하시겠습니까?'))delList('ch',$('#inChcode').val());"  data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
-			</div>
-			<div class="ui-content" role="main" >
-				<ul id="ulChDetail" data-role="listview" data-inset="true" >
-					<li data-role="list-divider">일반</li>
-					
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inChname">회사명:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input id="inChname" name="inChname" value="" placeholder="거래선명" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label class="select" for="selLevel">등급:</label>
-							</div>
-							<div class="ui-block-b" >
-								<select id="selLevel"  >
-								</select>
-							</div>
-						</div>
-					</li>
-					<li class="ui-field-contain">
-						<label for="txChnote">Notes:</label>
-						<input id="txChnote" value="" placeholder="Meno입력" data-clear-btn="true">
-					</li>
-				</ul>
-				<ul id="ulChDetail1" data-role="listview" data-inset="true">
-					<li data-role="list-divider">
-						Contact
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inZip">Zip:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input id="inZip" name="inZip" value="" placeholder="우편번호" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inAddr">주소:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input id="inAddr" name="inAddr" value="" placeholder="주소" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inLatLng">위치:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input id="inLatLng" name="inLatLng" value="" placeholder="위도경도표시" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					
-				</ul>
-				<ul id="ulChDetail2" data-role="listview" data-inset="true">
-					<li data-role="list-divider">
-						직원<span  style="margin:-15px -40px 0 0;" onclick="alert('hi')" class="ui-li-aside ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-nodisc-icon ui-alt-icon"></span>
-					</li>
-					
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inStaffname">이름:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="text" id="inStaffname"  value="" placeholder="직원명" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inDiv">부서:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="text" id="inDiv"  value="" placeholder="부서명" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inPos">직급:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="text" id="inPos"  value="" placeholder="직급명" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inTel">전화:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="tel" id="inTel"  value="" placeholder="회사전화번호" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inMobile">Mobile:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="tel" id="inMobile"  value="" placeholder="mobile phone" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li class="sp">
-						<div class="ui-grid-a" >
-							<div class="ui-block-a" >
-								<label for="inEmail">Email:</label>
-							</div>
-							<div class="ui-block-b" >
-								<input type="email" id="inEmail"  value="" placeholder="email" data-clear-btn="true" >
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="ui-field-contain">
-							<label for="inStaffnote">Notes:</label>
-							<input type="text" id="inStaffnote"  value="" placeholder="Memo내용" data-clear-btn="true" >
-						</div>
-					</li>
-				</ul>
-				<input id="inChcode" type="hidden">
-				<ul id="ulChDetail2" data-role="listview" data-inset="true">
-				</ul>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label class="select" for="selCat">분류:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <select id="selCat"></select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul id="ulProdDetail1" data-role="listview" data-inset="false">
+                    <li data-role="list-divider">
+                        가격
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inStd">평균:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="number" style="margin:0" id="inStd" value="" placeholder="상품의 평균값" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inA">A:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="number" id="inA" value="" placeholder="A등급 가격" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inB">B:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="number" id="inB" value="" placeholder="B등급 가격" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inC">C:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="number" id="inC" value="" placeholder="C등급 가격" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li data-role="list-divider">
+                        Images
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inC">Attach</label>
+                            </div>
+                            <div class="ui-block-b">
 
-			</div>
-			<div data-role="footer" data-position="fixed">
-				<div data-role="navbar" >
-					<ul>
-						<li><a href="#UlList" onclick="saveChan();"  class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
-						<li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top" >Cancel</a></li>
-					</ul>
-				</div>
-			</div>
-		
-		</div>
-		<div data-role="page" data-theme="a" id="dvChStaff">
-			<div data-role="header" data-theme="b">
-				<h3> Customer List </h3>
-				<a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
-			</div>
-			<div class="ui-content" role="main" data-theme="b" >
-				<ul id="ulChDetail2" data-role="listview" data-inset="true" data-divider-theme="a" >
-					<li>
-						<fieldset data-role="controlgroup" >
-							<legend></legend>
-							<div class="ui-field-contain">
-								<label for="inStaffname">이름:</label>
-								<input type="text" id="inStaffname"  value="" placeholder="이름" data-clear-btn="true" >
-							</div>
-							<div class="ui-field-contain">
-								<label for="inDiv">부서:</label>
-								<input type="text" id="inDiv"  value="" placeholder="부서명" data-clear-btn="true" >
-							</div>
-							<div class="ui-field-contain">
-								<label for="inPos">직급:</label>
-								<input type="text" id="inPos"  value="" placeholder="직급명" data-clear-btn="true" >
-							</div>
-							<div class="ui-field-contain">
-								<label for="inTel">전화:</label>
-								<input type="tel" id="inTel"  value="" placeholder="회사전화번호" data-clear-btn="true" >
-							</div>
-							<div class="ui-field-contain">
-								<label for="inMobile">Mobile:</label>
-								<input type="tel" id="inMobile"  value="" placeholder="Mobile phone" data-clear-btn="true" >
-								`
-							</div>
-							<div class="ui-field-contain">
-								<label for="inEmail">Email:</label>
-								<input type="email" id="inEmail"  value="" placeholder="email" data-clear-btn="true" >
-								`
-							</div>
-							<div class="ui-field-contain">
-								<label for="inStaffnote">Notes:</label>
-								<input type="text" id="inStaffnote"  value="" placeholder="" data-clear-btn="true" >
-								`
-							</div>
-						</fieldset>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div data-role="page" data-theme="a" id="Logindv" >
-		<div data-role="header" data-theme="b">
-			<h1>Log In</h1>
-		</div>
-		<div class="ui-content" role="main" >
-			<label for="username">ID:</label>
-			<input type="text" name="username" id="username" placeholder="Username">
-			<label for="password">Password:</label>
-			<input type="password"  id="password" placeholder="Password">
-			
-			
-			
-			<div class="ui-grid-b" style="margin-top:10px;">
-				<div class="ui-block-a">
-					<a href="#dvMenubar"  data-role="button" data-theme="a">Cancel</a>
-				</div>
-				<div class="ui-block-b" style="padding-left:5px;">
-					<a href="#dvSvctype"  data-role="button" data-theme="a">Join</a>
-				</div>
-				<div class="ui-block-c" style="padding-left:5px;">
-					<a href="#" onclick="LoginAjax1();"  data-role="button" data-theme="a">Login</a>
-				</div>
-			</div>
-			
-		</div>
-	</div>  
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <input id="inProdcode" type="hidden">
+                <ul id="ulProdDetail2" data-role="listview" data-inset="false">
+                    <li class="ui-field-contain">
+                        <label for="txNote">Notes:</label>
+                        <input id="txNote" value="" placeholder="" data-clear-btn="true">
+                    </li>
+                </ul>
+
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#UlList" onclick="saveProd();" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+                        <li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="dvChdetail">
+            <div data-role="header" data-theme="b">
+                <h3> 거래선 Detail </h3>
+                <a href="#" onclick="if(confirm('거래선을 삭제하시겠습니까?'))delList('ch',$('#inChcode').val());" data-role="button" data-icon="minus" data-iconpos="notext" class="ui-btn-right"></a>
+            </div>
+            <div class="ui-content" role="main">
+                <ul id="ulChDetail" data-role="listview" data-inset="true">
+                    <li data-role="list-divider">일반</li>
+
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inChname">회사명:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input id="inChname" name="inChname" value="" placeholder="거래선명" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label class="select" for="selLevel">등급:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <select id="selLevel"></select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="ui-field-contain">
+                        <label for="txChnote">Notes:</label>
+                        <input id="txChnote" value="" placeholder="Meno입력" data-clear-btn="true">
+                    </li>
+                </ul>
+                <ul id="ulChDetail1" data-role="listview" data-inset="true">
+                    <li data-role="list-divider">
+                        Contact
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inZip">Zip:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input id="inZip" name="inZip" value="" placeholder="우편번호" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inAddr">주소:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input id="inAddr" name="inAddr" value="" placeholder="주소" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inLatLng">위치:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input id="inLatLng" name="inLatLng" value="" placeholder="위도경도표시" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+                <ul id="ulChDetail2" data-role="listview" data-inset="true">
+                    <li data-role="list-divider">
+                        직원<span style="margin:-15px -40px 0 0;" onclick="alert('hi')" class="ui-li-aside ui-btn ui-btn-right ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-nodisc-icon ui-alt-icon"></span>
+                    </li>
+
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inStaffname">이름:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="text" id="inStaffname" value="" placeholder="직원명" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inDiv">부서:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="text" id="inDiv" value="" placeholder="부서명" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inPos">직급:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="text" id="inPos" value="" placeholder="직급명" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inTel">전화:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="tel" id="inTel" value="" placeholder="회사전화번호" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inMobile">Mobile:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="tel" id="inMobile" value="" placeholder="mobile phone" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sp">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label for="inEmail">Email:</label>
+                            </div>
+                            <div class="ui-block-b">
+                                <input type="email" id="inEmail" value="" placeholder="email" data-clear-btn="true">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="ui-field-contain">
+                            <label for="inStaffnote">Notes:</label>
+                            <input type="text" id="inStaffnote" value="" placeholder="Memo내용" data-clear-btn="true">
+                        </div>
+                    </li>
+                </ul>
+                <input id="inChcode" type="hidden">
+                <ul id="ulChDetail2" data-role="listview" data-inset="true"></ul>
+
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#UlList" onclick="saveChan();" class="ui-btn ui-icon-plus ui-btn-icon-top">Save</a></li>
+                        <li><a href="#UlList" data-transition="none" class="ui-btn ui-icon-back ui-btn-icon-top">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div data-role="page" data-theme="a" id="dvChStaff">
+            <div data-role="header" data-theme="b">
+                <h3> Customer List </h3>
+                <a href="#" onclick="clearDetail();" data-role="button" data-icon="plus" data-iconpos="notext" class="ui-btn-right"></a>
+            </div>
+            <div class="ui-content" role="main" data-theme="b">
+                <ul id="ulChDetail2" data-role="listview" data-inset="true" data-divider-theme="a">
+                    <li>
+                        <fieldset data-role="controlgroup">
+                            <legend></legend>
+                            <div class="ui-field-contain">
+                                <label for="inStaffname">이름:</label>
+                                <input type="text" id="inStaffname" value="" placeholder="이름" data-clear-btn="true">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inDiv">부서:</label>
+                                <input type="text" id="inDiv" value="" placeholder="부서명" data-clear-btn="true">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inPos">직급:</label>
+                                <input type="text" id="inPos" value="" placeholder="직급명" data-clear-btn="true">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inTel">전화:</label>
+                                <input type="tel" id="inTel" value="" placeholder="회사전화번호" data-clear-btn="true">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inMobile">Mobile:</label>
+                                <input type="tel" id="inMobile" value="" placeholder="Mobile phone" data-clear-btn="true">
+                                `
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inEmail">Email:</label>
+                                <input type="email" id="inEmail" value="" placeholder="email" data-clear-btn="true">
+                                `
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="inStaffnote">Notes:</label>
+                                <input type="text" id="inStaffnote" value="" placeholder="" data-clear-btn="true">
+                                `
+                            </div>
+                        </fieldset>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="page" data-theme="a" id="Logindv">
+            <div data-role="header" data-theme="b">
+                <h1>Log In</h1>
+            </div>
+            <div class="ui-content" role="main">
+                <label for="username">ID:</label>
+                <input type="text" name="username" id="username" placeholder="Username">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Password">
+
+
+
+                <div class="ui-grid-b" style="margin-top:10px;">
+                    <div class="ui-block-a">
+                        <a href="#dvMenubar" data-role="button" data-theme="a">Cancel</a>
+                    </div>
+                    <div class="ui-block-b" style="padding-left:5px;">
+                        <a href="#dvSvctype" data-role="button" data-theme="a">Join</a>
+                    </div>
+                    <div class="ui-block-c" style="padding-left:5px;">
+                        <a href="#" onclick="LoginAjax1();" data-role="button" data-theme="a">Login</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </span>
-	<script>
+    <script>
 		function saveCategory() {
 			localStorage.setItem("category", $("#txCategory").val());
 		}
@@ -1305,7 +1330,6 @@
 			setTimeout(function() {
 				$.mobile.utils.hideWaitBox()
 			}, 1000);
-
 		});
 		$(document).on("click", '[id^=cancel]', function(event, ui) {
 			//$.mobile.changePage("#setting");
@@ -1325,7 +1349,6 @@
 			}
 			$(id).append(newOptions);
 			$(id).selectmenu().selectmenu('refresh', true);
-
 			$(id).css("data-native-menu", "false");
 			$(id).attr("selectedIndex", -1)
 		}
@@ -1358,7 +1381,6 @@
 					case "거래선 List":
 						$("#inChcode").val(data[i]["code"]);
 						$("#inChname").val(data[i]["name"]);
-
 						$("#inLatLng").val(data[i]["latlng"]);
 						var staff = data[i]["staff"][0];
 						$("#inStaffname").val(staff["name"]);
@@ -1370,7 +1392,7 @@
 						$("#inStaffnote").val(staff["note"]);
 						$("#txChnote").val(data[i]["note"]);
 						var l = ["A", "B", "C", "D"];
-						
+
 						populateCat("#selLevel", l, data[i]["level"]);
 						$.mobile.changePage("#dvChdetail");
 						//$( "body" ).pagecontainer( "change", "dvChdetail.html", { transition: "slide" });
@@ -1399,7 +1421,6 @@
 			}
 			$("#ulList" + ' li').remove();
 			if (data1 != "") {
-
 				for (i in data) {
 					var li = document.createElement("li");
 					li.id = data[i]["code"];
@@ -1420,7 +1441,6 @@
 					}
 					//pic.setAttribute("class","ui-li-icon");
 					p.setAttribute("class", "ui-li-aside");
-
 					li.appendChild(a1);
 					a1.appendChild(document.createTextNode(data[i]["name"]));
 					a1.appendChild(p);
@@ -1441,7 +1461,6 @@
 						pd.splice(i, 1);
 				}
 			}
-
 			var ins = {};
 			ins.code = $("#inProdcode").val();
 			ins.name = $("#inProdname").val();
@@ -1471,7 +1490,6 @@
 						ch.splice(i, 1);
 				}
 			}
-
 			var ins = {};
 			ins.code = $("#inChcode").val();
 			ins.name = $("#inChname").val();
@@ -1489,7 +1507,6 @@
 			first.email = $("#inEmail").val();
 			first.note = $("#inStaffnote").val();
 			ins.staff.push(first);
-
 			ins.note = $("#txChnote").val();
 			ch.push(ins);
 			$("#inList").val(JSON.stringify(ch));
@@ -1507,7 +1524,6 @@
 				type = "ch";
 				break;
 			}
-
 			switch(type) {
 			case "pd":
 				$("#inProdcode").val("PD" + idMake());
@@ -1548,7 +1564,6 @@
 				//$( "body" ).pagecontainer( "change", "dvChdetail.html", { transition: "slide" });
 				break;
 			}
-
 		}
 		function delOk(code) {
 			var sales = localStorage.getItem("sales");
@@ -1587,9 +1602,7 @@
 								list.splice(i, 1);
 							else
 								alert("이미 사용중이라 삭제할 수 없습니다.");
-
 						}
-
 					}
 					localStorage.setItem(type, JSON.stringify(list));
 					makeUlList(type);
@@ -1658,9 +1671,8 @@
 		function onError(error) {
 			alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 		}
-
-	</script>
-	<!--from imcmaster -->
+    </script>
+    <!--from imcmaster -->
     <span>
         <link href="js2/redips/style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js2/redips/redips-drag-source.js"></script>
@@ -1668,10 +1680,8 @@
         <script type="text/javascript" src="js2/redips/script.js"></script>
         <script type="text/javascript" src="js2/CSSJSON-master/json2.js"></script>
         <script type="text/javascript" src="js2/CSSJSON-master/cssjson.js"></script>
-    
+
         <script async src="http://cdn.opencpu.org/opencpu-0.4.js"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <link href="js2/jqGrid3/css/ui.jqgrid.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" async src="js2/jqGrid3/js/i18n/grid.locale-en.js"></script>
         <script type="text/javascript" async src="js2/jqGrid3/js/jquery.jqGrid.src.js"></script>
         <script id="contextmenu-js" async type="text/javascript" src="js2/jquery-contextmenu/jquery.contextmenu.js"></script>
@@ -1688,6 +1698,9 @@
         <script type="text/javascript" src="js2/gridstack/gridstack.js"></script>
         <script src="js2/jquery-cookie-master/src/jquery.cookie.js" type="text/javascript"></script>
         <script type="text/javascript" src="js2/Simple-Convenient-Pagination-Plugin-For-jQuery-Paginathing/paginathing.js"></script>
+        <!-- SmartMenus jQuery plugin -->
+        <script src="js2/smartmenus-1.0.1/jquery.smartmenus.js" type="text/javascript"></script>
+        <!-- SmartMenus core CSS (required) -->
         <link rel="stylesheet" type="text/css" href="js2/c3/c3.min.css">
         <script async type="text/javascript" src="js2/d3/d3.min.js"></script>
         <script async type="text/javascript" src="js2/c3/c3.min.js"></script>
@@ -1701,6 +1714,9 @@
         <script type="text/javascript" src="js2/context/context.js"></script>
         <link href="js2/context/context.css" rel="stylesheet" type="text/css" />
         <link href="/App_Themes/Default/Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css">
+        <script id="themeroller-js" type="text/javascript" src="js2/jquery-themeroller/jquery.themeswitcher.min.js"></script>
+        <link type="text/css" href="js2/multiple-themes/theme_interiorNavigation/ui.all.css" rel="Stylesheet" />
         <script type="text/javascript" src="js2/Common_1.js"></script>
         <script type="text/javascript" src="js2/Common_misc_1.js"></script>
         <script type="text/javascript" src="js2/Controls_1.js"></script>
