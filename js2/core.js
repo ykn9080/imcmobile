@@ -1,17 +1,16 @@
 ﻿var googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0";
-var extlink = [];
+var extlink = [],pfx="/js2/",imapp=false;
 function declareglobal() {
+    imapp = true;
     googlekey = "AIzaSyBIJnp5VXSiVEAr8xPM7-OWAYRfdYtlbV0", output=0;
     jsonlang = "", jsonlist = "";
     extlink = [];
     menuid = "1", subid = "", contType = "afterlogin", webserviceprefix = "http://www.imcmaster.co.kr";
     umenuid = "", usubid = "", omenuid = "", osubid = "", mtogg = "", hpcd = "";
-    tt, cnt = 0;
+    tt, cnt = 0,pfx="js2/";
 }
 function jscssload(list, callback) {
     var cnt = 0;
-    var pfx = "/js2/";
-    if(isApp())pfx="js2/"
     $.each(list, function (i, k) {
         switch (k) {
             case "font-awesome":
@@ -168,13 +167,13 @@ function pageInit() {
     if (typeof constr == "undefined")
         constr = "Data Source=SQL5004.Smarterasp.net;Initial Catalog=DB_9D66CD_imcmaster;User Id=DB_9D66CD_imcmaster_admin;Password=ykn90809080;";
     defconnect = "DBtype=mssql;" + constr;
-    window.alert = function (text) { console.log('alert message: ' + text); return true; };
+    //window.alert = function (text) { console.log('alert message: ' + text); return true; };
     menutoggle = "";
     if (getlogin() == "") {
         menutoggle = "open";
     }
     else if (localStorage.getItem("imcsetting") == null) {
-        if (!isApp())
+        if (!imapp)
             Login(getuserid1());
     }
     var imc = localStorage.getItem("imctable")
@@ -182,23 +181,26 @@ function pageInit() {
         jsonReadallAjax("imctable");
     }
     else {
-        if (!isApp() && getuserid1() != "") menutoggle = "";
-        if (isApp() && localStorage.getItem("imcsetting") != null) menutoggle = "";
+        if (!imapp && getuserid1() != "") menutoggle = "";
+        if (imapp && localStorage.getItem("imcsetting") != null) menutoggle = "";
         findsubid(JSON.parse(imc));
-        if (isApp())
+        if (imapp)
             initApp();
-        else
-        init();
+        else {
+            jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
+       , "fancybox", "quickPagination", "colorpicker", "datatables", "pivottable", "ddslick"]);
+            init();
+        }
     }
      function initApp() {
-         jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
+         jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "colresizable"
             , "datatables", "pivottable"]);
 
-         google.charts.load('visualization','1', { packages: ['corechart'] });
+         //google.charts.load('visualization','1', { packages: ['corechart'] });
          setTimeout(function () { menuMainApp(); initDisplay(); }, 2000);
       
     }
-    function init() {
+     function init() {
         var theme = "cupertino", csshref, menu = selectimctable(menutoggle + menuid);
         if (typeof menu != "undefined" && menu.hasOwnProperty("theme")) theme = menu.theme;
         if (theme != "cupertino" && theme != "undefined" && theme != "") {
@@ -222,8 +224,7 @@ function pageInit() {
                 $("#main-top").appendTo($(".nav-brand"));
                 $("#main-top").css({ "float": "left", "background-color": "#F0FFF0" });
                 $("#splogo").empty().append($('<img style="width:50px" src="/images/logo/imc1_1.png"/>'));
-                jscssload(["jqgrid", "googlechart", "jstree", "datepicker", "multipleselect", "jqmodal", "sweetalert", "qtip2", "tinymce", "colresizable"
-         , "fancybox", "quickPagination", "colorpicker", "datatables", "pivottable", "ddslick"]);
+              
                 setTimeout(function () {
                     if ($("#main-menu").css("display") == "block")
                         $("#main-menu").hide();
@@ -289,7 +290,7 @@ function imcloadchk(sname) {
 function getuserid1() {
     var id = "";
     var sett = localStorage.getItem("imcsetting");
-    if (isApp()) {
+    if (imapp) {
         if (sett != null) id = JSON.parse(sett).id;
     }
     else {
@@ -346,12 +347,8 @@ function findsubid(imc) {
 
 //#region menu
 function menuInit(extlink) {
-    //var dvwrap = $("<div id='dvwrap' style='background-color:#F1F1F1'/>");
-    //dvwrap.appendTo($("form")[0]);
-
     menuMain(extlink);
-    if (!isApp())
-        menuHead(extlink);
+    menuHead(extlink);
     menuSide(extlink);
     cssInsert("menu-css", "/js2/menu_slide/menu.css");
     setTimeout(function () {
@@ -1488,7 +1485,7 @@ function isMobile() {
     }
     return rtn;
 }
-function isApp() {
+function imApp() {
     //is app?
     var rtn = false;
     if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
@@ -3814,9 +3811,11 @@ function datalistreturn(data, datalist) {
     //apply filter database and others differently with data as input
     //find datalist from dataset
     //if dtype==database,datalist in querylist( sqlcommand='select')
-    var rtn = "", dtlist = "";
-
+    var rtn = "", dtlist = "",dsrc=$("#spdataajax");
+    if (dsrc.length > 0)
+        data = JSON.parse(dsrc.text());
     if (typeof datalist != "undefined") dtlist = datalist;
+
     if (!data.hasOwnProperty("dtype")) {
         if (data.hasOwnProperty("datacode") && data.datacode != "")
             jsonReadAjax("imcdata", "", "code", data.datacode, datalistreturn, [datalist]);
@@ -7698,7 +7697,7 @@ function reloadview(ctype, id, options) {
 var jsonlang = "", jsonlist = "";
 function multilangReadAjax(language) {
     var pfx = "js2/";
-    if (isApp()) pfx = "/js2/";
+    if (imapp) pfx = "/js2/";
     if (typeof language == "undefined")
         language = $("#selCountry").val();
     if (typeof language == "undefined") language = 'kr';
@@ -7726,7 +7725,7 @@ function multilangReadAjax(language) {
 function multilangReadListAjax(callback) {
     var list, list1 = [];
     var pfx = "js2/";
-    if (isApp()) pfx = "/js2/";
+    if (imapp) pfx = "/js2/";
     var path = pfx+"jquery-lang-js-master/js/langpack/";
     $.ajax({
         url: webserviceprefix + "/WebService.asmx/ReadDataList",
@@ -8199,7 +8198,7 @@ function rstatInitRun(tabdata, reload) {
     var indeparr = [], dlist = [], k = tabdata;
     var outlist = k.outlist, predarr = k.predictarr, predarr1 = k.predictarr, varlist = k.varlist, tabname = k.tabname, tabsetting = k.tabsetting,
         outodr = k.outorder, column = k.column, cmd = k.cmd, outcmd = [], dt = k.dt, id = k.rstatid;
-    //$("#tab" + k.id).empty();
+    if (isMobile()) column = 1;
     $(varlist).each(function (a, b) {
         if (b.vartype != "dependent") {
             indeparr.push(b.imgid);

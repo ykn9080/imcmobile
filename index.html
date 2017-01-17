@@ -23,9 +23,9 @@
 	<script type="text/javascript" charset="utf-8" src="js/telephonenumber.js"></script>
 	<!--from imcmaster -->
 	 <link rel="stylesheet" href="js2/font-awesome/css/font-awesome.min.css"/>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-    <link id="jqtheme" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/theme.min.css" rel="stylesheet" type="text/css" />
+    <link id="jqtheme" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/theme.min.css" rel="stylesheet" type="text/css" />-->
     <script type="text/javascript" src="js2/default.js"></script>
     <script type="text/javascript" src="js2/core.js"></script>
     <link rel="stylesheet"  href="js2/bootstrapcdn/bootstrap.min.css"/>
@@ -485,7 +485,7 @@
             <div id="dvContent123" class="ui-content" role="main">
 
             </div>
-			<div  class="ui-content" role="main" >
+			<!--<div  class="ui-content" role="main" >
 				<div class="ui-grid-a">
 					<div class="ui-block-a" style="text-align:center;padding-bottom:20px;">
 						<a href="#"    data-clickload="spin" > <img onclick="move('sales')" class="imbiga" src="images/top_sales.png" />
@@ -513,7 +513,7 @@
 					</div>
 				</div>
 				<img id="temp" />
-			</div>
+			</div>-->
 			<div data-role="footer" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar" >
 					<ul style="height:50px;">
@@ -564,7 +564,8 @@
 						Register
 					</li>
 					<li class="sp" style="padding:0 0 10px 0;">
-						<a href="#dvSvctype" data-transition="none" data-ajax="false" onlick="chkSvctype()" ><label  for="lbSvctype" >서비스등록:</label> <label id="lbSvctype" class="ui-li-aside">Single(free)</label>
+						<a href="#dvSvctype" data-transition="none" data-ajax="false" onlick="chkSvctype()" ><label  for="lbSvctype" >서비스등록:</label> 
+                        <label id="lbSvctype" class="ui-li-aside">Single(free)</label>
 						<input id="inSvctype" type="hidden" value="single">
 						</a>
 					</li>
@@ -583,16 +584,16 @@
 				</script>
 				<ul id="ulSetting3" data-role="listview" data-inset="false">
 					<li data-role="list-divider">
-						기준정보
+						Business Basic Information
 					</li>
 					<li class="sp">
-						<a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('pd');" ><label  for="lbProd" >상품:</label> <label class="ui-li-aside" id="lbProd" >100건</label></a>
+						<a href="#UlList" data-transition="none" data-ajax="false" onclick="makeUlList('pd');" ><label  for="lbProd" >Product:</label> <label class="ui-li-aside" id="lbProd" >100건</label></a>
 					</li>
 					<li class="sp">
-						<a href="#UlList" data-transition="none" data-ajax="false"  onclick="makeUlList('ch');"><label  for="lbChan" >거래선:</label> <label class="ui-li-aside" id="lbChan" ></label></a>
+						<a href="#UlList" data-transition="none" data-ajax="false"  onclick="makeUlList('ch');"><label  for="lbChan" >Customer:</label> <label class="ui-li-aside" id="lbChan" ></label></a>
 					</li>
 					<li class="sp" style="padding:0 0 10px 0;">
-						<a href="#dvCategory" data-transition="none" data-ajax="false"  onclick="showCategory()"><label  for="lbCategory" >상품분류:</label> <label class="ui-li-aside" id="lbCategory" ></label></a>
+						<a href="#dvCategory" data-transition="none" data-ajax="false"  onclick="showCategory()"><label  for="lbCategory" >Product Category:</label> <label class="ui-li-aside" id="lbCategory" ></label></a>
 					</li>
 				</ul>
 				<ul id="ulSetting4" data-role="listview" data-inset="false">
@@ -606,7 +607,6 @@
 						<a href="#dvLocaldb"  data-transition="none" data-ajax="false" ><label  for="inLocaldb" >LocalDB:</label> <label id="lbLocaldb" class="ui-li-aside"></label> </a>
 					</li>
 				</ul>
-				
 				<ul id="ulSetting1" data-role="listview" data-inset="false">
 					<li data-role="list-divider">
 						Hardware
@@ -614,7 +614,7 @@
 					<li class="sp">
 						<div class="ui-grid-a" >
 							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-								<label title="프로그램사용중 화면이 꺼짐방지" for="insom">꺼짐방지:</label>
+								<label title="Do not turn off while using program" for="insom">Keep turn on:</label>
 							</div>
 							<div  class="ui-block-b" >
 								<select id="insom" name="switch" data-role="flipswitch">
@@ -627,11 +627,11 @@
 					<li class="sp">
 						<div class="ui-grid-a" >
 							<div style="padding:10px 0 0 0px;" class="ui-block-a" >
-								<label  class="select" for="savetime" title="용량 기준:50Kb">저장방식:</label>
+								<label  class="select" for="savetime" title="Size Limit:50Kb">Upload Setting:</label>
 							</div>
 							<div  class="ui-block-b" >
 								<select name="savetime" id="savetime" data-native-menu="false" >
-									<option value="smart" title="50Kb">저용량 always, 고용량 wifi</option>
+									<option value="smart" title="50Kb">Small always, Big wifi</option>
 									<option value="data">Data always, image wifi</option>
 									<option value="wifi">Wifi Only</option>
 									<option value="always">Always</option>
