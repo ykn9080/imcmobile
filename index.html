@@ -92,10 +92,15 @@
 	    document.addEventListener("backbutton", ShowExitDialog, false);
 	    var log = localStorage.getItem("login");
 	    declareglobal();
+	    console.log(pfx, webserviceprefix);
+	    pfx = "js2/";
+	    webserviceprefix = "http://www.imcmaster.co.kr";
+        
         //inittest();
 	    if (navigator.network.connection.type != Connection.NONE) {
 	        jsonReadallAjax("imctable");
 	    }
+	   
         pageInit();	
         if (log != null) {
             var obj = eval("(" + log + ")");
